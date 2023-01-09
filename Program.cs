@@ -1,4 +1,4 @@
-﻿using PhoneBookConsole.PhoneBookService;
+﻿using PhoneBookConsole.PhoneBookController;
 
-var contactManager = new ContactManager();
-contactManager.LaunchProgram();
+IContactController contactController = new ContactController();
+contactController.LaunchProgram();
