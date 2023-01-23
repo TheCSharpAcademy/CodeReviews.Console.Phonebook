@@ -9,6 +9,6 @@ public class ContactContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer("Data Source=(LocalDb)\\MyLocalDb;Initial Catalog=phonebook;Integrated Security=True");
+        optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Initial Catalog=flashcardapp;Integrated Security=True");
     }
 }
