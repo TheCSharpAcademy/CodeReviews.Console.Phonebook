@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PhoneBook.Models;
-using System.Configuration;
 
 namespace PhoneBook;
 
 public class PhoneBookContext : DbContext
 {
-    string dbString = ConfigurationManager.AppSettings.Get("ConnectionString");
+    string dbString = System.Configuration.ConfigurationManager.AppSettings.Get("ConnectionString");
 
     public DbSet<Contact> Contacts { get; set; }
 
@@ -14,7 +13,7 @@ public class PhoneBookContext : DbContext
 
     public PhoneBookContext()
     {
-        DbPath = ConfigurationManager.AppSettings.Get("DbFilePath");
+        DbPath = System.Configuration.ConfigurationManager.AppSettings.Get("DbFilePath");
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
