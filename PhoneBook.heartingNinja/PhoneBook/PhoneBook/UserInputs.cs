@@ -1,13 +1,11 @@
 ﻿using ConsoleTableExt;
 using FluentEmail.Core;
 using FluentEmail.Smtp;
-using System.Net;
 
 namespace PhoneBook;
 
 internal class UserInputs
 {
-    // static int stackID;
     static bool deleteContact;
     static bool editContact;
     internal static void MainMenu()
@@ -40,7 +38,6 @@ internal class UserInputs
                     break;
                 case "2":
                     EnterNewContact();
-                    // GetAllRecords();
                     break;
                 case "3":
                     editContact = true;
@@ -49,7 +46,6 @@ internal class UserInputs
                 case "4":
                     deleteContact = true;
                     ShowPhoneBook();
-                    //ChooseStack();
                     break;
                 case "5":
                     ChooseContactToSendEmail();
@@ -65,7 +61,6 @@ internal class UserInputs
     {
         DataContext dataContext = new DataContext(Data.SQLData);
         var users = dataContext.Users.ToList();
-        var userPermissions = dataContext.UserPermissions.ToList();
 
         if (users.Any())
         {
@@ -379,11 +374,11 @@ internal class UserInputs
                             EnableSsl = true,
                             DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network,
                             Port = 587,
-                            Credentials = new NetworkCredential(senderEmail, senderPassword),
+                            Credentials = new System.Net.NetworkCredential(senderEmail, senderPassword),
                         });
 
                         Email.DefaultSender = sender;
-                        var email = Email
+                             Email
                             .From(emailAddress: senderEmail)
                             .To(emailAddress: contactToSendEmail.Email, name: $"{contactToSendEmail.FirstName} {contactToSendEmail.LastName}")
                             .Subject(subject: subject)
@@ -396,7 +391,7 @@ internal class UserInputs
 
             Console.WriteLine("Press enter to continue");
             Console.ReadLine();
-            UserInputs.MainMenu();
+            MainMenu();
         }
     }
 }
