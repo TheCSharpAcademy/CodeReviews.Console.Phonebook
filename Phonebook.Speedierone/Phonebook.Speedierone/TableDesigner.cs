@@ -1,10 +1,5 @@
 ﻿using ConsoleTableExt;
 using Phonebook.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Phonebook
 {
@@ -18,10 +13,12 @@ namespace Phonebook
                 tableData.Add(new List<Object>
                 {
                     contact.Name,
-                    contact.PhoneNumber
+                    contact.PhoneNumber,
+                    contact.Email,
+                    contact.ContactGroup
                 });
             }
-            ConsoleTableBuilder.From(tableData).WithColumn("Name", "Phonenumber").ExportAndWriteLine();
+            ConsoleTableBuilder.From(tableData).WithColumn("Name", "Phonenumber", "Email", "ContactGroup").ExportAndWriteLine();
         }
     }
 }
