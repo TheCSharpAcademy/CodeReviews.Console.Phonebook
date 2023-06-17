@@ -1,4 +1,5 @@
-﻿using LucianoNicolasArrieta.PhoneBook.Persistence;
+﻿using LucianoNicolasArrieta.PhoneBook;
+using LucianoNicolasArrieta.PhoneBook.Persistence;
 using Spectre.Console;
 
 internal class Program
@@ -7,6 +8,7 @@ internal class Program
     {
         bool running = true;
         ContactController controller = new ContactController();
+
         while (running)
         {
             AnsiConsole.Clear();
@@ -18,6 +20,7 @@ internal class Program
                     MenuOptions.UpdateContact,
                     MenuOptions.DeleteContact,
                     MenuOptions.ViewContacts,
+                    MenuOptions.SendEmailThroughGmail,
                     MenuOptions.Exit));
 
             switch (option)
@@ -34,6 +37,10 @@ internal class Program
                     break;
                 case MenuOptions.ViewContacts:
                     controller.ViewAll();
+                    break;
+                case MenuOptions.SendEmailThroughGmail:
+                    EmailSender sender = new EmailSender();
+                    sender.sendEmail();
                     break;
                 case MenuOptions.Exit:
                     running = false;
@@ -53,5 +60,6 @@ enum MenuOptions
     UpdateContact,
     DeleteContact,
     ViewContacts,
+    SendEmailThroughGmail,
     Exit
 }
