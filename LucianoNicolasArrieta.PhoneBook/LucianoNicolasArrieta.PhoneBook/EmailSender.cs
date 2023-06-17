@@ -16,7 +16,7 @@ namespace LucianoNicolasArrieta.PhoneBook
             string to = contactController.GetContactEmailById();
             MailAddress toAdress = new MailAddress(to);
             AnsiConsole.WriteLine($"To: {to}");
-            
+
             AnsiConsole.Write("From ");
             MailAddress from = userInput.EmailInput();
             var fromPassword = AnsiConsole.Prompt(

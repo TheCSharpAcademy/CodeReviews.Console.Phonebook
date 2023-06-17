@@ -16,7 +16,7 @@ namespace LucianoNicolasArrieta.PhoneBook
 
             foreach (var contact in contacts)
             {
-                table.AddRow(new string[] { $"{contact.ContactID}", $"{contact.Name}", $"{contact.PhoneNumber}", $"{contact.Email}", $"{contact.CategoryID}"});
+                table.AddRow(new string[] { $"{contact.ContactID}", $"{contact.Name}", $"{contact.PhoneNumber}", $"{contact.Email}", $"{contact.CategoryID}" });
             }
 
             AnsiConsole.Write(table);
@@ -31,7 +31,7 @@ namespace LucianoNicolasArrieta.PhoneBook
 
             foreach (var category in categories)
             {
-                table.AddRow(new string[] { $"{category.CategoryID}", $"{category.Name}"});
+                table.AddRow(new string[] { $"{category.CategoryID}", $"{category.Name}" });
             }
 
             AnsiConsole.Write(table);

@@ -1,6 +1,4 @@
 ﻿using LucianoNicolasArrieta.PhoneBook;
-using LucianoNicolasArrieta.PhoneBook.Persistence;
-using Spectre.Console;
 
 internal class Program
 {

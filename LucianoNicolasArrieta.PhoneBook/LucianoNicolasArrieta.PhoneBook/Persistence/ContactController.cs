@@ -12,14 +12,14 @@ public class ContactController
     public void Delete()
     {
         List<Contact> contacts = GetContacts();
-        
+
         List<int> existingIds = new List<int>();
         foreach (Contact aux_contact in contacts)
         {
             existingIds.Add(aux_contact.ContactID);
         }
         int id = userInput.ValidIdInput(existingIds, "contact", "delete");
-        
+
         var contact = db.Contacts.FirstOrDefault(x => x.ContactID == id);
         db.Remove(contact);
         db.SaveChanges();

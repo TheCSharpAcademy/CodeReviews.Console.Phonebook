@@ -1,12 +1,6 @@
 ﻿using LucianoNicolasArrieta.PhoneBook.Models;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mail;
-using System.Runtime.Intrinsics.X86;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LucianoNicolasArrieta.PhoneBook
 {
