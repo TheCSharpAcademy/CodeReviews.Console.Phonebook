@@ -6,13 +6,21 @@ namespace LucianoNicolasArrieta.PhoneBook.Persistence;
 public class ContactController
 {
     ContactContext db = new ContactContext();
+    TableVisualization tableVisualization = new TableVisualization();
+    UserInput userInput = new UserInput();
+
     public void Delete()
     {
-        List<Contact> contacts = db.Contacts.ToList();
-        TableVisualization tableVisualization = new TableVisualization();
+        List<Contact> contacts = GetContacts();
         tableVisualization.printContacts(contacts);
-
-        int id = AnsiConsole.Ask<int>("Enter the id of the contact you want to delete: ");
+        
+        List<int> existingIds = new List<int>();
+        foreach (Contact aux_contact in contacts)
+        {
+            existingIds.Add(aux_contact.Id);
+        }
+        int id = userInput.ValidIdInput(existingIds, "delete");
+        
         var contact = db.Contacts.FirstOrDefault(x => x.Id == id);
         db.Remove(contact);
         db.SaveChanges();
@@ -23,14 +31,7 @@ public class ContactController
 
     public void Insert()
     {
-        Contact contact = new Contact();
-        var name = AnsiConsole.Ask<string>("What's the contact's [aqua]Name[/]?");
-        var number = AnsiConsole.Ask<string>("Insert the [aqua]Phone Number[/]: ");
-        var email = AnsiConsole.Ask<string>("Insert the [aqua]Email[/]:");
-
-        contact.Name = name;
-        contact.PhoneNumber = number;
-        contact.Email = email;
+        Contact contact = userInput.ContactInput();
 
         db.Add(contact);
         db.SaveChanges();
@@ -42,43 +43,58 @@ public class ContactController
     public void Update()
     {
         List<Contact> contacts = db.Contacts.ToList();
-        TableVisualization tableVisualization = new TableVisualization();
         tableVisualization.printContacts(contacts);
 
-        int id = AnsiConsole.Ask<int>("Enter the id of the contact you want to update: ");
+        List<int> existingIds = new List<int>();
+        foreach (Contact aux_contact in contacts)
+        {
+            existingIds.Add(aux_contact.Id);
+        }
+        int id = userInput.ValidIdInput(existingIds, "update");
+
         var contact = db.Contacts.FirstOrDefault(x => x.Id == id);
 
-        if (contact != null)
-        {
-            var name = AnsiConsole.Ask<string>("What's the new [aqua]Name[/]?");
-            var number = AnsiConsole.Ask<string>("Insert the new [aqua]Phone Number[/]: ");
-            var email = AnsiConsole.Ask<string>("Insert the new [aqua]Email[/]:");
+        Contact updatedContact = userInput.ContactInput();
+        contact.Name = updatedContact.Name;
+        contact.PhoneNumber = updatedContact.PhoneNumber;
+        contact.Email = updatedContact.Email;
 
-            contact.Name = name;
-            contact.PhoneNumber = number;
+        db.Update(contact);
+        db.SaveChanges();
 
-            db.Update(contact);
-            db.SaveChanges();
-
-            AnsiConsole.Markup("[green]Contact updated succesfully![/] Prees any key to continue.");
-            Console.ReadKey();
-        }
-        else
-        {
-            AnsiConsole.MarkupLine("[red]The id doesn't exist. Try again[/]");
-            Console.ReadKey();
-            Console.Clear();
-            Update();
-        }
+        AnsiConsole.Markup("[green]Contact updated succesfully![/] Prees any key to continue.");
+        Console.ReadKey();
     }
 
     public void ViewAll()
     {
-        List<Contact> contacts = db.Contacts.ToList();
-        TableVisualization tableVisualization = new TableVisualization();
-        tableVisualization.printContacts(contacts);
+        tableVisualization.printContacts(GetContacts());
 
         AnsiConsole.WriteLine("Press any key to return back to the menu.");
         Console.ReadKey();
+    }
+
+    public List<Contact> GetContacts()
+    {
+        List<Contact> contacts = db.Contacts.ToList();
+
+        return contacts;
+    }
+
+    public string GetContactEmailById()
+    {
+        List<Contact> contacts = GetContacts();
+        tableVisualization.printContacts(contacts);
+
+        List<int> existingIds = new List<int>();
+        foreach (Contact aux_contact in contacts)
+        {
+            existingIds.Add(aux_contact.Id);
+        }
+        int id = userInput.ValidIdInput(existingIds, "mail");
+
+        var contact = db.Contacts.FirstOrDefault(x => x.Id == id);
+
+        return contact.Email;
     }
 }

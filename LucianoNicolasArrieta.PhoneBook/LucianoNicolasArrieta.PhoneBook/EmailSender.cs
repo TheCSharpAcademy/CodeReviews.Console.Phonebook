@@ -1,4 +1,5 @@
-﻿using Spectre.Console;
+﻿using LucianoNicolasArrieta.PhoneBook.Persistence;
+using Spectre.Console;
 using System.Net;
 using System.Net.Mail;
 
@@ -9,13 +10,20 @@ namespace LucianoNicolasArrieta.PhoneBook
 
         public void sendEmail()
         {
-            MailAddress from = MailInput("From");
+            UserInput userInput = new UserInput();
+            ContactController contactController = new ContactController();
+
+            string to = contactController.GetContactEmailById();
+            MailAddress toAdress = new MailAddress(to);
+            AnsiConsole.WriteLine($"To: {to}");
+            
+            AnsiConsole.Write("From ");
+            MailAddress from = userInput.EmailInput();
             var fromPassword = AnsiConsole.Prompt(
                 new TextPrompt<string>("Generated Google App password:")
                 .PromptStyle("red")
                 .Secret());
 
-            MailAddress to = MailInput("To");
             string subject = AnsiConsole.Ask<string>("Subject: ");
             string body = AnsiConsole.Ask<string>("Body: ");
 
@@ -46,27 +54,6 @@ namespace LucianoNicolasArrieta.PhoneBook
                 AnsiConsole.MarkupLine($"[red]There was an error trying to send the email: {ex.Message}[/]. Press any key to continue");
                 Console.ReadKey();
             }
-        }
-
-
-        private MailAddress MailInput(string aux)
-        {
-            MailAddress mail = null;
-
-            while (mail == null)
-            {
-                string from = AnsiConsole.Ask<string>($"{aux}: ");
-                try
-                {
-                    mail = new MailAddress(from);
-                }
-                catch
-                {
-                    AnsiConsole.MarkupLine("[red]Invalid email. Try again.[/]");
-                }
-            }
-
-            return mail;
         }
     }
 }
