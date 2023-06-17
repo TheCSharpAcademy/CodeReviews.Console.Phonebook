@@ -41,17 +41,24 @@ namespace LucianoNicolasArrieta.PhoneBook
             return mail;
         }
 
-        public int ValidIdInput(List<int> ids, string aux)
+        public int ValidIdInput(List<int> ids, string aux, string purpose)
         {
-            int id = AnsiConsole.Ask<int>($"Enter the id of the contact you want to {aux}: ");
+            int id = AnsiConsole.Ask<int>($"Enter the id of the {aux} you want to {purpose}: ");
 
             while (!ids.Contains(id))
             {
                 AnsiConsole.MarkupLine("[red]The id doesn't exist. Try again[/]");
-                id = AnsiConsole.Ask<int>($"Enter the id of the contact you want to {aux}: ");
+                id = AnsiConsole.Ask<int>($"Enter the id of the {aux} you want to {purpose}: ");
             }
 
             return id;
+        }
+
+        internal Category CategoryInput()
+        {
+            var name = AnsiConsole.Ask<string>("Category [aqua]Name[/]:");
+
+            return new Category(name);
         }
     }
 }

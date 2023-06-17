@@ -3,6 +3,7 @@ using LucianoNicolasArrieta.PhoneBook.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LucianoNicolasArrieta.PhoneBook.Migrations
 {
     [DbContext(typeof(ContactContext))]
-    partial class ContactContextModelSnapshot : ModelSnapshot
+    [Migration("20230617203639_cat")]
+    partial class cat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,30 +26,30 @@ namespace LucianoNicolasArrieta.PhoneBook.Migrations
 
             modelBuilder.Entity("LucianoNicolasArrieta.PhoneBook.Models.Category", b =>
                 {
-                    b.Property<int>("CategoryID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CategoryID");
+                    b.HasKey("Id");
 
                     b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("LucianoNicolasArrieta.PhoneBook.Models.Contact", b =>
                 {
-                    b.Property<int>("ContactID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContactID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryID")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -61,9 +64,9 @@ namespace LucianoNicolasArrieta.PhoneBook.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ContactID");
+                    b.HasKey("Id");
 
-                    b.HasIndex("CategoryID");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Contact", (string)null);
                 });
@@ -72,7 +75,7 @@ namespace LucianoNicolasArrieta.PhoneBook.Migrations
                 {
                     b.HasOne("LucianoNicolasArrieta.PhoneBook.Models.Category", "Category")
                         .WithMany("Contacts")
-                        .HasForeignKey("CategoryID")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

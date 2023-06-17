@@ -12,16 +12,15 @@ public class ContactController
     public void Delete()
     {
         List<Contact> contacts = GetContacts();
-        tableVisualization.printContacts(contacts);
         
         List<int> existingIds = new List<int>();
         foreach (Contact aux_contact in contacts)
         {
-            existingIds.Add(aux_contact.Id);
+            existingIds.Add(aux_contact.ContactID);
         }
-        int id = userInput.ValidIdInput(existingIds, "delete");
+        int id = userInput.ValidIdInput(existingIds, "contact", "delete");
         
-        var contact = db.Contacts.FirstOrDefault(x => x.Id == id);
+        var contact = db.Contacts.FirstOrDefault(x => x.ContactID == id);
         db.Remove(contact);
         db.SaveChanges();
 
@@ -29,9 +28,10 @@ public class ContactController
         Console.ReadKey();
     }
 
-    public void Insert()
+    public void InsertInCategory(Category category)
     {
         Contact contact = userInput.ContactInput();
+        contact.CategoryID = category.CategoryID;
 
         db.Add(contact);
         db.SaveChanges();
@@ -42,17 +42,16 @@ public class ContactController
 
     public void Update()
     {
-        List<Contact> contacts = db.Contacts.ToList();
-        tableVisualization.printContacts(contacts);
+        List<Contact> contacts = GetContacts();
 
         List<int> existingIds = new List<int>();
         foreach (Contact aux_contact in contacts)
         {
-            existingIds.Add(aux_contact.Id);
+            existingIds.Add(aux_contact.ContactID);
         }
-        int id = userInput.ValidIdInput(existingIds, "update");
+        int id = userInput.ValidIdInput(existingIds, "contact", "update");
 
-        var contact = db.Contacts.FirstOrDefault(x => x.Id == id);
+        var contact = db.Contacts.FirstOrDefault(x => x.ContactID == id);
 
         Contact updatedContact = userInput.ContactInput();
         contact.Name = updatedContact.Name;
@@ -68,7 +67,7 @@ public class ContactController
 
     public void ViewAll()
     {
-        tableVisualization.printContacts(GetContacts());
+        tableVisualization.PrintContacts(GetContacts());
 
         AnsiConsole.WriteLine("Press any key to return back to the menu.");
         Console.ReadKey();
@@ -84,17 +83,29 @@ public class ContactController
     public string GetContactEmailById()
     {
         List<Contact> contacts = GetContacts();
-        tableVisualization.printContacts(contacts);
 
         List<int> existingIds = new List<int>();
         foreach (Contact aux_contact in contacts)
         {
-            existingIds.Add(aux_contact.Id);
+            existingIds.Add(aux_contact.ContactID);
         }
-        int id = userInput.ValidIdInput(existingIds, "mail");
+        int id = userInput.ValidIdInput(existingIds, "contact", "mail");
 
-        var contact = db.Contacts.FirstOrDefault(x => x.Id == id);
+        var contact = db.Contacts.FirstOrDefault(x => x.ContactID == id);
 
         return contact.Email;
+    }
+
+    public void ViewContactsByCategory(Category category)
+    {
+        AnsiConsole.MarkupLine($"[aqua]Contacts in '{category.Name}'[/]");
+        tableVisualization.PrintContacts(GetContactsByCategory(category));
+    }
+
+    public List<Contact> GetContactsByCategory(Category category)
+    {
+        List<Contact> contacts = db.Contacts.ToList().FindAll(x => x.CategoryID == category.CategoryID);
+
+        return contacts;
     }
 }
