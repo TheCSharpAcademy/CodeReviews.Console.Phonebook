@@ -8,7 +8,7 @@ static void CreateDb()
 {
     using (var db = new AppDb())
     {
-        db.Database.Migrate();
+        db.Database.EnsureCreated();
         Console.WriteLine("Database created!");
     }
 
