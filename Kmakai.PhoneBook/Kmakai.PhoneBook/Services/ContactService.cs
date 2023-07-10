@@ -12,11 +12,11 @@ public class ContactService
     {
         Contact contact = new Contact();
 
-        var name = inputValidation.GetAndValidateName();
+        var name = InputValidation.GetAndValidateName();
 
-        var phoneNumber = inputValidation.GetAndValidateNumber();
+        var phoneNumber = InputValidation.GetAndValidateNumber();
 
-        var email = inputValidation.GetAndValidateEmail();
+        var email = InputValidation.GetAndValidateEmail();
 
         contact.Name = name;
         contact.PhoneNumber = phoneNumber;
@@ -76,9 +76,9 @@ public class ContactService
             return;
         }
 
-        contact.Name = AnsiConsole.Confirm("Update contact name?") ? inputValidation.GetAndValidateName() : contact.Name;
-        contact.PhoneNumber = AnsiConsole.Confirm("Update contact phone number?") ? inputValidation.GetAndValidateNumber() : contact.PhoneNumber;
-        contact.Email = AnsiConsole.Confirm("Update contact email?") ? inputValidation.GetAndValidateEmail() : contact.Email;
+        contact.Name = AnsiConsole.Confirm("Update contact name?") ? InputValidation.GetAndValidateName() : contact.Name;
+        contact.PhoneNumber = AnsiConsole.Confirm("Update contact phone number?") ? InputValidation.GetAndValidateNumber() : contact.PhoneNumber;
+        contact.Email = AnsiConsole.Confirm("Update contact email?") ? InputValidation.GetAndValidateEmail() : contact.Email;
         contact.CategoryId = AnsiConsole.Confirm("Update contact category?") ? CategoryController.GetCategoryIdByName() : contact.CategoryId;
 
         ContactController.UpdateContact(contact);

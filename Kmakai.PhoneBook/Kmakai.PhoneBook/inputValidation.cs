@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Kmakai.PhoneBook;
 
-public class inputValidation
+public class InputValidation
 {
     public static bool IsValidName(string name)
     {
