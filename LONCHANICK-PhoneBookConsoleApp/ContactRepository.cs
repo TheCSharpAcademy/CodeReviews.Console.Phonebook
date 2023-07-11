@@ -8,7 +8,7 @@ internal class ContactRepository
 		db.Add(contact);
 		db.SaveChanges();
 	}
-	internal static List<Contact> GetContacts() 
+	internal static List<Contact> GetContacts()
 	{
 		var db = new ContactDbContext();
 		return db.Contacts.ToList();

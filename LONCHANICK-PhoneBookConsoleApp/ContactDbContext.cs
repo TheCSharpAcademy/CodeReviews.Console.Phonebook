@@ -10,6 +10,6 @@ public class ContactDbContext : DbContext
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
 		optionsBuilder.UseSqlServer($"Server=localhost\\MSSQLSERVER01;Database=PhoneBook; Trusted_Connection=True;MultipleActiveResultSets=true; TrustServerCertificate=True;");
-    //"Server=localhost\\MSSQLSERVER01;Database=BethanysPieShop0123456; Trusted_Connection=True;MultipleActiveResultSets=true; TrustServerCertificate=True;"
+	//"Server=localhost\\MSSQLSERVER01;Database=BethanysPieShop0123456; Trusted_Connection=True;MultipleActiveResultSets=true; TrustServerCertificate=True;"
 
 }
