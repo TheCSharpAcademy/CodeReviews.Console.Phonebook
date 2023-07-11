@@ -26,11 +26,11 @@ internal class ContactService
 	internal static void UpdateContact()
 	{
 		var contact = ContactsUI.ShooseAnOptionCONTACTS();
-		contact.Name = AnsiConsole.Confirm("Sure?")
+		contact.Name = AnsiConsole.Confirm("Update Name field sure?")
 			? AnsiConsole.Ask<string>("New Name: ")
 			: contact.Name;
 
-		contact.PhoneNumber = AnsiConsole.Confirm("Sure?")
+		contact.PhoneNumber = AnsiConsole.Confirm("Update Phone Number field sure?")
 			? AnsiConsole.Ask<string>("New PhoneNumber: ")
 			: contact.PhoneNumber;
 
