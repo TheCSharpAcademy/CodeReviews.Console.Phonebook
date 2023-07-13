@@ -53,8 +53,11 @@ public class ContactService
         table.AddColumn("Name");
         table.AddColumn("Phone Number");
         table.AddColumn("Email");
+        table.AddColumn("Category");
 
-        table.AddRow(contact.Name, contact.PhoneNumber, contact.Email);
+        var category = CategoryController.GetCategoryIdById(contact.CategoryId);
+
+        table.AddRow(contact.Name, contact.PhoneNumber, contact.Email, category?.Name ?? "Not Set");
 
         AnsiConsole.Write(table);
     }
@@ -117,16 +120,19 @@ public class ContactService
     public static void GetContacts()
     {
         var contacts = ContactController.GetContacts();
+        var categories = CategoryController.GetCategories();
 
         var table = new Table();
 
         table.AddColumn("Name");
         table.AddColumn("Phone Number");
         table.AddColumn("Email");
+        table.AddColumn("Category");
 
         foreach (var contact in contacts)
         {
-            table.AddRow(contact.Name, contact.PhoneNumber, contact.Email);
+            var category = categories.SingleOrDefault(x => x.Id == contact.CategoryId);
+            table.AddRow(contact.Name, contact.PhoneNumber, contact.Email, category?.Name ?? "Not set");
         }
 
         AnsiConsole.Write(table);

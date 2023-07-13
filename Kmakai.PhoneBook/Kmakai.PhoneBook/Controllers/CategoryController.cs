@@ -10,7 +10,14 @@ public class CategoryController
     {
         using var db = new AppDbContext();
         return db.Categories.ToList();
-    }   
+    }
+    
+    public static Category GetCategoryIdById(int id)
+    {
+        using var db = new AppDbContext();
+        var category = db.Categories.SingleOrDefault(x => x.Id == id);
+        return category;
+    }
 
     public static int GetCategoryIdByName()
     {

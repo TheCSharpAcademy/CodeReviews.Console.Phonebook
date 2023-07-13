@@ -1,6 +1,8 @@
 ﻿
 using Kmakai.PhoneBook.Services;
+using Microsoft.EntityFrameworkCore;
 using Spectre.Console;
+using Kmakai.PhoneBook.Data;
 
 namespace Kmakai.PhoneBook;
 
@@ -9,6 +11,8 @@ public class PhoneBook
     private bool IsRunning = true;
     public void Start()
     {
+        var db = new AppDbContext();
+        db.Database.EnsureCreated();
         while (IsRunning)
         {
             var option = AnsiConsole.Prompt(
