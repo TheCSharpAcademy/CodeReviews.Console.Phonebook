@@ -1,4 +1,5 @@
-﻿using Spectre.Console;
+﻿using Phonebook;
+using Spectre.Console;
 
 bool appAlive = true;
 while (appAlive)
@@ -16,6 +17,7 @@ while (appAlive)
 	switch(option)
 	{
 		case MenuOptions.AddContact:
+			PhonebookService.InsertContact();
 			break;
 		case MenuOptions.ShowContact: break;
 		case MenuOptions.ShowAllContacts: break;
