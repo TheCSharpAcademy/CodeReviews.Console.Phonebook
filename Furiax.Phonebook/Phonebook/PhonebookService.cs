@@ -42,7 +42,6 @@ internal class PhonebookService
 		var contact = GetContactOptionInput();
 		PhonebookController.DeleteContact(contact);
 	}
-
 	internal static void UpdateContact()
 	{
 		var contact = GetContactOptionInput();
@@ -53,5 +52,6 @@ internal class PhonebookService
 			AnsiConsole.Ask<string>("Enter the new phonenumber:")
 			: contact.PhoneNumber;
 		PhonebookController.UpdateContact(contact);
+		Console.Clear();
 	}
 }
