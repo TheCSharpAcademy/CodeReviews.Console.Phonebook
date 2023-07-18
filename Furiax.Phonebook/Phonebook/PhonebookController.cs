@@ -10,4 +10,10 @@ internal class PhonebookController
 		db.Add(contact);
 		db.SaveChanges();	
 	}
+	internal static List<Contact> GetContacts()
+	{
+		using var db = new PhonebookContext();
+		var contacts = db.Contacts.ToList();
+		return contacts;
+	}
 }

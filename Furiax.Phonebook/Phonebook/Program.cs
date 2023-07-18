@@ -20,7 +20,9 @@ while (appAlive)
 			PhonebookService.InsertContact();
 			break;
 		case MenuOptions.ShowContact: break;
-		case MenuOptions.ShowAllContacts: break;
+		case MenuOptions.ShowAllContacts:
+			PhonebookService.GetContacts();
+			break;
 		case MenuOptions.UpdateContact: break;
 		case MenuOptions.DeleteContact: break;
 		case MenuOptions.ExitApplication:
