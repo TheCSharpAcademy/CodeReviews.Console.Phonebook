@@ -22,4 +22,18 @@ internal class PhonebookController
 		var contact = db.Contacts.SingleOrDefault(x => x.Id == id);
 		return contact;
 	}
+
+	internal static void DeleteContact(Contact contact)
+	{
+		using var db = new PhonebookContext();
+		db.Remove(contact);
+		db.SaveChanges();
+	}
+
+	internal static void UpdateContact(Contact contact)
+	{
+		using var db = new PhonebookContext();
+		db.Update(contact);
+		db.SaveChanges();
+	}
 }

@@ -25,8 +25,12 @@ while (appAlive)
 		case MenuOptions.ShowAllContacts:
 			PhonebookService.GetContacts();
 			break;
-		case MenuOptions.UpdateContact: break;
-		case MenuOptions.DeleteContact: break;
+		case MenuOptions.UpdateContact: 
+			PhonebookService.UpdateContact();
+			break;
+		case MenuOptions.DeleteContact: 
+			PhonebookService.DeleteContact();
+			break;
 		case MenuOptions.ExitApplication:
 			appAlive = false;
 			break;
