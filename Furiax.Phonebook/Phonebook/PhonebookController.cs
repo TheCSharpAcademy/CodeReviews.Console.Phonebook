@@ -16,4 +16,10 @@ internal class PhonebookController
 		var contacts = db.Contacts.ToList();
 		return contacts;
 	}
+	internal static Contact GetContactById(int id)
+	{
+		using var db = new PhonebookContext();
+		var contact = db.Contacts.SingleOrDefault(x => x.Id == id);
+		return contact;
+	}
 }

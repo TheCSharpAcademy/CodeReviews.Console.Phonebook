@@ -5,6 +5,24 @@ namespace Phonebook;
 
 internal class PhonebookService
 {
+	internal static void GetContact()
+	{
+		var contact = GetContactOptionInput();
+		UserInterface.DisplayContactTable(contact);
+	}
+
+	private static Contact GetContactOptionInput()
+	{
+		var contacts = PhonebookController.GetContacts();
+		var contactsArray = contacts.Select(x => x.Name).ToArray();
+		var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
+			.Title("Choose contact")
+			.AddChoices(contactsArray));
+		var id = contacts.Single(x => x.Name == option).Id;
+		var contact = PhonebookController.GetContactById(id);
+		return contact;
+	}
+
 	internal static void GetContacts()
 	{
 		var contacts = PhonebookController.GetContacts();
