@@ -34,7 +34,9 @@ internal class PhonebookService
 		var contact = new Contact();
 		contact.Name = AnsiConsole.Ask<string>("Contact's name:");
 		contact.PhoneNumber = AnsiConsole.Ask<string>("Contact's phonenumber:");
+		contact.EmailAddress = AnsiConsole.Ask<string>("Contact's email address:");
 		PhonebookController.AddContact(contact);
+		Console.Clear();
 	}
 
 	internal static void DeleteContact()
@@ -51,6 +53,9 @@ internal class PhonebookService
 		contact.PhoneNumber = AnsiConsole.Confirm("Update phonenumber?") ?
 			AnsiConsole.Ask<string>("Enter the new phonenumber:")
 			: contact.PhoneNumber;
+		contact.EmailAddress = AnsiConsole.Confirm("Update emailaddress?") ?
+			AnsiConsole.Ask<string>("Enter the new emailaddress:")
+			: contact.EmailAddress;
 		PhonebookController.UpdateContact(contact);
 		Console.Clear();
 	}

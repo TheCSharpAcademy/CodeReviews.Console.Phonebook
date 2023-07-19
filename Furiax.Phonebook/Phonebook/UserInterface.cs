@@ -11,10 +11,11 @@ internal class UserInterface
 		table.AddColumn("Id");
 		table.AddColumn("Name");
 		table.AddColumn("Phonenumber");
+		table.AddColumn("Emailaddress");
 
 		foreach (var contact in contacts)
 		{
-			table.AddRow(contact.Id.ToString(), contact.Name, contact.PhoneNumber);
+			table.AddRow(contact.Id.ToString(), contact.Name, contact.PhoneNumber, contact.EmailAddress);
 		}
 
 		AnsiConsole.Write(table);
@@ -28,7 +29,8 @@ internal class UserInterface
 	{
 		var panel = new Panel($@"Id: {contact.Id}
 Name: {contact.Name}
-Phonenumber: {contact.PhoneNumber}");
+Phonenumber: {contact.PhoneNumber}
+Emailaddress= {contact.EmailAddress}");
 		panel.Header = new PanelHeader("Contact info");
 		panel.Padding = new Padding(2,2,2,2);
 

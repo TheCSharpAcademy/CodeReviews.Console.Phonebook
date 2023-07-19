@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Phonebook;
 
@@ -10,9 +11,11 @@ using Phonebook;
 namespace Phonebook.Migrations
 {
     [DbContext(typeof(PhonebookContext))]
-    partial class PhonebookContextModelSnapshot : ModelSnapshot
+    [Migration("20230719191428_emailaddress_added")]
+    partial class emailaddress_added
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
