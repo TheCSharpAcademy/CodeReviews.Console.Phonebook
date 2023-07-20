@@ -33,8 +33,25 @@ internal class PhonebookService
 	{
 		var contact = new Contact();
 		contact.Name = AnsiConsole.Ask<string>("Contact's name:");
-		contact.PhoneNumber = AnsiConsole.Ask<string>("Contact's phonenumber:");
-		contact.EmailAddress = AnsiConsole.Ask<string>("Contact's email address:");
+		string phoneNumber;
+		do
+		{
+			phoneNumber = AnsiConsole.Ask<string>("Contact's phonenumber:");
+			if (Validation.IsValidPhoneNumber(phoneNumber))
+				contact.PhoneNumber = phoneNumber;
+			else
+				Console.WriteLine("Invalid phonenumber, a valid phonenumber can only contain digits. Try again");
+		} while (!Validation.IsValidPhoneNumber(phoneNumber));
+
+		string emailAddress;
+		do
+		{
+			emailAddress = AnsiConsole.Ask<string>("Contact's email address:");
+			if (Validation.IsValidEmail(emailAddress))
+				contact.EmailAddress = emailAddress;
+			else
+				Console.WriteLine("Invalid emailadres, try again.");
+		}while (!Validation.IsValidEmail(emailAddress));
 		PhonebookController.AddContact(contact);
 		Console.Clear();
 	}

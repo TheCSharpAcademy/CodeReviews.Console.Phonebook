@@ -4,7 +4,7 @@ namespace Phonebook
 {
 	internal class Validation
 	{
-		static bool IsValidPhoneNumber(string phoneNumber)
+		internal static bool IsValidPhoneNumber(string phoneNumber)
 		{
             foreach (char c in phoneNumber)
 			{
@@ -15,7 +15,7 @@ namespace Phonebook
 			}
 			return true;
 		}
-		static bool IsValidEmail(string email)
+		internal static bool IsValidEmail(string email)
 		{
 			try
 			{
