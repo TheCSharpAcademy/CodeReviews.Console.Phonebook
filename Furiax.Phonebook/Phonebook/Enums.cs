@@ -9,6 +9,15 @@ internal class Enums
 		ShowAllContacts,
 		UpdateContact,
 		DeleteContact,
+		ManageCategories,
 		ExitApplication
+	}
+	internal enum CategoriesMenu
+	{
+		AddCategory,
+		UpdateCategory,
+		DeleteCategory,
+		ShowCategories,
+		Return
 	}
 }

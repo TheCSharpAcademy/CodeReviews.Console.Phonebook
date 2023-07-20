@@ -19,7 +19,7 @@ internal class PhonebookController
 	internal static Contact GetContactById(int id)
 	{
 		using var db = new PhonebookContext();
-		var contact = db.Contacts.SingleOrDefault(x => x.Id == id);
+		var contact = db.Contacts.SingleOrDefault(x => x.ContactId == id);
 		return contact;
 	}
 

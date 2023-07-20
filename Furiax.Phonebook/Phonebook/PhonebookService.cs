@@ -18,7 +18,7 @@ internal class PhonebookService
 		var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
 			.Title("Choose contact")
 			.AddChoices(contactsArray));
-		var id = contacts.Single(x => x.Name == option).Id;
+		var id = contacts.Single(x => x.Name == option).ContactId;
 		var contact = PhonebookController.GetContactById(id);
 		return contact;
 	}
