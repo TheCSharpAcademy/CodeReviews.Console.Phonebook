@@ -1,4 +1,5 @@
 ﻿using Phonebook.Model;
+using Phonebook.Services;
 using Spectre.Console;
 using static Phonebook.Enums;
 
@@ -11,6 +12,7 @@ internal class UserInterface
 		bool appAlive = true;
 		while (appAlive)
 		{
+			Console.Clear();
 			var option = AnsiConsole.Prompt(new SelectionPrompt<MenuOptions>()
 				.Title("What do you want to do ?")
 				.AddChoices(
@@ -54,6 +56,7 @@ internal class UserInterface
 		bool IsCategoriesAlive = true;
 		while(IsCategoriesAlive)
 		{
+			Console.Clear();
 			var option = AnsiConsole.Prompt(new SelectionPrompt<CategoriesMenu>()
 				.Title("Categories Menu")
 				.AddChoices(
@@ -65,12 +68,16 @@ internal class UserInterface
 			switch (option)
 			{
 				case Enums.CategoriesMenu.AddCategory:
+					CategoryService.InsertCategory();
 					break;
-				case Enums.CategoriesMenu.UpdateCategory: 
+				case Enums.CategoriesMenu.UpdateCategory:
+					CategoryService.UpdateCategory();
 					break;
-				case Enums.CategoriesMenu.DeleteCategory: 
+				case Enums.CategoriesMenu.DeleteCategory:
+					CategoryService.DeleteCategory();
 					break;
 				case Enums.CategoriesMenu.ShowCategories: 
+					CategoryService.GetCategories();
 					break;
 				case Enums.CategoriesMenu.Return:
 					IsCategoriesAlive = false;
@@ -90,7 +97,11 @@ internal class UserInterface
 
 		foreach (var contact in contacts)
 		{
-			table.AddRow(contact.ContactId.ToString(), contact.Name, contact.PhoneNumber, contact.EmailAddress, contact.Category.Name);
+			table.AddRow(contact.ContactId.ToString(),
+				contact.Name, 
+				contact.PhoneNumber, 
+				contact.EmailAddress, 
+				contact.Category.Name);
 		}
 
 		AnsiConsole.Write(table);
@@ -99,7 +110,6 @@ internal class UserInterface
 		Console.ReadLine();
 		Console.Clear();
     }
-
 	internal static void DisplayContactTable(Contact contact)
 	{
 		var panel = new Panel($@"Id: {contact.ContactId}
@@ -109,6 +119,35 @@ Emailaddress= {contact.EmailAddress}
 Category: {contact.Category.Name}");
 		panel.Header = new PanelHeader("Contact info");
 		panel.Padding = new Padding(2,2,2,2);
+
+		AnsiConsole.Write(panel);
+
+		Console.WriteLine("Press any key to continue");
+		Console.ReadLine();
+		Console.Clear();
+	}
+	internal static void DisplayCategoryTable(List<Category> categories)
+	{
+		var table = new Table();
+		table.AddColumn("Id");
+		table.AddColumn("Name");
+
+		foreach (var category in categories)
+		{
+			table.AddRow(category.CategoryId.ToString(), category.Name);
+		}
+
+		AnsiConsole.Write(table);
+
+		Console.WriteLine("Press any key to continue");
+		Console.ReadLine();
+	}
+	internal static void DisplayCategory(Category category)
+	{
+		var panel = new Panel($@"Id: {category.CategoryId}
+Name: {category.Name}");
+		panel.Header = new PanelHeader("Category info");
+		panel.Padding = new Padding(2, 2, 2, 2);
 
 		AnsiConsole.Write(panel);
 

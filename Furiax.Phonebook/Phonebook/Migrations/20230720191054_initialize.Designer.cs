@@ -11,8 +11,8 @@ using Phonebook;
 namespace Phonebook.Migrations
 {
     [DbContext(typeof(PhonebookContext))]
-    [Migration("20230720184725_added_category")]
-    partial class added_category
+    [Migration("20230720191054_initialize")]
+    partial class initialize
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
