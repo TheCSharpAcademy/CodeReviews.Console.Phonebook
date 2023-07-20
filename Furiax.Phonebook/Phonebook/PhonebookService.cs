@@ -1,5 +1,6 @@
 ﻿using Phonebook.Model;
 using Spectre.Console;
+using System.Net.Mail;
 
 namespace Phonebook;
 
@@ -52,6 +53,7 @@ internal class PhonebookService
 			else
 				Console.WriteLine("Invalid emailadres, try again.");
 		}while (!Validation.IsValidEmail(emailAddress));
+
 		PhonebookController.AddContact(contact);
 		Console.Clear();
 	}

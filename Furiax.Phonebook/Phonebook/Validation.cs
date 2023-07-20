@@ -1,4 +1,6 @@
-﻿using System.Net.Mail;
+﻿using System.Data.SqlTypes;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
 
 namespace Phonebook
 {
@@ -19,8 +21,8 @@ namespace Phonebook
 		{
 			try
 			{
-				MailAddress mailAddress = new MailAddress(email);
-					return true;
+				MailAddress mailadress = new MailAddress(email);
+				return true;
 			}
 			catch (FormatException)
 			{
