@@ -1,5 +1,6 @@
 ﻿using Phonebook.Model;
 using Spectre.Console;
+using static Phonebook.Enums;
 
 namespace Phonebook;
 
@@ -39,5 +40,44 @@ Emailaddress= {contact.EmailAddress}");
 		Console.WriteLine("Press any key to continue");
 		Console.ReadLine();
 		Console.Clear();
+	}
+
+	internal static void MainMenu()
+	{
+		bool appAlive = true;
+		while (appAlive)
+		{
+			var option = AnsiConsole.Prompt(new SelectionPrompt<MenuOptions>()
+				.Title("What do you want to do ?")
+				.AddChoices(
+					MenuOptions.AddContact,
+					MenuOptions.ShowContact,
+					MenuOptions.ShowAllContacts,
+					MenuOptions.UpdateContact,
+					MenuOptions.DeleteContact,
+					MenuOptions.ExitApplication));
+
+			switch (option)
+			{
+				case MenuOptions.AddContact:
+					PhonebookService.InsertContact();
+					break;
+				case MenuOptions.ShowContact:
+					PhonebookService.GetContact();
+					break;
+				case MenuOptions.ShowAllContacts:
+					PhonebookService.GetContacts();
+					break;
+				case MenuOptions.UpdateContact:
+					PhonebookService.UpdateContact();
+					break;
+				case MenuOptions.DeleteContact:
+					PhonebookService.DeleteContact();
+					break;
+				case MenuOptions.ExitApplication:
+					appAlive = false;
+					break;
+			}
+		}
 	}
 }

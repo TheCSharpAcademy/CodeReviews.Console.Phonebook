@@ -1,6 +1,5 @@
 ﻿using Phonebook.Model;
 using Spectre.Console;
-using System.Net.Mail;
 
 namespace Phonebook;
 
