@@ -63,18 +63,35 @@ internal class PhonebookService
 		var contact = GetContactOptionInput();
 		PhonebookController.DeleteContact(contact);
 	}
+
 	internal static void UpdateContact()
 	{
 		var contact = GetContactOptionInput();
 		contact.Name = AnsiConsole.Confirm("Update name?") ?
 			AnsiConsole.Ask<string>("Enter the new name:")
 			: contact.Name;
-		contact.PhoneNumber = AnsiConsole.Confirm("Update phonenumber?") ?
-			AnsiConsole.Ask<string>("Enter the new phonenumber:")
-			: contact.PhoneNumber;
-		contact.EmailAddress = AnsiConsole.Confirm("Update emailaddress?") ?
-			AnsiConsole.Ask<string>("Enter the new emailaddress:")
-			: contact.EmailAddress;
+		if (AnsiConsole.Confirm("Update phonenumber ?"))
+		{
+			string newPhoneNumber;
+			do
+			{
+				newPhoneNumber = AnsiConsole.Ask<string>("Enter the new phonenumber:");
+				if (!Validation.IsValidPhoneNumber(newPhoneNumber))
+                    Console.WriteLine("Invalid phone number, try again");
+            } while (!Validation.IsValidPhoneNumber(newPhoneNumber));
+			contact.PhoneNumber = newPhoneNumber;
+		}
+		if( AnsiConsole.Confirm("Update emailaddress?"))
+		{
+			string newEmailAddress;
+			do
+			{
+				newEmailAddress = AnsiConsole.Ask<string>("Enter the new emailaddress:");
+				if (!Validation.IsValidEmail(newEmailAddress))
+					Console.WriteLine("Invalid emailaddress");
+			} while (!Validation.IsValidEmail(newEmailAddress));
+			contact.EmailAddress = newEmailAddress;
+		}
 		PhonebookController.UpdateContact(contact);
 		Console.Clear();
 	}

@@ -1,6 +1,4 @@
-﻿using System.Data.SqlTypes;
-using System.Net.Mail;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Phonebook
 {
@@ -19,15 +17,9 @@ namespace Phonebook
 		}
 		internal static bool IsValidEmail(string email)
 		{
-			try
-			{
-				MailAddress mailadress = new MailAddress(email);
-				return true;
-			}
-			catch (FormatException)
-			{
-				return false;
-			}
+			string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+
+			return Regex.IsMatch(email, pattern);
 		}
 
 	}
