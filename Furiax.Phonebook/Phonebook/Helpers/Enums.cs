@@ -10,6 +10,8 @@ internal class Enums
         UpdateContact,
         DeleteContact,
         ManageCategories,
+        SendEmail,
+        SendSMS,
         ExitApplication
     }
     internal enum CategoriesMenu

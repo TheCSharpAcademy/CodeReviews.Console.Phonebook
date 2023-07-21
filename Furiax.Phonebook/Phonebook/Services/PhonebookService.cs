@@ -96,4 +96,14 @@ internal class PhonebookService
         PhonebookController.UpdateContact(contact);
         Console.Clear();
     }
+    internal static void SendSMS()
+    {
+        var contact = GetContactOptionInput();
+        PhonebookController.SendSMS(contact);
+    }
+    internal static void SendEmail()
+    {
+        var contact = GetContactOptionInput();
+        PhonebookController.SendEmail(contact);
+    }
 }
