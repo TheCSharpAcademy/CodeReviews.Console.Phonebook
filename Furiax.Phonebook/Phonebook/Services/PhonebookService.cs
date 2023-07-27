@@ -134,6 +134,10 @@ internal class PhonebookService
                 } while (!Validation.IsValidEmail(newEmailAddress));
                 contact.EmailAddress = newEmailAddress;
             }
+            if (AnsiConsole.Confirm("Update category ?"))
+            {
+				contact.CategoryId = CategoryService.GetCategoryOptionInput().CategoryId;
+			}
             PhonebookController.UpdateContact(contact);
             Console.Clear();
         }
