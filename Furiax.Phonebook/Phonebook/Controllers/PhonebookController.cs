@@ -61,7 +61,7 @@ internal class PhonebookController
 		messageOptions.Body = body;
 
 
-		var message = MessageResource.Create(messageOptions);
+		MessageResource.Create(messageOptions);
 	}
 	internal static async Task SendEmail(Contact contact)
 	{
@@ -80,6 +80,6 @@ internal class PhonebookController
 		var from = new EmailAddress("carlmalfliet@proximus.be", "Carl's Phonebook app");
 		var to = new EmailAddress(toEmail);
 		var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent: null, htmlContent: body);
-		var response = await client.SendEmailAsync(msg);
+		await client.SendEmailAsync(msg);
 	}
 }
