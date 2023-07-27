@@ -193,6 +193,8 @@ namespace PhoneBook.JsPeanut
             YesNoOptions.No));
             if (option == YesNoOptions.Yes)
             {
+                contact.Name  =newContactName;
+                contact.PhoneNumber = newPhoneNumber;
                 ContactController.UpdateContact(contact);
             }
             else
