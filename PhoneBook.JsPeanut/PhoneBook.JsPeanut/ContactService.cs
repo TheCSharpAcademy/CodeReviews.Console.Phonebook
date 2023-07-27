@@ -59,7 +59,7 @@ namespace PhoneBook.JsPeanut
             }
             while (Validator.CheckNumber(phoneNumber) == "not a number")
             {
-                Console.WriteLine("The phone number you entered is invalid. Please try again. Type M to go back to the main menu.");
+                Console.WriteLine("The phone number you entered is invalid. It can't contain numbers or letters. Please try again. Type M to go back to the main menu.");
 
                 phoneNumber = AnsiConsole.Ask<string>("Phone number:");
 
@@ -172,7 +172,7 @@ namespace PhoneBook.JsPeanut
             }
             while (Validator.CheckNumber(newPhoneNumber) == "not a number")
             {
-                Console.WriteLine("The phone number you entered is invalid. Please try again. Type M to go back to the main menu.");
+                Console.WriteLine("The phone number you entered is invalid. It can't contain numbers or letters. Please try again. Type M to go back to the main menu.");
 
                 newPhoneNumber = AnsiConsole.Ask<string>("Phone number:");
 
