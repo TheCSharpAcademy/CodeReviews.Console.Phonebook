@@ -28,18 +28,34 @@ internal class CategoryService
 
 	internal static void DeleteCategory()
 	{
-		var category = GetCategoryOptionInput();
-		CategoryController.DeleteCategory(category);
+		if (CategoryController.GetCategories().Count == 0)
+		{
+			Console.WriteLine("The category list is empty");
+			Console.ReadKey();
+		}
+		else
+		{
+			var category = GetCategoryOptionInput();
+			CategoryController.DeleteCategory(category);
+		}
 	}
 
 	internal static void UpdateCategory()
 	{
-		var category = GetCategoryOptionInput();
-		category.Name = AnsiConsole.Confirm("Update name?") ?
-			AnsiConsole.Ask<string>("Enter the new name:")
-			:category.Name;
-		CategoryController.UpdateCategory(category);
-		Console.Clear();
+		if (CategoryController.GetCategories().Count == 0)
+		{
+			Console.WriteLine("The category list is empty");
+			Console.ReadKey();
+		}
+		else
+		{
+			var category = GetCategoryOptionInput();
+			category.Name = AnsiConsole.Confirm("Update name?") ?
+				AnsiConsole.Ask<string>("Enter the new name:")
+				: category.Name;
+			CategoryController.UpdateCategory(category);
+			Console.Clear();
+		}
 	}
 	internal static void GetCategories()
 	{
@@ -48,7 +64,15 @@ internal class CategoryService
 	}
 	internal static void GetCategory()
 	{
-		var category = GetCategoryOptionInput();
-		UserInterface.DisplayCategory(category);
+		if (CategoryController.GetCategories().Count == 0)
+		{
+			Console.WriteLine("The category list is empty");
+			Console.ReadKey();
+		}
+		else
+		{
+			var category = GetCategoryOptionInput();
+			UserInterface.DisplayCategory(category);
+		}
 	}
 }
