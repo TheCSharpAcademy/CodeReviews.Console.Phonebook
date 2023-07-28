@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using Phonebook.Controllers;
+using System.Text.RegularExpressions;
 
 namespace Phonebook.Helpers
 {
@@ -21,6 +22,16 @@ namespace Phonebook.Helpers
 
             return Regex.IsMatch(email, pattern);
         }
+        internal static bool DoesNameAlreadyExists(string name)
+        {
+			var contacts = PhonebookController.GetContacts();
+            foreach (var contact in contacts)
+            {
+                if (contact.Name.ToLower() == name.ToLower())
+                    return true;
+            }
+            return false;
+		}
 
     }
 }

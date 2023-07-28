@@ -51,7 +51,20 @@ internal class PhonebookService
         else
         {
             var contact = new Contact();
-            contact.Name = AnsiConsole.Ask<string>("Contact's name:");
+            string name;
+            do
+            {
+                name = AnsiConsole.Ask<string>("Contact's name:");
+                if (!Validation.DoesNameAlreadyExists(name))
+                    contact.Name = name;
+				else
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine("A contact with this name already exists, please enter a diffrent name");
+					Console.ForegroundColor = ConsoleColor.White;
+				}
+			} while (Validation.DoesNameAlreadyExists(name));
+
             string phoneNumber;
             do
             {
