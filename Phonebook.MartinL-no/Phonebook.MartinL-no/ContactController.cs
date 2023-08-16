@@ -1,6 +1,4 @@
-﻿using Phonebook.MartinL_no.Models;
-
-namespace Phonebook.MartinL_no.Controllers;
+﻿namespace Phonebook.MartinL_no;
 
 internal class ContactController
 {
@@ -38,7 +36,7 @@ internal class ContactController
     {
         using var db = new ContactsContext();
 
-        var contact = db.Contacts.SingleOrDefault(c => c.Id == id);
+        var contact = db.Contacts.FirstOrDefault(c => c.Id == id);
 
         return contact;
     }

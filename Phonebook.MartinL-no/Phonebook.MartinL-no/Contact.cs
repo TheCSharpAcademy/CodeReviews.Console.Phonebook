@@ -1,4 +1,4 @@
-﻿namespace Phonebook.MartinL_no.Models;
+﻿namespace Phonebook.MartinL_no;
 
 public class Contact
 {
