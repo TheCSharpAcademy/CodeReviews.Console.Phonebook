@@ -1,9 +1,9 @@
 ﻿using Phonebook.MartinL_no.Models;
 using Spectre.Console;
 
-namespace Phonebook.MartinL_no.UserInterface;
+namespace Phonebook.MartinL_no.UserInterfaces;
 
-static internal class UserInterface
+public class UserInterface
 {
     public static void ShowContacts(List<Contact> contacts)
     {
@@ -21,10 +21,9 @@ static internal class UserInterface
 
         Console.WriteLine("Enter any key to continue");
         Console.ReadKey();
-        Console.Clear();
     }
 
-    internal static void ShowContact(Contact contact)
+    public static void ShowContact(Contact contact)
     {
         var panel = new Panel($"""
             Id:             {contact.Id}
@@ -38,7 +37,6 @@ static internal class UserInterface
 
         Console.WriteLine("Enter any key to continue");
         Console.ReadKey();
-        Console.Clear();
     }
 }
 

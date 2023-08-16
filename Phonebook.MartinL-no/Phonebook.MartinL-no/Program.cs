@@ -1,6 +1,5 @@
-﻿using Phonebook.MartinL_no.Controllers;
-using Phonebook.MartinL_no.Services;
-using Phonebook.MartinL_no.UserInterface;
+﻿using Phonebook.MartinL_no.Services;
+using Phonebook.MartinL_no.UserInterfaces;
 using Spectre.Console;
 
 while (true)
@@ -18,21 +17,20 @@ while (true)
     switch (option)
     {
         case MenuOptions.AddContact:
-            //ContactController.AddContact();
+            ContactService.AddContact();
             break;
         case MenuOptions.DeleteContact:
-            //ContactController.DeleteContact();
+            ContactService.DeleteContact();
             break;
         case MenuOptions.UpdateContact:
             //ContactController.UpdateContact();
             break;
         case MenuOptions.ViewAllContacts:
-            var contacts = ContactController.GetContacts();
-            UserInterface.ShowContacts(contacts);
+            ContactService.GetContacts();
             break;
         case MenuOptions.ViewContact:
-            var contact = ContactService.GetContactOptionInput();
-            UserInterface.ShowContact(contact);
+            ContactService.GetContact();
             break;
     }
-}
+    Console.Clear();
+}   

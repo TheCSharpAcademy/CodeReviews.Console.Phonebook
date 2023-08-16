@@ -1,4 +1,4 @@
-﻿namespace Phonebook.MartinL_no.UserInterface;
+﻿namespace Phonebook.MartinL_no.UserInterfaces;
 
 public enum MenuOptions
 {
