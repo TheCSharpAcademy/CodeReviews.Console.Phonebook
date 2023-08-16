@@ -23,8 +23,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="User Interface\" />
+    <None Remove="Controllers\" />
+    <None Remove="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User Interface\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>

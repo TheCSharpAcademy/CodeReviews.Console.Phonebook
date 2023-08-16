@@ -1,4 +1,6 @@
-﻿namespace Phonebook.MartinL_no;
+﻿using Phonebook.MartinL_no.Models;
+
+namespace Phonebook.MartinL_no.Controllers;
 
 internal class ContactController
 {
