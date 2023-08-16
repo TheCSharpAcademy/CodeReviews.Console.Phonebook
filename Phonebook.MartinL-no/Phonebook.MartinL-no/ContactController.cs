@@ -10,6 +10,19 @@ internal class ContactController
         db.SaveChanges();
     }
 
+    public static void DeleteContact(int id)
+    {
+        var contact = GetContactById(id);
+
+        if (contact != null)
+        {
+            using var db = new ContactsContext();
+            db.Remove(contact);
+
+            db.SaveChanges();
+        }
+    }
+
     public static List<Contact> GetContacts()
     {
         using var db = new ContactsContext();

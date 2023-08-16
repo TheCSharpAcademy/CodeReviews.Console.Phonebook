@@ -2,6 +2,6 @@
 
 //ContactController.AddContact("John Doe", "123456");
 //var contacts = ContactController.GetContacts();
-var contact = ContactController.GetContactById(1);
-
+//var contact = ContactController.GetContactById(1);
+ContactController.DeleteContact(1);
 Console.WriteLine();
