@@ -21,4 +21,10 @@
     </PackageReference>
     <PackageReference Include="Spectre.Console" Version="0.47.0" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="User Interface\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="User Interface\" />
+  </ItemGroup>
 </Project>
