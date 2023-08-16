@@ -18,4 +18,13 @@ internal class ContactController
 
         return contacts;
     }
+
+    public static Contact GetContactById(int id)
+    {
+        using var db = new ContactsContext();
+
+        var contact = db.Contacts.FirstOrDefault(c => c.Id == id);
+
+        return contact;
+    }
 }
