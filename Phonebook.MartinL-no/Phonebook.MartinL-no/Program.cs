@@ -23,7 +23,7 @@ while (true)
             ContactService.DeleteContact();
             break;
         case MenuOptions.UpdateContact:
-            //ContactController.UpdateContact();
+            ContactService.UpdateContact();
             break;
         case MenuOptions.ViewAllContacts:
             ContactService.GetContacts();

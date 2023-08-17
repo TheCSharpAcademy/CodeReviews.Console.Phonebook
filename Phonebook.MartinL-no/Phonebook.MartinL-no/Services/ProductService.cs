@@ -1,8 +1,8 @@
-﻿using Phonebook.MartinL_no.Models;
+﻿using Spectre.Console;
+
+using Phonebook.MartinL_no.Models;
 using Phonebook.MartinL_no.Controllers;
 using Phonebook.MartinL_no.UserInterfaces;
-
-using Spectre.Console;
 
 namespace Phonebook.MartinL_no.Services;
 
@@ -12,7 +12,9 @@ internal static class ContactService
 	{
         var name = AnsiConsole.Ask<string>("Contact's name: ");
         var phoneNumber = AnsiConsole.Ask<string>("Phone number: ");
-        ContactController.AddContact(new Contact { Name = name, PhoneNumber = phoneNumber });
+        var email = AnsiConsole.Ask<string>("Email address: ");
+
+        ContactController.AddContact(new Contact { Name = name, PhoneNumber = phoneNumber, Email = email });
     }
 
     public static void DeleteContact()
@@ -21,16 +23,26 @@ internal static class ContactService
 		ContactController.DeleteContact(contact);
 	}
 
-    internal static void GetContacts()
+    public static void GetContacts()
     {
         var contacts = ContactController.GetContacts();
         UserInterface.ShowContacts(contacts);
     }
 
-    internal static void GetContact()
+    public static void GetContact()
     {
         var contact = ContactService.GetContactOptionInput();
 		UserInterface.ShowContact(contact);
+    }
+
+    public static void UpdateContact()
+    {
+        var contact = ContactService.GetContactOptionInput();
+        contact.Name = AnsiConsole.Ask<string>("Contact's new name: ");
+        contact.PhoneNumber = AnsiConsole.Ask<string>("Contact's new phone number: ");
+        contact.Email = AnsiConsole.Ask<string>("Email address: ");
+
+        ContactController.UpdateContact(contact);
     }
 
     private static Contact GetContactOptionInput()
@@ -46,4 +58,3 @@ internal static class ContactService
 		return contact;
 	}
 }
-

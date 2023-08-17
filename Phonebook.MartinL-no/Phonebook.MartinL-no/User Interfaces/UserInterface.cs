@@ -11,10 +11,12 @@ public class UserInterface
         table.AddColumn("Id");
         table.AddColumn("Name");
         table.AddColumn("Phone Number");
+        table.AddColumn("Email address");
+
 
         foreach (var contact in contacts)
         {
-            table.AddRow(contact.Id.ToString(), contact.Name, contact.PhoneNumber);
+            table.AddRow(contact.Id.ToString(), contact.Name, contact.PhoneNumber, contact.Email);
         }
 
         AnsiConsole.Write(table);
@@ -29,6 +31,7 @@ public class UserInterface
             Id:             {contact.Id}
             Name:           {contact.Name}
             Phone Number:   {contact.PhoneNumber}
+            Email Address:  {contact.Email}
             """);
         panel.Header("Contact Info");
         panel.Padding(2,2,2,2);
