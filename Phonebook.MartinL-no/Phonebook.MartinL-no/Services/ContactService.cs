@@ -1,4 +1,5 @@
 ﻿using Spectre.Console;
+using SendGrid.Helpers.Mail;
 
 using Phonebook.MartinL_no.Models;
 using Phonebook.MartinL_no.Controllers;
