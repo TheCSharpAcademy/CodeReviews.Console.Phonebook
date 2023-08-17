@@ -1,12 +1,36 @@
-﻿using Phonebook.MartinL_no;
+﻿using Phonebook.MartinL_no.Services;
+using Phonebook.MartinL_no.UserInterfaces;
+using Spectre.Console;
 
-ContactController.AddContact("John Doe", "123456");
-var contacts = ContactController.GetContacts();
-//var contact = ContactController.GetContactById(1);
-//ContactController.DeleteContact(1);
+while (true)
+{
+    var option = AnsiConsole.Prompt(
+        new SelectionPrompt<MenuOptions>()
+        .Title("What would you like to do:")
+        .AddChoices(
+            MenuOptions.AddContact,
+            MenuOptions.DeleteContact,
+            MenuOptions.UpdateContact,
+            MenuOptions.ViewAllContacts,
+            MenuOptions.ViewContact));
 
-var contact = contacts[0];
-contact.PhoneNumber = "98765";
-ContactController.UpdateContact(contacts[0]);
-
-Console.WriteLine();
+    switch (option)
+    {
+        case MenuOptions.AddContact:
+            ContactService.AddContact();
+            break;
+        case MenuOptions.DeleteContact:
+            ContactService.DeleteContact();
+            break;
+        case MenuOptions.UpdateContact:
+            ContactService.UpdateContact();
+            break;
+        case MenuOptions.ViewAllContacts:
+            ContactService.GetContacts();
+            break;
+        case MenuOptions.ViewContact:
+            ContactService.GetContact();
+            break;
+    }
+    Console.Clear();
+}   

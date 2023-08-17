@@ -1,26 +1,23 @@
-﻿namespace Phonebook.MartinL_no;
+﻿using Phonebook.MartinL_no.Models;
+
+namespace Phonebook.MartinL_no.Controllers;
 
 internal class ContactController
 {
-    public static void AddContact(string name, string phoneNumber)
+    public static void AddContact(Contact contact)
     {
         using var db = new ContactsContext();
-        db.Add(new Contact { Name = name, PhoneNumber = phoneNumber });
+        db.Add(contact);
 
         db.SaveChanges();
     }
 
-    public static void DeleteContact(int id)
+    public static void DeleteContact(Contact contact)
     {
-        var contact = GetContactById(id);
+        using var db = new ContactsContext();
+        db.Remove(contact);
 
-        if (contact != null)
-        {
-            using var db = new ContactsContext();
-            db.Remove(contact);
-
-            db.SaveChanges();
-        }
+        db.SaveChanges();
     }
 
     public static List<Contact> GetContacts()

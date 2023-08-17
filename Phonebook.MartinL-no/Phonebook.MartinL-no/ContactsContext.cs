@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using Phonebook.MartinL_no.Models;
+
 namespace Phonebook.MartinL_no;
 
 internal class ContactsContext : DbContext
