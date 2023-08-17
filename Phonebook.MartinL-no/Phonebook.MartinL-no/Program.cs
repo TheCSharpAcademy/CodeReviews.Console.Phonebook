@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Phonebook.MartinL_no.Services;
+﻿using Phonebook.MartinL_no.Services;
 using Phonebook.MartinL_no.UserInterfaces;
 using Spectre.Console;
 
@@ -13,7 +12,8 @@ while (true)
             MenuOptions.DeleteContact,
             MenuOptions.UpdateContact,
             MenuOptions.ViewAllContacts,
-            MenuOptions.ViewContact));
+            MenuOptions.ViewContact,
+            MenuOptions.SendEmail));
 
     switch (option)
     {
@@ -31,6 +31,9 @@ while (true)
             break;
         case MenuOptions.ViewContact:
             ContactService.GetContact();
+            break;
+        case MenuOptions.SendEmail:
+            await ContactService.SendEmail();
             break;
     }
     Console.Clear();

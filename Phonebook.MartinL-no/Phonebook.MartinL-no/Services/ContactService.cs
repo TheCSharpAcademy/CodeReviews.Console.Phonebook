@@ -1,5 +1,4 @@
 ﻿using Spectre.Console;
-using SendGrid.Helpers.Mail;
 
 using Phonebook.MartinL_no.Models;
 using Phonebook.MartinL_no.Controllers;
@@ -44,6 +43,17 @@ internal static class ContactService
         contact.Email = AnsiConsole.Ask<string>("Email address: ");
 
         ContactController.UpdateContact(contact);
+    }
+
+    public static async 
+    Task
+SendEmail()
+    {
+        var contact = ContactService.GetContactOptionInput();
+        var subject = AnsiConsole.Ask<string>("Subject: ");
+        var content = AnsiConsole.Ask<string>("Content: ");
+
+        await EmailController.SendEmail(contact, subject, content);
     }
 
     private static Contact GetContactOptionInput()
