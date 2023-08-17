@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 using Phonebook.MartinL_no.Models;
 
@@ -10,6 +11,6 @@ internal class ContactsContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
         optionsBuilder.UseSqlServer(
-            "Server=127.0.0.1,1433;Initial Catalog=Phonebook;User ID=SA;Password=YourStrong@Passw0rd;Trust Server Certificate=True;"
-            );
+            ConfigurationManager.AppSettings.Get("connString")
+        );
 }

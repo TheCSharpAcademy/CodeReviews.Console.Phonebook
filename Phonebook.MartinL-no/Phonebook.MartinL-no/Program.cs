@@ -1,7 +1,9 @@
-﻿using Phonebook.MartinL_no.Services;
+﻿using System.Reflection;
+using Phonebook.MartinL_no.Services;
 using Phonebook.MartinL_no.UserInterfaces;
 using Spectre.Console;
 
+var t = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 while (true)
 {
     var option = AnsiConsole.Prompt(
