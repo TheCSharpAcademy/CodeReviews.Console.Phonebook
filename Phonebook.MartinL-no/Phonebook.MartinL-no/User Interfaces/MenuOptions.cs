@@ -7,6 +7,7 @@ public enum MenuOptions
     UpdateContact,
     ViewContact,
     ViewAllContacts,
+    SendEmail,
     Quit
 }
 
