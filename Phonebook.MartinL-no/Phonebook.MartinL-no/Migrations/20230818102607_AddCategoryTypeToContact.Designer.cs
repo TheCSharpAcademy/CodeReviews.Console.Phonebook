@@ -11,8 +11,8 @@ using Phonebook.MartinL_no;
 namespace Phonebook.MartinL_no.Migrations
 {
     [DbContext(typeof(ContactsContext))]
-    [Migration("20230817121231_AddEmailAddress")]
-    partial class AddEmailAddress
+    [Migration("20230818102607_AddCategoryTypeToContact")]
+    partial class AddCategoryTypeToContact
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,6 +43,9 @@ namespace Phonebook.MartinL_no.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

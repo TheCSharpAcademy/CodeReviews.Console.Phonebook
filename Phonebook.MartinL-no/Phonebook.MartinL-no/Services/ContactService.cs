@@ -1,4 +1,6 @@
-﻿using Spectre.Console;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
+using Spectre.Console;
 
 using Phonebook.MartinL_no.Models;
 using Phonebook.MartinL_no.Controllers;
@@ -12,9 +14,14 @@ internal static class ContactService
 	{
         var name = AnsiConsole.Ask<string>("Contact's name: ");
         var phoneNumber = AnsiConsole.Ask<string>("Phone number: ");
-        var email = AnsiConsole.Ask<string>("Email address: ");
+        var email = "";
+        while (!IsValidEmail(email))
+        {
+            email = AnsiConsole.Ask<string>("Email address: ");
+        }
+        var type = GetContactType();
 
-        ContactController.AddContact(new Contact { Name = name, PhoneNumber = phoneNumber, Email = email });
+        ContactController.AddContact(new Contact { Name = name, PhoneNumber = phoneNumber, Email = email, Type = type });
     }
 
     public static void DeleteContact()
@@ -31,25 +38,37 @@ internal static class ContactService
 
     public static void GetContact()
     {
-        var contact = ContactService.GetContactOptionInput();
+        var contact = GetContactOptionInput();
 		UserInterface.ShowContact(contact);
+    }
+
+    public static void GetContactsByType()
+    {
+        var category = GetContactType();
+        var contacts = ContactController.GetContacts().Where(x => x.Type == category).ToList();
+        UserInterface.ShowContacts(contacts);
     }
 
     public static void UpdateContact()
     {
-        var contact = ContactService.GetContactOptionInput();
+        var contact = GetContactOptionInput();
         contact.Name = AnsiConsole.Ask<string>("Contact's new name: ");
         contact.PhoneNumber = AnsiConsole.Ask<string>("Contact's new phone number: ");
-        contact.Email = AnsiConsole.Ask<string>("Email address: ");
+
+        var email = "";
+        while (!IsValidEmail(email))
+        {
+            email = AnsiConsole.Ask<string>("New email address: ");
+        }
+
+        contact.Type = GetContactType();
 
         ContactController.UpdateContact(contact);
     }
 
-    public static async 
-    Task
-SendEmail()
+    public static async Task SendEmail()
     {
-        var contact = ContactService.GetContactOptionInput();
+        var contact = GetContactOptionInput();
         var subject = AnsiConsole.Ask<string>("Subject: ");
         var content = AnsiConsole.Ask<string>("Content: ");
 
@@ -68,4 +87,60 @@ SendEmail()
 
 		return contact;
 	}
+
+    private static ContactType GetContactType()
+    {
+        return AnsiConsole.Prompt(
+        new SelectionPrompt<ContactType>()
+        .Title("Choose contact type:")
+        .AddChoices(
+            ContactType.Family,
+            ContactType.Friends,
+            ContactType.Work,
+            ContactType.None));
+    }
+
+    private static bool IsValidEmail(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+            return false;
+
+        try
+        {
+            // Normalize the domain
+            email = Regex.Replace(email, @"(@)(.+)$", DomainMapper,
+                                    RegexOptions.None, TimeSpan.FromMilliseconds(200));
+
+            // Examines the domain part of the email and normalizes it.
+            string DomainMapper(Match match)
+            {
+                // Use IdnMapping class to convert Unicode domain names.
+                var idn = new IdnMapping();
+
+                // Pull out and process domain name (throws ArgumentException on invalid)
+                string domainName = idn.GetAscii(match.Groups[2].Value);
+
+                return match.Groups[1].Value + domainName;
+            }
+        }
+        catch (RegexMatchTimeoutException e)
+        {
+            return false;
+        }
+        catch (ArgumentException e)
+        {
+            return false;
+        }
+
+        try
+        {
+            return Regex.IsMatch(email,
+                @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+                RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
+        }
+        catch (RegexMatchTimeoutException)
+        {
+            return false;
+        }
+    }
 }

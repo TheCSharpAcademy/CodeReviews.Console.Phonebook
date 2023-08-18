@@ -3,7 +3,7 @@ using Spectre.Console;
 
 namespace Phonebook.MartinL_no.UserInterfaces;
 
-public class UserInterface
+internal class UserInterface
 {
     public static void ShowContacts(List<Contact> contacts)
     {
@@ -12,11 +12,12 @@ public class UserInterface
         table.AddColumn("Name");
         table.AddColumn("Phone Number");
         table.AddColumn("Email address");
-
+        table.AddColumn("Contact type");
 
         foreach (var contact in contacts)
         {
-            table.AddRow(contact.Id.ToString(), contact.Name, contact.PhoneNumber, contact.Email);
+            var contactType = contact.Type == ContactType.None ? "" : contact.Type.ToString(); 
+            table.AddRow(contact.Id.ToString(), contact.Name, contact.PhoneNumber, contact.Email, contactType);
         }
 
         AnsiConsole.Write(table);
@@ -32,6 +33,7 @@ public class UserInterface
             Name:           {contact.Name}
             Phone Number:   {contact.PhoneNumber}
             Email Address:  {contact.Email}
+            Contact Type:   {(contact.Type == ContactType.None ? "" : contact.Type)}
             """);
         panel.Header("Contact Info");
         panel.Padding(2,2,2,2);
