@@ -1,4 +1,6 @@
-﻿using Spectre.Console;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
+using Spectre.Console;
 
 using Phonebook.MartinL_no.Models;
 using Phonebook.MartinL_no.Controllers;
@@ -12,7 +14,11 @@ internal static class ContactService
 	{
         var name = AnsiConsole.Ask<string>("Contact's name: ");
         var phoneNumber = AnsiConsole.Ask<string>("Phone number: ");
-        var email = AnsiConsole.Ask<string>("Email address: ");
+        var email = "";
+        while (!IsValidEmail(email))
+        {
+            email = AnsiConsole.Ask<string>("Email address: ");
+        }
         var type = GetContactType();
 
         ContactController.AddContact(new Contact { Name = name, PhoneNumber = phoneNumber, Email = email, Type = type });
@@ -48,7 +54,13 @@ internal static class ContactService
         var contact = GetContactOptionInput();
         contact.Name = AnsiConsole.Ask<string>("Contact's new name: ");
         contact.PhoneNumber = AnsiConsole.Ask<string>("Contact's new phone number: ");
-        contact.Email = AnsiConsole.Ask<string>("Email address: ");
+
+        var email = "";
+        while (!IsValidEmail(email))
+        {
+            email = AnsiConsole.Ask<string>("New email address: ");
+        }
+
         contact.Type = GetContactType();
 
         ContactController.UpdateContact(contact);
@@ -86,5 +98,49 @@ internal static class ContactService
             ContactType.Friends,
             ContactType.Work,
             ContactType.None));
+    }
+
+    private static bool IsValidEmail(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+            return false;
+
+        try
+        {
+            // Normalize the domain
+            email = Regex.Replace(email, @"(@)(.+)$", DomainMapper,
+                                    RegexOptions.None, TimeSpan.FromMilliseconds(200));
+
+            // Examines the domain part of the email and normalizes it.
+            string DomainMapper(Match match)
+            {
+                // Use IdnMapping class to convert Unicode domain names.
+                var idn = new IdnMapping();
+
+                // Pull out and process domain name (throws ArgumentException on invalid)
+                string domainName = idn.GetAscii(match.Groups[2].Value);
+
+                return match.Groups[1].Value + domainName;
+            }
+        }
+        catch (RegexMatchTimeoutException e)
+        {
+            return false;
+        }
+        catch (ArgumentException e)
+        {
+            return false;
+        }
+
+        try
+        {
+            return Regex.IsMatch(email,
+                @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+                RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
+        }
+        catch (RegexMatchTimeoutException)
+        {
+            return false;
+        }
     }
 }
