@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using System.Text.RegularExpressions;
-using Spectre.Console;
+﻿using Spectre.Console;
 
 using Phonebook.MartinL_no.Models;
 using Phonebook.MartinL_no.Controllers;
@@ -11,14 +9,11 @@ namespace Phonebook.MartinL_no.Services;
 internal static class ContactService
 {
     public static void AddContact()
-	{
-        var name = AnsiConsole.Ask<string>("Contact's name: ");
-        var phoneNumber = AnsiConsole.Ask<string>("Phone number: ");
-        var email = "";
-        while (!IsValidEmail(email))
-        {
-            email = AnsiConsole.Ask<string>("Email address: ");
-        }
+    {
+        var name = GetNameInput();
+        var phoneNumber = GetPhoneNumberInput();
+        var email = GetEmailInput();
+
         var type = GetContactType();
 
         ContactController.AddContact(new Contact { Name = name, PhoneNumber = phoneNumber, Email = email, Type = type });
@@ -52,15 +47,10 @@ internal static class ContactService
     public static void UpdateContact()
     {
         var contact = GetContactOptionInput();
-        contact.Name = AnsiConsole.Ask<string>("Contact's new name: ");
-        contact.PhoneNumber = AnsiConsole.Ask<string>("Contact's new phone number: ");
 
-        var email = "";
-        while (!IsValidEmail(email))
-        {
-            email = AnsiConsole.Ask<string>("New email address: ");
-        }
-
+        contact.Name = GetNameInput();
+        contact.PhoneNumber = GetPhoneNumberInput();
+        contact.Email = GetEmailInput();
         contact.Type = GetContactType();
 
         ContactController.UpdateContact(contact);
@@ -100,47 +90,44 @@ internal static class ContactService
             ContactType.None));
     }
 
-    private static bool IsValidEmail(string email)
+    private static string GetNameInput()
     {
-        if (string.IsNullOrWhiteSpace(email))
-            return false;
-
-        try
+        var contacts = ContactController.GetContacts();
+        while (true)
         {
-            // Normalize the domain
-            email = Regex.Replace(email, @"(@)(.+)$", DomainMapper,
-                                    RegexOptions.None, TimeSpan.FromMilliseconds(200));
+            var name = AnsiConsole.Ask<string>("Name: ");
 
-            // Examines the domain part of the email and normalizes it.
-            string DomainMapper(Match match)
-            {
-                // Use IdnMapping class to convert Unicode domain names.
-                var idn = new IdnMapping();
+            if (!contacts.Exists(x => x.Name.ToLower() == name.ToLower())) return name;
+            else ShowMessage("Contact already exist, please choose another name");
+        }
+    }
 
-                // Pull out and process domain name (throws ArgumentException on invalid)
-                string domainName = idn.GetAscii(match.Groups[2].Value);
+    private static string GetPhoneNumberInput()
+    {
+        while (true)
+        {
+            var phoneNumber = AnsiConsole.Ask<string>("Phone Number (format must be +4795634657): ");
 
-                return match.Groups[1].Value + domainName;
-            }
+            if (Validation.IsValidPhoneNumber(phoneNumber)) return phoneNumber;
+            else ShowMessage("Invalid phone number, please try again");
         }
-        catch (RegexMatchTimeoutException e)
-        {
-            return false;
-        }
-        catch (ArgumentException e)
-        {
-            return false;
-        }
+    }
 
-        try
+    private static string GetEmailInput()
+    {
+        while (true)
         {
-            return Regex.IsMatch(email,
-                @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
-                RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
+            var email = AnsiConsole.Ask<string>("Email address: ");
+
+            if (Validation.IsValidEmail(email)) return email;
+            else ShowMessage("Invalid email address, please try again");
         }
-        catch (RegexMatchTimeoutException)
-        {
-            return false;
-        }
+    }
+
+    private static void ShowMessage(string message)
+    {
+        Console.WriteLine(message);
+        Thread.Sleep(2000);
+        Console.Clear();
     }
 }

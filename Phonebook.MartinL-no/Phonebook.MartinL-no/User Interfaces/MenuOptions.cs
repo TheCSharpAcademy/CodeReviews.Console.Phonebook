@@ -1,6 +1,6 @@
 ﻿namespace Phonebook.MartinL_no.UserInterfaces;
 
-public enum MenuOptions
+internal enum MenuOptions
 {
     AddContact,
     DeleteContact,
