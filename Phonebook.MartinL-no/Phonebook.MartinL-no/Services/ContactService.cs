@@ -31,13 +31,19 @@ internal static class ContactService
 
     public static void GetContact()
     {
-        var contact = ContactService.GetContactOptionInput();
+        var contact = GetContactOptionInput();
 		UserInterface.ShowContact(contact);
+    }
+
+    public static void GetContactsByType()
+    {
+        var contacts = GetCategoryOptionInput();
+        UserInterface.ShowContacts(contacts);
     }
 
     public static void UpdateContact()
     {
-        var contact = ContactService.GetContactOptionInput();
+        var contact = GetContactOptionInput();
         contact.Name = AnsiConsole.Ask<string>("Contact's new name: ");
         contact.PhoneNumber = AnsiConsole.Ask<string>("Contact's new phone number: ");
         contact.Email = AnsiConsole.Ask<string>("Email address: ");
@@ -45,11 +51,9 @@ internal static class ContactService
         ContactController.UpdateContact(contact);
     }
 
-    public static async 
-    Task
-SendEmail()
+    public static async Task SendEmail()
     {
-        var contact = ContactService.GetContactOptionInput();
+        var contact = GetContactOptionInput();
         var subject = AnsiConsole.Ask<string>("Subject: ");
         var content = AnsiConsole.Ask<string>("Content: ");
 
@@ -68,4 +72,18 @@ SendEmail()
 
 		return contact;
 	}
+
+    private static List<Contact> GetCategoryOptionInput()
+    {
+        var option = AnsiConsole.Prompt(
+        new SelectionPrompt<CategoryType>()
+        .Title("Choose Option:")
+        .AddChoices(
+            CategoryType.Family,
+            CategoryType.Friends,
+            CategoryType.Work));
+        var contacts = ContactController.GetContacts().Where(x => x.category.Type == option).ToList();
+
+        return contacts;
+    }
 }

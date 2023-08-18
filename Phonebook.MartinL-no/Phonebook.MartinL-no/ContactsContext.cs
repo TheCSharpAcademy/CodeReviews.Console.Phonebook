@@ -14,4 +14,13 @@ internal class ContactsContext : DbContext
         optionsBuilder.UseSqlServer(
             ConfigurationManager.AppSettings.Get("connString")
         );
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Category>()
+            .HasMany(e => e.Contacts)
+            .WithOne(e => e.category)
+            .HasForeignKey(e => e.CategoryId)
+            .IsRequired(false);
+    }
 }

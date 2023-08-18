@@ -12,11 +12,11 @@ internal class UserInterface
         table.AddColumn("Name");
         table.AddColumn("Phone Number");
         table.AddColumn("Email address");
-
+        table.AddColumn("Contact type");
 
         foreach (var contact in contacts)
         {
-            table.AddRow(contact.Id.ToString(), contact.Name, contact.PhoneNumber, contact.Email);
+            table.AddRow(contact.Id.ToString(), contact.Name, contact.PhoneNumber, contact.Email, contact.category.Type.ToString());
         }
 
         AnsiConsole.Write(table);
@@ -32,6 +32,7 @@ internal class UserInterface
             Name:           {contact.Name}
             Phone Number:   {contact.PhoneNumber}
             Email Address:  {contact.Email}
+            Contact Type:   {contact.category.Type}
             """);
         panel.Header("Contact Info");
         panel.Padding(2,2,2,2);
