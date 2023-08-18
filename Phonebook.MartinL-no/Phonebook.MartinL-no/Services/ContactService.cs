@@ -48,10 +48,18 @@ internal static class ContactService
     {
         var contact = GetContactOptionInput();
 
-        contact.Name = GetNameInput();
-        contact.PhoneNumber = GetPhoneNumberInput();
-        contact.Email = GetEmailInput();
-        contact.Type = GetContactType();
+        contact.Name = AnsiConsole.Confirm("Update name?")
+            ? GetNameInput()
+            : contact.Name;
+        contact.PhoneNumber = AnsiConsole.Confirm("Update phone number?")
+            ? GetPhoneNumberInput()
+            : contact.PhoneNumber;
+        contact.Email = AnsiConsole.Confirm("Update email address?")
+            ? GetEmailInput()
+            : contact.Email;
+        contact.Type = AnsiConsole.Confirm("Update contact type?")
+            ? GetContactType()
+            : contact.Type;
 
         ContactController.UpdateContact(contact);
     }
