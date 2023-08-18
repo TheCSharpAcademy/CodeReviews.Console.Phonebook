@@ -13,8 +13,9 @@ internal static class ContactService
         var name = AnsiConsole.Ask<string>("Contact's name: ");
         var phoneNumber = AnsiConsole.Ask<string>("Phone number: ");
         var email = AnsiConsole.Ask<string>("Email address: ");
+        var type = GetContactType();
 
-        ContactController.AddContact(new Contact { Name = name, PhoneNumber = phoneNumber, Email = email });
+        ContactController.AddContact(new Contact { Name = name, PhoneNumber = phoneNumber, Email = email, Type = type });
     }
 
     public static void DeleteContact()
@@ -37,7 +38,8 @@ internal static class ContactService
 
     public static void GetContactsByType()
     {
-        var contacts = GetCategoryOptionInput();
+        var category = GetContactType();
+        var contacts = ContactController.GetContacts().Where(x => x.Type == category).ToList();
         UserInterface.ShowContacts(contacts);
     }
 
@@ -47,6 +49,7 @@ internal static class ContactService
         contact.Name = AnsiConsole.Ask<string>("Contact's new name: ");
         contact.PhoneNumber = AnsiConsole.Ask<string>("Contact's new phone number: ");
         contact.Email = AnsiConsole.Ask<string>("Email address: ");
+        contact.Type = GetContactType();
 
         ContactController.UpdateContact(contact);
     }
@@ -73,17 +76,15 @@ internal static class ContactService
 		return contact;
 	}
 
-    private static List<Contact> GetCategoryOptionInput()
+    private static ContactType GetContactType()
     {
-        var option = AnsiConsole.Prompt(
-        new SelectionPrompt<CategoryType>()
-        .Title("Choose Option:")
+        return AnsiConsole.Prompt(
+        new SelectionPrompt<ContactType>()
+        .Title("Choose contact type:")
         .AddChoices(
-            CategoryType.Family,
-            CategoryType.Friends,
-            CategoryType.Work));
-        var contacts = ContactController.GetContacts().Where(x => x.category.Type == option).ToList();
-
-        return contacts;
+            ContactType.Family,
+            ContactType.Friends,
+            ContactType.Work,
+            ContactType.None));
     }
 }

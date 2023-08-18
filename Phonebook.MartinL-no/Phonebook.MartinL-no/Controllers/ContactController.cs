@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-using Phonebook.MartinL_no.Models;
+﻿using Phonebook.MartinL_no.Models;
 
 namespace Phonebook.MartinL_no.Controllers;
 
@@ -26,7 +24,7 @@ internal class ContactController
     {
         using var db = new ContactsContext();
 
-        var contacts = db.Contacts.Include(x => x.category).ToList();
+        var contacts = db.Contacts.ToList();
 
         return contacts;
     }
@@ -35,7 +33,7 @@ internal class ContactController
     {
         using var db = new ContactsContext();
 
-        var contact = db.Contacts.Include(x => x.category).FirstOrDefault(c => c.Id == id);
+        var contact = db.Contacts.FirstOrDefault(c => c.Id == id);
 
         return contact;
     }

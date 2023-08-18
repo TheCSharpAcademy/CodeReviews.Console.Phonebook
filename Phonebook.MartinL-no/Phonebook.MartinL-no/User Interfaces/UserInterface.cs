@@ -16,7 +16,8 @@ internal class UserInterface
 
         foreach (var contact in contacts)
         {
-            table.AddRow(contact.Id.ToString(), contact.Name, contact.PhoneNumber, contact.Email, contact.category.Type.ToString());
+            var contactType = contact.Type == ContactType.None ? "" : contact.Type.ToString(); 
+            table.AddRow(contact.Id.ToString(), contact.Name, contact.PhoneNumber, contact.Email, contactType);
         }
 
         AnsiConsole.Write(table);
@@ -32,7 +33,7 @@ internal class UserInterface
             Name:           {contact.Name}
             Phone Number:   {contact.PhoneNumber}
             Email Address:  {contact.Email}
-            Contact Type:   {contact.category.Type}
+            Contact Type:   {(contact.Type == ContactType.None ? "" : contact.Type)}
             """);
         panel.Header("Contact Info");
         panel.Padding(2,2,2,2);

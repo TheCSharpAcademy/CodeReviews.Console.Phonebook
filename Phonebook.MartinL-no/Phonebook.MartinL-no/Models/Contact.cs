@@ -6,6 +6,5 @@ internal class Contact
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
     public string Email { get; set; }
-    public int? CategoryId { get; set; }
-    public Category? category { get; set; } = null;
+    public ContactType Type { get; set; }
 }
