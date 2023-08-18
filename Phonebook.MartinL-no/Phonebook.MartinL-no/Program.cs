@@ -2,6 +2,8 @@
 using Phonebook.MartinL_no.UserInterfaces;
 using Spectre.Console;
 
+using Phonebook.MartinL_no.Models;
+
 while (true)
 {
     var option = AnsiConsole.Prompt(

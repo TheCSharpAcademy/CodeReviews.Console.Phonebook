@@ -3,7 +3,7 @@ using Spectre.Console;
 
 namespace Phonebook.MartinL_no.UserInterfaces;
 
-public class UserInterface
+internal class UserInterface
 {
     public static void ShowContacts(List<Contact> contacts)
     {

@@ -8,6 +8,7 @@ namespace Phonebook.MartinL_no;
 internal class ContactsContext : DbContext
 {
 	public DbSet<Contact> Contacts { get; set; }
+    public DbSet<Category> Categories { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
         optionsBuilder.UseSqlServer(

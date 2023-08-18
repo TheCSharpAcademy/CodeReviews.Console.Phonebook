@@ -4,4 +4,5 @@ internal class Category
 {
 	public int Id { get; set; }
 	public CategoryType Type { get; set; }
+	public ICollection<Contact> Contacts { get; set; } = new List<Contact>();
 }
