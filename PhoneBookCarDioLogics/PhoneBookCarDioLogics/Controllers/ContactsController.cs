@@ -140,25 +140,33 @@ internal class ContactsController
             if (emailRecipient != "")
             {
                 string emailSender = AnsiConsole.Ask<string>("Sender's email:");
-                string emailSenderPassword = AnsiConsole.Prompt(new TextPrompt<string>("Sender's email password:").Secret());
 
-
-                string emailDomain = emailSender.Split('@')[1];
-
-                SmtpClient smtpClient = EmailService.SetEmailClient(emailDomain, emailSender, emailSenderPassword);
-
-                //if the email domain is supported. The user is allowed to create and send the email.
-                if (emailDomain == "gmail.com" || emailDomain == "hotmail.com")
+                if(IsValidEmail(emailSender))
                 {
-                    MailMessage mailMessage = new MailMessage(emailSender, emailRecipient)
-                    {
-                        Subject = AnsiConsole.Ask<string>("Subject of the email:"),
-                        Body = AnsiConsole.Ask<string>("Write the content of the email:"),
-                        IsBodyHtml = false, // Set to true if you want to use HTML in the email body
-                    };
+                    string emailSenderPassword = AnsiConsole.Prompt(new TextPrompt<string>("Sender's email password:").Secret());
 
-                    smtpClient.Send(mailMessage);
+                    string emailDomain = emailSender.Split('@')[1];
+
+                    SmtpClient smtpClient = EmailService.SetEmailClient(emailDomain, emailSender, emailSenderPassword);
+
+                    //if the email domain is supported. The user is allowed to create and send the email.
+                    if (emailDomain == "gmail.com" || emailDomain == "hotmail.com")
+                    {
+                        MailMessage mailMessage = new MailMessage(emailSender, emailRecipient)
+                        {
+                            Subject = AnsiConsole.Ask<string>("Subject of the email:"),
+                            Body = AnsiConsole.Ask<string>("Write the content of the email:"),
+                            IsBodyHtml = false, // Set to true if you want to use HTML in the email body
+                        };
+
+                        smtpClient.Send(mailMessage);
+                    }
                 }
+                else
+                {
+                    Console.WriteLine("Invalid sender email address format.");
+                    Console.ReadLine();
+                } 
             }
             else
             {
@@ -170,6 +178,20 @@ internal class ContactsController
         {
             Console.WriteLine("Can´t send email! No contacts exist yet!");
             Console.ReadLine();
+        }
+    }
+
+
+    internal static bool IsValidEmail(string email)
+    {
+        try
+        {
+            var addr = new System.Net.Mail.MailAddress(email);
+            return addr.Address == email;
+        }
+        catch
+        {
+            return false;
         }
     }
 }
