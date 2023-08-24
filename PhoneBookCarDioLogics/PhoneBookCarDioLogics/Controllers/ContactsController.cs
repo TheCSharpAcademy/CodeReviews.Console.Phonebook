@@ -20,7 +20,7 @@ internal class ContactsController
             contact.CategoryID = CategoryController.GetCategoryOptionInput().CategoryId;
             contact.Email = AnsiConsole.Confirm("Add email to contact?") ? AnsiConsole.Ask<string>("Contact's email:") : contact.Email = "";
 
-            if (contact.Email != "")
+            if (IsValidEmail(contact.Email))
             {
                 string emailDomain = contact.Email.Split('@')[1];
                 if (emailDomain != "gmail.com" && emailDomain != "hotmail.com")
@@ -29,10 +29,17 @@ internal class ContactsController
                     Console.WriteLine("Email domain not supported");
                     Console.ReadLine();
                 }
+                else
+                {
+                    context.Add(contact);
+                    context.SaveChanges();
+                }
             }
-
-            context.Add(contact);
-            context.SaveChanges();
+            else
+            {
+                Console.WriteLine("Email is not valid!");
+                Console.ReadLine();
+            }
         }
         else
         {
