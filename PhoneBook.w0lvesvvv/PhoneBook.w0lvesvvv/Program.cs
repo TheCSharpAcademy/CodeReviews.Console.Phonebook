@@ -5,7 +5,7 @@ using System.Drawing.Text;
 
 using (var _db = new DataContext())
 {
-    var a = _db.Database.EnsureCreated();
+    _db.Database.EnsureCreated();
 }
 
 do
@@ -30,7 +30,6 @@ do
             Environment.Exit(0);
             break;
     }
-
 } while (true);
 
 #region Menu
@@ -82,9 +81,17 @@ void AddContact()
     if (string.IsNullOrWhiteSpace(contactName)) return;
     contact.Name = contactName;
 
+    ConsoleUtils.DisplayMessage("(Phone number format: '6XX XXX XXX' or '976 XXX XXX') ");
     string contactPhone = UserInput.RequestString("Introduce phone number: ");
     if (string.IsNullOrWhiteSpace(contactPhone)) return;
+    if (!UserInputValidation.ValidatePhoneNumber(contactPhone))
+    {
+        Console.WriteLine();
+        ConsoleUtils.DisplayMessage("Phone number format not valid.", messageColor: ConsoleColor.Red);
+        return;
+    }
     contact.PhoneNumber = contactPhone;
+
 
     using (var _db = new DataContext())
     {
