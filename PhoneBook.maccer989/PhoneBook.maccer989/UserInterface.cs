@@ -4,7 +4,7 @@ namespace PhoneBook.maccer989
 {
     public class UserInterface
     {
-        public static bool checkForContacts = false;
+        public static bool checkForContacts;
         public static void GetUserInput()
         {
             bool closeApp = false;
