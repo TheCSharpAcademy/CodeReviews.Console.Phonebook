@@ -23,7 +23,7 @@ namespace PhoneBook.w0lvesvvv.Utils
 
             if (!phoneNumber.Substring(0, 1).Equals("6") && !phoneNumber.Substring(0, 3).Equals("976")) return false;
 
-            return Regex.Match(phoneNumber, @"^\d{9}$").Success;
+            return true;
         }
     }
 }

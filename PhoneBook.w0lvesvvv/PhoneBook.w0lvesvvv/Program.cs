@@ -126,6 +126,12 @@ void EditContact()
 
     string contactPhone = UserInput.RequestString("Introduce new phone number: ");
     if (string.IsNullOrWhiteSpace(contactPhone)) return;
+    if (!UserInputValidation.ValidatePhoneNumber(contactPhone))
+    {
+        Console.WriteLine();
+        ConsoleUtils.DisplayMessage("Phone number format not valid.", messageColor: ConsoleColor.Red);
+        return;
+    }
     contact.PhoneNumber = contactPhone;
 
     using (var _db = new DataContext())
