@@ -1,7 +1,4 @@
-﻿using System.Net.Http.Headers;
-using System.Numerics;
-
-namespace Phonebook;
+﻿namespace Phonebook;
 internal class Menu
 {
     public string TopLeft { get; set; } = "╔";
@@ -23,7 +20,7 @@ internal class Menu
     List<int> FieldPosTop = new();
     public List<string> FieldString { get; set; } = new();
     public int FieldSize { get; set; } = 13;
-    int FieldPosRight = 0;
+    int FieldPosRight;
     public int InputRow { get; set; }
     public int MinWidth { get; set; } = 50;
     public string Message { get; set; } = "";

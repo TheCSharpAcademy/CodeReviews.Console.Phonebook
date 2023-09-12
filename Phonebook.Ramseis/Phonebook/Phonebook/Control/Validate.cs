@@ -4,38 +4,38 @@ namespace Phonebook;
 
 internal class Validate
 {
-    internal static bool Name(string name)
+    internal static bool Name(string input)
     {
-        return Controller.GetContactName(name) == null;
+        return Controller.GetContactName(input) == null;
     }
 
     private static readonly Regex rxNonDigits = new Regex(@"[^\d]+");
-    internal static string Phone(string phone)
+    internal static string Phone(string input)
     {
-        phone = rxNonDigits.Replace(phone, "");
-        if (phone.Length == 10)
+        input = rxNonDigits.Replace(input, "");
+        if (input.Length == 10)
         {
-            phone = phone.Insert(3, "-");
-            phone = phone.Insert(7, "-");
-            return phone;
+            input = input.Insert(3, "-");
+            input = input.Insert(7, "-");
+            return input;
         }
         return "";
     }
 
-    internal static bool Zip (int zip)
+    internal static bool Zip (int input)
     {
-        if (zip.ToString().Length == 5)
+        if (input.ToString().Length == 5)
         {
             return true;
         }
         return false;
     }
 
-    internal static bool Email (string email)
+    internal static bool Email (string input)
     {
         try
         {
-            return Regex.IsMatch(email,
+            return Regex.IsMatch(input,
                 @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
                 RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
         }

@@ -119,6 +119,6 @@ internal class NewContact
                 LastAccess = DateTime.Now,
                 Group = group
             }
-        );;
+        );
     }
 }
