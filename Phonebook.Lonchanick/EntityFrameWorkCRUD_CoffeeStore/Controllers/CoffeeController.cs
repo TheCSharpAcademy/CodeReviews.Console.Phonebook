@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlayingSpectre.Models;
 using PlayingSpectre.UserInterfaces;
-using Spectre.Console;
 
 namespace PlayingSpectre.Controllers;
 
@@ -34,27 +33,25 @@ internal class CoffeeController
         return coffees;
     }
 
-	internal static int Update(Product coffee)
-	{
-		//var coffee = UserInterface.UpdateInterface();
-		using var dbContext = new CoffeeDBcontext();
-		dbContext.Update(coffee);
-		return dbContext.SaveChanges();
+    internal static int Update(Product coffee)
+    {
+        using var dbContext = new CoffeeDBcontext();
+        dbContext.Update(coffee);
+        return dbContext.SaveChanges();
 
-	}
-	internal static Product GetCoffeeById(int id)
-	{
-		using var db = new CoffeeDBcontext();
+    }
+    internal static Product GetCoffeeById(int id)
+    {
+        using var db = new CoffeeDBcontext();
         var coffee = db.Coffees.First(x => x.CoffeeId == id);
-		return coffee;
+        return coffee;
 
-	}
+    }
 
-	public static void SuccefullOrUnsuccefullMessage(int status, string message, Product coffee)
+    public static void SuccefullOrUnsuccefullMessage(int status, string message, Product coffee)
     {
         if (status > 0)
         {
-            //Console.Clear();
             CoffeeInterface.ShowSingleCoffeeDetails(coffee, message, true);
         }
         else

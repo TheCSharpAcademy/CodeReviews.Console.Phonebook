@@ -51,11 +51,6 @@ public class OrderController
 
     internal static Order? GetOrderDetailedById(int id)
     {
-        //var result = (from o in db.Orders
-        //             where o.Id == id
-        //             select o).Include(op => op.OrderProd)
-        //             .ThenInclude(p=>p.Coffee);
-
         using var db = new CoffeeDBcontext();
         var order = db.Orders
             .Include(op => op.OrderProd)

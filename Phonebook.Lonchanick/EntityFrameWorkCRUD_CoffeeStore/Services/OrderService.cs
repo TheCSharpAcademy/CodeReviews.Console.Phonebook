@@ -33,11 +33,9 @@ public class OrderService
 
             choosingProducts = AnsiConsole.Confirm("Add more products? ");
         }
-        //Thread.Sleep(800);
         OrderController.Add(orderProd);
         Console.Write("Press any Key to continue");
         Console.Read();
-
     }
 
     internal static void ViewAllOrders()
@@ -56,12 +54,6 @@ public class OrderService
 
         Console.Write("Press any Key to continue");
         Console.Read();
-
-        /*var orderId = AnsiConsole.Ask<int>("Order Id?: ");
-		var order = OrderController.GetOrderById(orderId);
-		//OrderInterface.PrintOrderTable(orders);
-		Console.WriteLine(order);
-		Console.ReadLine();*/
     }
 
     internal static void RemoveOrder()

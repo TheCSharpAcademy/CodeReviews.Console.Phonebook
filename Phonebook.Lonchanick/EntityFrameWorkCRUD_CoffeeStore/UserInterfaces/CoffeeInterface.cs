@@ -6,7 +6,6 @@ namespace PlayingSpectre.UserInterfaces;
 
 internal class CoffeeInterface
 {
-	//prints a table with all coffees available
 	internal static void PrintCoffeeList(List<Product> coffees)
 	{
 		var table = new Table();
@@ -31,7 +30,6 @@ internal class CoffeeInterface
 		Console.ReadLine();
 
 	}
-	//present a complete list of coffees as a pickable menu option
 	public static Product CoffeeListMenu(List<Product> coffees)
 	{
 		var option = AnsiConsole.Prompt(new SelectionPrompt<Product>()
@@ -41,11 +39,8 @@ internal class CoffeeInterface
 		return option;
 	}
 
-	//shows a single coffe details in a pretty way
 	public static void ShowSingleCoffeeDetails(Product coffee, string optional = "", bool newCoffee = false)
 	{
-		//si newCoffee es true se usan las instrucciones para imprimir solo el 
-		//id de la categoria que se le asigno al cafe nuevo
 		if(newCoffee) 
 		{
 		var panel = new Panel($@"Id: {coffee.CoffeeId}
@@ -118,10 +113,8 @@ Is Coffee of the month?: {coffee.IsCoffeeOfTheMonth}");
 			? true
 			: false
 		};
-		//coffee.CategoryId = 1;
 		var category = CategoryInterface.CategoryMenuPickable();
 		coffee.CategoryId = category.categoryId;
-		//coffee.Category = category;
 
 		return coffee;
 	}

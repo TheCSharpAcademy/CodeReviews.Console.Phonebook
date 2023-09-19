@@ -7,7 +7,6 @@ public class Main
 {
     internal static void MainMenu()
     {
-        //animated fake loading 
         AnsiConsole.Status()
             .Start("Loading...", ctx =>
             {
@@ -67,7 +66,6 @@ public class Main
                     CategoryOptions.VIEWALL_Categories,
                     CategoryOptions.VIEW_Category,
                     CategoryOptions.DELETE_Category,
-                    //CategoryOptions.UPDATE_Category,
                     CategoryOptions.BACK
                 );
 

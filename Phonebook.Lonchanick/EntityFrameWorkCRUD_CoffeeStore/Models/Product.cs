@@ -28,7 +28,6 @@ public class Product
 		Name = name;
 		Price = price;
 		IsCoffeeOfTheMonth = isCoffeeOfTheMonth;
-        //Category = category;
 	}
 
 	public Product(){}
