@@ -2,6 +2,13 @@ namespace PhoneBook;
 
 class Controller
 {
+    private PhoneBookContext phoneBookContext;
+
+    public Controller(PhoneBookContext phoneBookContext)
+    {
+        this.phoneBookContext = phoneBookContext;
+    }
+
     public void ShowMenu()
     {
         var view = new MenuView(this);

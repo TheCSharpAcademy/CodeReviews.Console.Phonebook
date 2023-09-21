@@ -6,7 +6,9 @@ class Program
 {
     public static void Main(string[] args)
     {
-        var controller = new Controller();
+        var config = new Configuration();
+        var phoneBookContect = new PhoneBookContext(config.DatabaseConnectionString);
+        var controller = new Controller(phoneBookContect);
         controller.ShowMenu();
     }
 }
