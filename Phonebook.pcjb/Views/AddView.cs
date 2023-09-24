@@ -12,9 +12,7 @@ class AddView : BaseView
     }
     public override void Body()
     {
-        string? name;
-        string? email;
-        string? phoneNumber;
+        var contact = new ContactDto();
         bool isValid;
 
         Console.WriteLine("Add Contact");
@@ -22,8 +20,8 @@ class AddView : BaseView
         do
         {
             Console.Write("Name: ");
-            name = Console.ReadLine();
-            isValid = !String.IsNullOrEmpty(name);
+            contact.Name = Console.ReadLine();
+            isValid = !String.IsNullOrEmpty(contact.Name);
             if (!isValid)
             {
                 Console.WriteLine("Please enter a name.");
@@ -33,8 +31,8 @@ class AddView : BaseView
         do
         {
             Console.Write("Email: ");
-            email = Console.ReadLine();
-            isValid = String.IsNullOrEmpty(email) || Validator.IsValidEmail(email);
+            contact.Email = Console.ReadLine();
+            isValid = String.IsNullOrEmpty(contact.Email) || Validator.IsValidEmail(contact.Email);
             if (!isValid)
             {
                 Console.WriteLine("Please enter a valid email.");
@@ -43,17 +41,15 @@ class AddView : BaseView
 
         do
         {
-            Console.WriteLine("Phone Numer: ");
-            phoneNumber = Console.ReadLine();
-            isValid = String.IsNullOrEmpty(phoneNumber) || Validator.IsValidPhoneNumber(phoneNumber);
+            Console.WriteLine("Phone Number: ");
+            contact.PhoneNumber = Console.ReadLine();
+            isValid = String.IsNullOrEmpty(contact.PhoneNumber) || Validator.IsValidPhoneNumber(contact.PhoneNumber);
             if (!isValid)
             {
                 Console.WriteLine("Please enter a valid phone number.");
             }
         } while (!isValid);
 
-        Console.ReadLine();
-
-        controller.ShowMenu();
+        controller.Create(contact);
     }
 }

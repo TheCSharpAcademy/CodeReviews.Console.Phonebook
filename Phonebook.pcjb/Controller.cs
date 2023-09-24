@@ -1,3 +1,5 @@
+using Microsoft.VisualBasic;
+
 namespace PhoneBook;
 
 class Controller
@@ -11,20 +13,53 @@ class Controller
 
     public void ShowMenu()
     {
+        ShowMenu(null);
+    }
+
+    public void ShowMenu(string? message)
+    {
         var view = new MenuView(this);
+        view.SetMessage(message);
         view.Show();
     }
 
     public void ShowList()
     {
-        var view = new ListView(this);
+        using var db = new PhoneBookContext();
+        var contacts = db.Contacts.OrderBy(c => c.Name).ToList();
+        var view = new ListView(this, contacts);
         view.Show();
     }
 
     public void ShowAdd()
     {
+        ShowAdd(null);
+    }
+
+    public void ShowAdd(string? message)
+    {
         var view = new AddView(this);
+        view.SetMessage(message);
         view.Show();
+    }
+
+    public void Create(ContactDto dto)
+    {
+        if (String.IsNullOrEmpty(dto.Name))
+        {
+            ShowAdd("ERROR - A contact must at least have a name.");
+            return;
+        }
+        var contact = new Contact
+        {
+            Name = dto.Name,
+            Email = dto.Email,
+            PhoneNumber = dto.PhoneNumber
+        };
+        using var db = new PhoneBookContext();
+        db.Add(contact);
+        db.SaveChanges();
+        ShowMenu($"OK - New contact '{contact.Name}' added.");
     }
 
     public void ShowEdit()
