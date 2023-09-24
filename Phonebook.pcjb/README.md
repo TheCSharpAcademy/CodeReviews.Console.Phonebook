@@ -20,6 +20,8 @@ Thus the database user must to be allowed to create tables in the database.
 
 ## Notes/References
 * [The C# Academy Exercise "Phone Book"](https://thecsharpacademy.com/project/16)
+* https://learn.microsoft.com/en-us/ef/core/
+* https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli
 
 
 

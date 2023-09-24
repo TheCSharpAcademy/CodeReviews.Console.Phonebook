@@ -2,16 +2,27 @@ namespace PhoneBook;
 
 using Microsoft.Extensions.Configuration;
 
-internal class Configuration
+internal sealed class Configuration
 {
-    readonly IConfigurationRoot config;
+    private static Configuration? instance;
+    private readonly IConfigurationRoot config;
 
-    public Configuration()
+    private Configuration()
     {
         config = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
             .AddUserSecrets<Program>()
             .Build();
+    }
+
+    public static Configuration GetInstance()
+    {
+        if (instance == null)
+        {
+            instance = new Configuration();
+
+        }
+        return instance;
     }
 
     internal string? DatabaseConnectionString
