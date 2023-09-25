@@ -70,10 +70,42 @@ class Controller
         ShowList($"OK - New contact '{contact.Name}' added.");
     }
 
-    public void ShowEdit()
+    public void ShowEdit(int id)
     {
-        var view = new EditView(this);
-        view.Show();
+        using var db = new PhoneBookContext();
+        try
+        {
+            var contact = db.Contacts.Where(c => c.ContactID == id).Single();
+            var view = new EditView(this, contact);
+            view.Show();
+        }
+        catch (InvalidOperationException)
+        {
+            ShowList($"ERROR - Could not load details for ID {id}");
+        }
+    }
+
+    public void Update(int id, ContactDto dto)
+    {
+        if (String.IsNullOrEmpty(dto.Name))
+        {
+            ShowAdd("ERROR - A contact must at least have a name.");
+            return;
+        }
+        using var db = new PhoneBookContext();
+        try
+        {
+            var contact = db.Contacts.Where(c => c.ContactID == id).Single();
+            contact.Name = dto.Name;
+            contact.Email = dto.Email;
+            contact.PhoneNumber = dto.PhoneNumber;
+            db.SaveChanges();
+            ShowList($"OK - Contact '{contact.Name}' updated.");
+        }
+        catch (Exception)
+        {
+            ShowList($"ERROR - Failed to update contact. ID: {id}");
+        }
     }
 
     public void ShowDelete()

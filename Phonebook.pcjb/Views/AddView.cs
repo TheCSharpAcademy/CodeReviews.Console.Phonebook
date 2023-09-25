@@ -41,7 +41,7 @@ class AddView : BaseView
 
         do
         {
-            Console.WriteLine("Phone Number: ");
+            Console.Write("Phone Number: ");
             contact.PhoneNumber = Console.ReadLine();
             isValid = String.IsNullOrEmpty(contact.PhoneNumber) || Validator.IsValidPhoneNumber(contact.PhoneNumber);
             if (!isValid)

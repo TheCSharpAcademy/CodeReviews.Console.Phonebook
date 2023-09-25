@@ -93,7 +93,7 @@ class ListView : BaseView
             case ConsoleKey.E:
                 if (contacts != null && contacts.Count > 0)
                 {
-                    controller.ShowEdit();
+                    controller.ShowEdit(contacts[pointer].ContactID);
                 }
                 else
                 {
