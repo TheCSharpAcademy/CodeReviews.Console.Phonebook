@@ -26,9 +26,17 @@ class Controller
     public void ShowDetails(int id)
     {
         using var db = new PhoneBookContext();
-        var contact = db.Contacts.Where(c => c.ContactID == id).Single();
-        var view = new DetailView(this, contact);
-        view.Show();
+        try
+        {
+            var contact = db.Contacts.Where(c => c.ContactID == id).Single();
+            var view = new DetailView(this, contact);
+            view.Show();
+        }
+        catch (InvalidOperationException)
+        {
+            ShowList($"ERROR - Could not load details for ID {id}");
+        }
+
     }
 
     public void ShowAdd()
