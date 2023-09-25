@@ -14,7 +14,7 @@ class AddView : BaseView
         bool isValid;
 
         Console.WriteLine("Add Contact");
-
+        Console.WriteLine("Only the name is required. Press enter to skip fields.");
         do
         {
             Console.Write("Name: ");
@@ -33,7 +33,7 @@ class AddView : BaseView
             isValid = String.IsNullOrEmpty(contact.PhoneNumber) || Validator.IsValidPhoneNumber(contact.PhoneNumber);
             if (!isValid)
             {
-                Console.WriteLine("Please enter a valid phone number.");
+                Console.WriteLine($"Please enter a valid phone number ({Validator.PhoneNumberPatternDescription}).");
             }
         } while (!isValid);
 
@@ -44,7 +44,7 @@ class AddView : BaseView
             isValid = String.IsNullOrEmpty(contact.Email) || Validator.IsValidEmail(contact.Email);
             if (!isValid)
             {
-                Console.WriteLine("Please enter a valid email.");
+                Console.WriteLine($"Please enter a valid email ({Validator.EmailPatternDescription}).");
             }
         } while (!isValid);
 

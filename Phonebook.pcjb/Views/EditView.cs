@@ -38,7 +38,7 @@ class EditView : BaseView
             isValid = String.IsNullOrEmpty(editedContact.PhoneNumber) || Validator.IsValidPhoneNumber(editedContact.PhoneNumber);
             if (!isValid)
             {
-                Console.WriteLine("Please enter a valid phone number.");
+                Console.WriteLine($"Please enter a valid phone number ({Validator.PhoneNumberPatternDescription}).");
             }
         } while (!isValid);
 
@@ -50,7 +50,7 @@ class EditView : BaseView
             isValid = String.IsNullOrEmpty(editedContact.Email) || Validator.IsValidEmail(editedContact.Email);
             if (!isValid)
             {
-                Console.WriteLine("Please enter a valid email.");
+                Console.WriteLine($"Please enter a valid email ({Validator.EmailPatternDescription}).");
             }
         } while (!isValid);
 
