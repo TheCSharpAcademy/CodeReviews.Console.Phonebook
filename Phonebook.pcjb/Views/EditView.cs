@@ -30,18 +30,6 @@ class EditView : BaseView
             }
         } while (!isValid);
 
-        Console.WriteLine($"Old Email: {contact.Email}");
-        do
-        {
-            Console.Write("New Email: ");
-            editedContact.Email = Console.ReadLine();
-            isValid = String.IsNullOrEmpty(editedContact.Email) || Validator.IsValidEmail(editedContact.Email);
-            if (!isValid)
-            {
-                Console.WriteLine("Please enter a valid email.");
-            }
-        } while (!isValid);
-
         Console.WriteLine($"Old Phone Number: {contact.PhoneNumber}");
         do
         {
@@ -51,6 +39,18 @@ class EditView : BaseView
             if (!isValid)
             {
                 Console.WriteLine("Please enter a valid phone number.");
+            }
+        } while (!isValid);
+
+        Console.WriteLine($"Old Email: {contact.Email}");
+        do
+        {
+            Console.Write("New Email: ");
+            editedContact.Email = Console.ReadLine();
+            isValid = String.IsNullOrEmpty(editedContact.Email) || Validator.IsValidEmail(editedContact.Email);
+            if (!isValid)
+            {
+                Console.WriteLine("Please enter a valid email.");
             }
         } while (!isValid);
 

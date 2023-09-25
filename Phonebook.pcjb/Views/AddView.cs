@@ -30,23 +30,23 @@ class AddView : BaseView
 
         do
         {
-            Console.Write("Email: ");
-            contact.Email = Console.ReadLine();
-            isValid = String.IsNullOrEmpty(contact.Email) || Validator.IsValidEmail(contact.Email);
-            if (!isValid)
-            {
-                Console.WriteLine("Please enter a valid email.");
-            }
-        } while (!isValid);
-
-        do
-        {
             Console.Write("Phone Number: ");
             contact.PhoneNumber = Console.ReadLine();
             isValid = String.IsNullOrEmpty(contact.PhoneNumber) || Validator.IsValidPhoneNumber(contact.PhoneNumber);
             if (!isValid)
             {
                 Console.WriteLine("Please enter a valid phone number.");
+            }
+        } while (!isValid);
+
+        do
+        {
+            Console.Write("Email: ");
+            contact.Email = Console.ReadLine();
+            isValid = String.IsNullOrEmpty(contact.Email) || Validator.IsValidEmail(contact.Email);
+            if (!isValid)
+            {
+                Console.WriteLine("Please enter a valid email.");
             }
         } while (!isValid);
 
