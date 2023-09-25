@@ -13,6 +13,6 @@ class EditView : BaseView
     {
         Console.WriteLine("Edit Contact");
         Console.ReadLine();
-        controller.ShowMenu();
+        controller.ShowList();
     }
 }

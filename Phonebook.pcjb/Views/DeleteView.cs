@@ -13,6 +13,6 @@ class DeleteView : BaseView
     {
         Console.WriteLine("Delete Contact");
         Console.ReadLine();
-        controller.ShowMenu();
+        controller.ShowList();
     }
 }

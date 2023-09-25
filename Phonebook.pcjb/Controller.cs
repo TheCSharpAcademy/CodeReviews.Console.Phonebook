@@ -1,5 +1,3 @@
-using Microsoft.VisualBasic;
-
 namespace PhoneBook;
 
 class Controller
@@ -11,23 +9,25 @@ class Controller
         this.phoneBookContext = phoneBookContext;
     }
 
-    public void ShowMenu()
-    {
-        ShowMenu(null);
-    }
-
-    public void ShowMenu(string? message)
-    {
-        var view = new MenuView(this);
-        view.SetMessage(message);
-        view.Show();
-    }
-
     public void ShowList()
+    {
+        ShowList(null);
+    }
+
+    public void ShowList(string? message)
     {
         using var db = new PhoneBookContext();
         var contacts = db.Contacts.OrderBy(c => c.Name).ToList();
         var view = new ListView(this, contacts);
+        view.SetMessage(message);
+        view.Show();
+    }
+
+    public void ShowDetails(int id)
+    {
+        using var db = new PhoneBookContext();
+        var contact = db.Contacts.Where(c => c.ContactID == id).Single();
+        var view = new DetailView(this, contact);
         view.Show();
     }
 
@@ -59,7 +59,7 @@ class Controller
         using var db = new PhoneBookContext();
         db.Add(contact);
         db.SaveChanges();
-        ShowMenu($"OK - New contact '{contact.Name}' added.");
+        ShowList($"OK - New contact '{contact.Name}' added.");
     }
 
     public void ShowEdit()
