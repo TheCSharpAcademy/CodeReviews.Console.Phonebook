@@ -139,7 +139,7 @@ class Controller
         }
     }
 
-    public void ShowExit()
+    public static void ShowExit()
     {
         var view = new ExitView();
         view.Show();

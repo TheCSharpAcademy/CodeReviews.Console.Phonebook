@@ -34,7 +34,7 @@ class DetailView : BaseView
                 controller.ShowDelete(contact.ContactID);
                 break;
             case ConsoleKey.X:
-                controller.ShowExit();
+                Controller.ShowExit();
                 break;
             default:
                 Show();
@@ -42,7 +42,7 @@ class DetailView : BaseView
         }
     }
 
-    private void WriteLineIfNotEmpty(string label, string? text)
+    private static void WriteLineIfNotEmpty(string label, string? text)
     {
         if (!String.IsNullOrEmpty(text))
         {
