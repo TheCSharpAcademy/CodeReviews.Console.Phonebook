@@ -31,7 +31,7 @@ class DetailView : BaseView
                 controller.ShowEdit(contact.ContactID);
                 break;
             case ConsoleKey.D:
-                controller.ShowDelete();
+                controller.ShowDelete(contact.ContactID);
                 break;
             case ConsoleKey.X:
                 controller.ShowExit();

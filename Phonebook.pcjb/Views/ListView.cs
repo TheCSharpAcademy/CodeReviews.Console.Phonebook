@@ -103,7 +103,7 @@ class ListView : BaseView
             case ConsoleKey.D:
                 if (contacts != null && contacts.Count > 0)
                 {
-                    controller.ShowDelete();
+                    controller.ShowDelete(contacts[pointer].ContactID);
                 }
                 else
                 {

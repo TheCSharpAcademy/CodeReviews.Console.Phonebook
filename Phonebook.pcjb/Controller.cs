@@ -108,10 +108,35 @@ class Controller
         }
     }
 
-    public void ShowDelete()
+    public void ShowDelete(int id)
     {
-        var view = new DeleteView(this);
-        view.Show();
+        using var db = new PhoneBookContext();
+        try
+        {
+            var contact = db.Contacts.Where(c => c.ContactID == id).Single();
+            var view = new DeleteView(this, contact);
+            view.Show();
+        }
+        catch (InvalidOperationException)
+        {
+            ShowList($"ERROR - Could not load details for ID {id}");
+        }
+    }
+
+    public void Delete(int id)
+    {
+        using var db = new PhoneBookContext();
+        try
+        {
+            var contact = db.Contacts.Where(c => c.ContactID == id).Single();
+            db.Remove(contact);
+            db.SaveChanges();
+            ShowList($"OK - Contact '{contact.Name}' deleted.");
+        }
+        catch (InvalidOperationException)
+        {
+            ShowList($"ERROR - Failed to delete contact with '{id}'.");
+        }
     }
 
     public void ShowExit()
