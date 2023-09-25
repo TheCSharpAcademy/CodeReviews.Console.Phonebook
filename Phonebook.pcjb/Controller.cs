@@ -1,8 +1,10 @@
+using Microsoft.VisualBasic;
+
 namespace PhoneBook;
 
 class Controller
 {
-    private PhoneBookContext phoneBookContext;
+    private readonly PhoneBookContext phoneBookContext;
 
     public Controller(PhoneBookContext phoneBookContext)
     {
@@ -16,8 +18,7 @@ class Controller
 
     public void ShowList(string? message)
     {
-        using var db = new PhoneBookContext();
-        var contacts = db.Contacts.OrderBy(c => c.Name).ToList();
+        var contacts = phoneBookContext.Contacts.OrderBy(c => c.Name).ToList();
         var view = new ListView(this, contacts);
         view.SetMessage(message);
         view.Show();
@@ -25,10 +26,9 @@ class Controller
 
     public void ShowDetails(int id)
     {
-        using var db = new PhoneBookContext();
         try
         {
-            var contact = db.Contacts.Where(c => c.ContactID == id).Single();
+            var contact = phoneBookContext.Contacts.Where(c => c.ContactID == id).Single();
             var view = new DetailView(this, contact);
             view.Show();
         }
@@ -36,7 +36,6 @@ class Controller
         {
             ShowList($"ERROR - Could not load details for ID {id}");
         }
-
     }
 
     public void ShowAdd()
@@ -64,18 +63,16 @@ class Controller
             Email = dto.Email,
             PhoneNumber = dto.PhoneNumber
         };
-        using var db = new PhoneBookContext();
-        db.Add(contact);
-        db.SaveChanges();
+        phoneBookContext.Add(contact);
+        phoneBookContext.SaveChanges();
         ShowList($"OK - New contact '{contact.Name}' added.");
     }
 
     public void ShowEdit(int id)
     {
-        using var db = new PhoneBookContext();
         try
         {
-            var contact = db.Contacts.Where(c => c.ContactID == id).Single();
+            var contact = phoneBookContext.Contacts.Where(c => c.ContactID == id).Single();
             var view = new EditView(this, contact);
             view.Show();
         }
@@ -92,14 +89,13 @@ class Controller
             ShowAdd("ERROR - A contact must at least have a name.");
             return;
         }
-        using var db = new PhoneBookContext();
         try
         {
-            var contact = db.Contacts.Where(c => c.ContactID == id).Single();
+            var contact = phoneBookContext.Contacts.Where(c => c.ContactID == id).Single();
             contact.Name = dto.Name;
             contact.Email = dto.Email;
             contact.PhoneNumber = dto.PhoneNumber;
-            db.SaveChanges();
+            phoneBookContext.SaveChanges();
             ShowList($"OK - Contact '{contact.Name}' updated.");
         }
         catch (Exception)
@@ -110,10 +106,9 @@ class Controller
 
     public void ShowDelete(int id)
     {
-        using var db = new PhoneBookContext();
         try
         {
-            var contact = db.Contacts.Where(c => c.ContactID == id).Single();
+            var contact = phoneBookContext.Contacts.Where(c => c.ContactID == id).Single();
             var view = new DeleteView(this, contact);
             view.Show();
         }
@@ -125,12 +120,11 @@ class Controller
 
     public void Delete(int id)
     {
-        using var db = new PhoneBookContext();
         try
         {
-            var contact = db.Contacts.Where(c => c.ContactID == id).Single();
-            db.Remove(contact);
-            db.SaveChanges();
+            var contact = phoneBookContext.Contacts.Where(c => c.ContactID == id).Single();
+            phoneBookContext.Remove(contact);
+            phoneBookContext.SaveChanges();
             ShowList($"OK - Contact '{contact.Name}' deleted.");
         }
         catch (InvalidOperationException)
