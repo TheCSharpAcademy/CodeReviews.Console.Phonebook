@@ -14,6 +14,8 @@ class CategoryListView : BaseView
 
     public override void Body()
     {
+        Console.WriteLine($"Categories:");
+
         if (HasCategories())
         {
             WriteCategoryList();

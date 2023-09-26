@@ -16,6 +16,7 @@ class ContactListView : BaseView
 
     public override void Body()
     {
+        Console.WriteLine($"Contacts in category '{category.Name}':");
 
         if (HasContacts())
         {
