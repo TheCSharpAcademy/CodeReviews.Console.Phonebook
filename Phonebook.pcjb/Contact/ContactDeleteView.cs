@@ -1,11 +1,11 @@
 namespace PhoneBook;
 
-class DeleteView : BaseView
+class ContactDeleteView : BaseView
 {
-    private readonly Controller controller;
+    private readonly ContactController controller;
     private readonly Contact contact;
 
-    public DeleteView(Controller controller, Contact contact)
+    public ContactDeleteView(ContactController controller, Contact contact)
     {
         this.controller = controller;
         this.contact = contact;

@@ -6,7 +6,7 @@ class Program
     {
         Console.WriteLine("PhoneBook starts. Please wait a moment...");
         using var phoneBookContext = new PhoneBookContext();
-        var controller = new Controller(phoneBookContext);
+        var controller = new ContactController(phoneBookContext);
         controller.ShowList();
     }
 }

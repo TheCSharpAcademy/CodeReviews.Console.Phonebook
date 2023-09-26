@@ -1,11 +1,11 @@
 namespace PhoneBook;
 
-class EditView : BaseView
+class ContactEditView : BaseView
 {
-    private readonly Controller controller;
+    private readonly ContactController controller;
     private readonly Contact contact;
 
-    public EditView(Controller controller, Contact contact)
+    public ContactEditView(ContactController controller, Contact contact)
     {
         this.controller = controller;
         this.contact = contact;

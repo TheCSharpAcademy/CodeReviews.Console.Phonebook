@@ -1,12 +1,12 @@
 namespace PhoneBook;
 
-class ListView : BaseView
+class ContactListView : BaseView
 {
-    private readonly Controller controller;
+    private readonly ContactController controller;
     private readonly List<Contact> contacts;
     private int pointer;
 
-    public ListView(Controller controller, List<Contact> contacts)
+    public ContactListView(ContactController controller, List<Contact> contacts)
     {
         this.controller = controller;
         this.contacts = contacts;
@@ -59,7 +59,7 @@ class ListView : BaseView
                 Delete();
                 break;
             case ConsoleKey.X:
-                Controller.ShowExit();
+                ContactController.ShowExit();
                 break;
             default:
                 Show();

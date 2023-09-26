@@ -1,11 +1,11 @@
 namespace PhoneBook;
 
-class DetailView : BaseView
+class ContactDetailView : BaseView
 {
-    private readonly Controller controller;
+    private readonly ContactController controller;
     private readonly Contact contact;
 
-    public DetailView(Controller controller, Contact contact)
+    public ContactDetailView(ContactController controller, Contact contact)
     {
         this.controller = controller;
         this.contact = contact;
@@ -34,7 +34,7 @@ class DetailView : BaseView
                 controller.ShowDelete(contact.ContactID);
                 break;
             case ConsoleKey.X:
-                Controller.ShowExit();
+                ContactController.ShowExit();
                 break;
             default:
                 Show();

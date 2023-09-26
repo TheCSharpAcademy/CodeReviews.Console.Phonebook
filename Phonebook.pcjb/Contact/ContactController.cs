@@ -1,10 +1,10 @@
 namespace PhoneBook;
 
-class Controller
+class ContactController
 {
     private readonly PhoneBookContext phoneBookContext;
 
-    public Controller(PhoneBookContext phoneBookContext)
+    public ContactController(PhoneBookContext phoneBookContext)
     {
         this.phoneBookContext = phoneBookContext;
     }
@@ -17,7 +17,7 @@ class Controller
     public void ShowList(string? message)
     {
         var contacts = phoneBookContext.Contacts.OrderBy(c => c.Name).ToList();
-        var view = new ListView(this, contacts);
+        var view = new ContactListView(this, contacts);
         view.SetMessage(message);
         view.Show();
     }
@@ -27,7 +27,7 @@ class Controller
         try
         {
             var contact = phoneBookContext.Contacts.Where(c => c.ContactID == id).Single();
-            var view = new DetailView(this, contact);
+            var view = new ContactDetailView(this, contact);
             view.Show();
         }
         catch (InvalidOperationException)
@@ -43,7 +43,7 @@ class Controller
 
     public void ShowAdd(string? message)
     {
-        var view = new AddView(this);
+        var view = new ContactAddView(this);
         view.SetMessage(message);
         view.Show();
     }
@@ -71,7 +71,7 @@ class Controller
         try
         {
             var contact = phoneBookContext.Contacts.Where(c => c.ContactID == id).Single();
-            var view = new EditView(this, contact);
+            var view = new ContactEditView(this, contact);
             view.Show();
         }
         catch (InvalidOperationException)
@@ -107,7 +107,7 @@ class Controller
         try
         {
             var contact = phoneBookContext.Contacts.Where(c => c.ContactID == id).Single();
-            var view = new DeleteView(this, contact);
+            var view = new ContactDeleteView(this, contact);
             view.Show();
         }
         catch (InvalidOperationException)
