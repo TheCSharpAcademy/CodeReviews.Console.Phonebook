@@ -3,17 +3,21 @@ namespace PhoneBook;
 class ContactAddView : BaseView
 {
     private readonly ContactController controller;
+    private readonly Category category;
 
-    public ContactAddView(ContactController controller)
+    public ContactAddView(ContactController controller, Category category)
     {
         this.controller = controller;
+        this.category = category;
     }
+
     public override void Body()
     {
         var contact = new ContactDto();
         bool isValid;
 
         Console.WriteLine("Add Contact");
+        Console.WriteLine($"Category: {category.Name}");
         Console.WriteLine("Only the name is required. Press enter to skip fields.");
         do
         {
@@ -48,6 +52,6 @@ class ContactAddView : BaseView
             }
         } while (!isValid);
 
-        controller.Create(contact);
+        controller.Create(category, contact);
     }
 }

@@ -10,6 +10,8 @@ class Program
         var contactController = new ContactController(phoneBookContext);
         contactController.SetMessageController(messageController);
         messageController.SetContactController(contactController);
-        contactController.ShowList();
+        var categoryController = new CategoryController(phoneBookContext, contactController);
+        contactController.SetCategoryController(categoryController);
+        categoryController.ShowList();
     }
 }

@@ -54,6 +54,6 @@ class ContactEditView : BaseView
             }
         } while (!isValid);
 
-        controller.Update(contact.ContactID, editedContact);
+        controller.Update(contact, editedContact);
     }
 }

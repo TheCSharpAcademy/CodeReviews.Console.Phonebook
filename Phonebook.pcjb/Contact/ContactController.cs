@@ -3,6 +3,7 @@ namespace PhoneBook;
 class ContactController
 {
     private readonly PhoneBookContext phoneBookContext;
+    private CategoryController? categoryController;
     private MessageController? messageController;
 
     public ContactController(PhoneBookContext phoneBookContext)
@@ -10,61 +11,67 @@ class ContactController
         this.phoneBookContext = phoneBookContext;
     }
 
+    public void SetCategoryController(CategoryController categoryController)
+    {
+        this.categoryController = categoryController;
+    }
+
     public void SetMessageController(MessageController messageController)
     {
         this.messageController = messageController;
     }
 
-    public void ShowList()
+    public void ShowList(Category category)
     {
-        ShowList(null);
+        ShowList(category, null);
     }
 
-    public void ShowList(string? message)
+    public void ShowList(Category category, string? message)
     {
-        var contacts = phoneBookContext.Contacts.OrderBy(c => c.Name).ToList();
-        var view = new ContactListView(this, contacts);
+        var contacts = category.Contacts.OrderBy(c => c.Name).ToList();
+        var view = new ContactListView(this, category, contacts);
         view.SetMessage(message);
         view.Show();
     }
 
-    public void ShowDetails(int id)
+    public void ChangeCategory()
     {
-        ShowDetails(id, null);
-    }
-
-    public void ShowDetails(int id, string? message)
-    {
-        try
+        if (categoryController == null)
         {
-            var contact = phoneBookContext.Contacts.Where(c => c.ContactID == id).Single();
-            var view = new ContactDetailView(this, contact);
-            view.SetMessage(message);
-            view.Show();
+            throw new InvalidOperationException("Required CategoryController missing.");
         }
-        catch (InvalidOperationException)
-        {
-            ShowList($"ERROR - Could not load details for ID {id}");
-        }
+        categoryController.ShowList();
     }
 
-    public void ShowAdd()
+    public void ShowDetails(Contact contact)
     {
-        ShowAdd(null);
+        ShowDetails(contact, null);
     }
 
-    public void ShowAdd(string? message)
+    public void ShowDetails(Contact contact, string? message)
     {
-        var view = new ContactAddView(this);
+        var view = new ContactDetailView(this, contact);
         view.SetMessage(message);
         view.Show();
     }
 
-    public void Create(ContactDto dto)
+    public void ShowAdd(Category category)
+    {
+        ShowAdd(category, null);
+    }
+
+    public void ShowAdd(Category category, string? message)
+    {
+        var view = new ContactAddView(this, category);
+        view.SetMessage(message);
+        view.Show();
+    }
+
+    public void Create(Category category, ContactDto dto)
     {
         if (String.IsNullOrEmpty(dto.Name))
         {
-            ShowAdd("ERROR - A contact must at least have a name.");
+            ShowAdd(category, "ERROR - A contact must at least have a name.");
             return;
         }
         var contact = new Contact
@@ -73,74 +80,49 @@ class ContactController
             Email = dto.Email,
             PhoneNumber = dto.PhoneNumber
         };
-        phoneBookContext.Add(contact);
+        category.Contacts.Add(contact);
         phoneBookContext.SaveChanges();
-        ShowList($"OK - New contact '{contact.Name}' added.");
+        ShowList(category, $"OK - New contact '{contact.Name}' added.");
     }
 
-    public void ShowEdit(int id)
+    public void ShowEdit(Contact contact)
     {
-        try
-        {
-            var contact = phoneBookContext.Contacts.Where(c => c.ContactID == id).Single();
-            var view = new ContactEditView(this, contact);
-            view.Show();
-        }
-        catch (InvalidOperationException)
-        {
-            ShowList($"ERROR - Could not load details for ID {id}");
-        }
+        var view = new ContactEditView(this, contact);
+        view.Show();
     }
 
-    public void Update(int id, ContactDto dto)
+    public void Update(Contact contact, ContactDto dto)
     {
         if (String.IsNullOrEmpty(dto.Name))
         {
-            ShowAdd("ERROR - A contact must at least have a name.");
+            ShowAdd(contact.Category, "ERROR - A contact must at least have a name.");
             return;
         }
         try
         {
-            var contact = phoneBookContext.Contacts.Where(c => c.ContactID == id).Single();
             contact.Name = dto.Name;
             contact.Email = dto.Email;
             contact.PhoneNumber = dto.PhoneNumber;
             phoneBookContext.SaveChanges();
-            ShowList($"OK - Contact '{contact.Name}' updated.");
+            ShowList(contact.Category, $"OK - Contact '{contact.Name}' updated.");
         }
         catch (Exception)
         {
-            ShowList($"ERROR - Failed to update contact. ID: {id}");
+            ShowList(contact.Category, $"ERROR - Failed to update contact. ID: {contact.ContactID}");
         }
     }
 
-    public void ShowDelete(int id)
+    public void ShowDelete(Contact contact)
     {
-        try
-        {
-            var contact = phoneBookContext.Contacts.Where(c => c.ContactID == id).Single();
-            var view = new ContactDeleteView(this, contact);
-            view.Show();
-        }
-        catch (InvalidOperationException)
-        {
-            ShowList($"ERROR - Could not load details for ID {id}");
-        }
+        var view = new ContactDeleteView(this, contact);
+        view.Show();
     }
 
-    public void Delete(int id)
+    public void Delete(Contact contact)
     {
-        try
-        {
-            var contact = phoneBookContext.Contacts.Where(c => c.ContactID == id).Single();
-            phoneBookContext.Remove(contact);
-            phoneBookContext.SaveChanges();
-            ShowList($"OK - Contact '{contact.Name}' deleted.");
-        }
-        catch (InvalidOperationException)
-        {
-            ShowList($"ERROR - Failed to delete contact with '{id}'.");
-        }
+        phoneBookContext.Remove(contact);
+        phoneBookContext.SaveChanges();
+        ShowList(contact.Category, $"OK - Contact '{contact.Name}' deleted.");
     }
 
     public static void ShowExit()

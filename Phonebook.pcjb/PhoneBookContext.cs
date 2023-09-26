@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 class PhoneBookContext : DbContext
 {
+    public DbSet<Category> Category { get; set; }
     public DbSet<Contact> Contacts { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

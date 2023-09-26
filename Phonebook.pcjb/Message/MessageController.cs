@@ -75,6 +75,6 @@ class MessageController
         {
             throw new InvalidOperationException("Required ContactController missing.");
         }
-        contactController.ShowDetails(contact.ContactID, message);
+        contactController.ShowDetails(contact, message);
     }
 }

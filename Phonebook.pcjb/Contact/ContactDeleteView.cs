@@ -19,10 +19,10 @@ class ContactDeleteView : BaseView
         switch (Console.ReadKey().KeyChar.ToString())
         {
             case "y":
-                controller.Delete(contact.ContactID);
+                controller.Delete(contact);
                 break;
             default:
-                controller.ShowList();
+                controller.ShowList(contact.Category);
                 break;
         }
     }

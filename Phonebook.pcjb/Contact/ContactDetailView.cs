@@ -14,6 +14,7 @@ class ContactDetailView : BaseView
     public override void Body()
     {
         Console.WriteLine("Contact Details");
+        WriteLineIfNotEmpty("Category", contact.Category.Name);
         WriteLineIfNotEmpty("Name", contact.Name);
         WriteLineIfNotEmpty("Phone-Number", contact.PhoneNumber);
         WriteLineIfNotEmpty("Email", contact.Email);
@@ -26,13 +27,13 @@ class ContactDetailView : BaseView
         switch (Console.ReadKey().Key)
         {
             case ConsoleKey.LeftArrow:
-                controller.ShowList();
+                controller.ShowList(contact.Category);
                 break;
             case ConsoleKey.E:
-                controller.ShowEdit(contact.ContactID);
+                controller.ShowEdit(contact);
                 break;
             case ConsoleKey.D:
-                controller.ShowDelete(contact.ContactID);
+                controller.ShowDelete(contact);
                 break;
             case ConsoleKey.M:
                 controller.SendMail(contact);

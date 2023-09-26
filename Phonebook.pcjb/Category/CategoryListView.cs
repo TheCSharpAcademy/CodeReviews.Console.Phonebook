@@ -1,43 +1,39 @@
 namespace PhoneBook;
 
-class ContactListView : BaseView
+class CategoryListView : BaseView
 {
-    private readonly ContactController controller;
-    private readonly Category category;
-    private readonly List<Contact> contacts;
+    private readonly CategoryController controller;
+    private readonly List<Category> categories;
     private int pointer;
 
-    public ContactListView(ContactController controller, Category category, List<Contact> contacts)
+    public CategoryListView(CategoryController controller, List<Category> categories)
     {
         this.controller = controller;
-        this.category = category;
-        this.contacts = contacts;
+        this.categories = categories;
     }
 
     public override void Body()
     {
-
-        if (HasContacts())
+        if (HasCategories())
         {
-            WriteContactList();
+            WriteCategoryList();
         }
         else
         {
-            Console.WriteLine("No contacts found.");
+            Console.WriteLine("No categories found.");
         }
 
         Console.WriteLine("---");
-        if (HasContacts())
+        if (HasCategories())
         {
-            Console.WriteLine("Press arrow-up/-down to scroll through the list of contacts.");
-            Console.WriteLine("Press arrow-left to change the category.");
-            Console.WriteLine("Press arrow-right to view the details of the contact marked with '->'.");
+            Console.WriteLine("Press arrow-up/-down to scroll through the list of categories.");
+            Console.WriteLine("Press arrow-right to view the contacts of the category marked with '->'.");
         }
-        Console.WriteLine("Press 'a' to add a new contact.");
-        if (HasContacts())
+        Console.WriteLine("Press 'a' to add a new category.");
+        if (HasCategories())
         {
-            Console.WriteLine("Press 'e' to edit the contact marked with '->'.");
-            Console.WriteLine("Press 'd' to delete the contact marked with '->'.");
+            Console.WriteLine("Press 'e' to edit the category marked with '->'.");
+            Console.WriteLine("Press 'd' to delete the category marked with '->'.");
         }
         Console.WriteLine("Press 'x' to exit.");
 
@@ -49,14 +45,11 @@ class ContactListView : BaseView
             case ConsoleKey.UpArrow:
                 PointerUp();
                 break;
-            case ConsoleKey.LeftArrow:
-                controller.ChangeCategory();
-                break;
             case ConsoleKey.RightArrow:
-                Details();
+                Contacts();
                 break;
             case ConsoleKey.A:
-                controller.ShowAdd(category);
+                controller.ShowAdd();
                 break;
             case ConsoleKey.E:
                 Edit();
@@ -65,7 +58,7 @@ class ContactListView : BaseView
                 Delete();
                 break;
             case ConsoleKey.X:
-                ContactController.ShowExit();
+                CategoryController.ShowExit();
                 break;
             default:
                 Show();
@@ -73,14 +66,14 @@ class ContactListView : BaseView
         }
     }
 
-    private bool HasContacts()
+    private bool HasCategories()
     {
-        return contacts != null && contacts.Count > 0;
+        return categories != null && categories.Count > 0;
     }
 
-    private void WriteContactList()
+    private void WriteCategoryList()
     {
-        int itemsAfterPointer = contacts.Count - 1 - pointer;
+        int itemsAfterPointer = categories.Count - 1 - pointer;
         int maxVisibleItemsBeforeAfter = 3;
         int first = pointer - Math.Min(maxVisibleItemsBeforeAfter, pointer);
         int last = pointer + Math.Min(maxVisibleItemsBeforeAfter, itemsAfterPointer);
@@ -93,23 +86,23 @@ class ContactListView : BaseView
             first -= Math.Min(maxVisibleItemsBeforeAfter - (last - pointer), pointer);
         }
         if (first < 0) first = 0;
-        if (first >= contacts.Count) first = contacts.Count - 1;
+        if (first >= categories.Count) first = categories.Count - 1;
         if (last < 0) last = 0;
-        if (last >= contacts.Count) last = contacts.Count - 1;
+        if (last >= categories.Count) last = categories.Count - 1;
 
         for (int i = first; i <= last; i++)
         {
             var pointerSymbol = (i == pointer) ? "->" : "  ";
-            Console.WriteLine($"{pointerSymbol} {contacts[i].Name}");
+            Console.WriteLine($"{pointerSymbol} {categories[i].Name}");
         }
     }
 
     private void PointerDown()
     {
         pointer++;
-        if (HasContacts() && pointer > contacts.Count - 1)
+        if (HasCategories() && pointer > categories.Count - 1)
         {
-            pointer = contacts.Count - 1;
+            pointer = categories.Count - 1;
         }
         Show();
     }
@@ -124,11 +117,11 @@ class ContactListView : BaseView
         Show();
     }
 
-    private void Details()
+    private void Contacts()
     {
-        if (HasContacts())
+        if (HasCategories())
         {
-            controller.ShowDetails(contacts[pointer]);
+            controller.ShowContacts(categories[pointer]);
         }
         else
         {
@@ -138,9 +131,9 @@ class ContactListView : BaseView
 
     private void Edit()
     {
-        if (HasContacts())
+        if (HasCategories())
         {
-            controller.ShowEdit(contacts[pointer]);
+            controller.ShowEdit(categories[pointer]);
         }
         else
         {
@@ -150,9 +143,9 @@ class ContactListView : BaseView
 
     private void Delete()
     {
-        if (HasContacts())
+        if (HasCategories())
         {
-            controller.ShowDelete(contacts[pointer]);
+            controller.ShowDelete(categories[pointer]);
         }
         else
         {
