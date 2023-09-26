@@ -42,6 +42,18 @@ class ContactEditView : BaseView
             }
         } while (!isValid);
 
+        Console.WriteLine($"Old Mobile Number: {contact.MobileNumber}");
+        do
+        {
+            Console.Write("New Mobile Number: ");
+            editedContact.MobileNumber = Console.ReadLine();
+            isValid = String.IsNullOrEmpty(editedContact.MobileNumber) || Validator.IsValidPhoneNumber(editedContact.MobileNumber);
+            if (!isValid)
+            {
+                Console.WriteLine($"Please enter a valid mobile number ({Validator.PhoneNumberPatternDescription}).");
+            }
+        } while (!isValid);
+
         Console.WriteLine($"Old Email: {contact.Email}");
         do
         {

@@ -16,7 +16,8 @@ class ContactDetailView : BaseView
         Console.WriteLine("Contact Details");
         WriteLineIfNotEmpty("Category", contact.Category.Name);
         WriteLineIfNotEmpty("Name", contact.Name);
-        WriteLineIfNotEmpty("Phone-Number", contact.PhoneNumber);
+        WriteLineIfNotEmpty("Phone Number", contact.PhoneNumber);
+        WriteLineIfNotEmpty("Mobile Number", contact.MobileNumber);
         WriteLineIfNotEmpty("Email", contact.Email);
         Console.WriteLine("---");
         Console.WriteLine("Press arrow-left to select a different contact.");

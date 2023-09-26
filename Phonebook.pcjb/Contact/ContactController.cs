@@ -78,7 +78,8 @@ class ContactController
         {
             Name = dto.Name,
             Email = dto.Email,
-            PhoneNumber = dto.PhoneNumber
+            PhoneNumber = dto.PhoneNumber,
+            MobileNumber = dto.MobileNumber
         };
         category.Contacts.Add(contact);
         phoneBookContext.SaveChanges();
@@ -103,6 +104,7 @@ class ContactController
             contact.Name = dto.Name;
             contact.Email = dto.Email;
             contact.PhoneNumber = dto.PhoneNumber;
+            contact.MobileNumber = dto.MobileNumber;
             phoneBookContext.SaveChanges();
             ShowList(contact.Category, $"OK - Contact '{contact.Name}' updated.");
         }

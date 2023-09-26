@@ -43,6 +43,17 @@ class ContactAddView : BaseView
 
         do
         {
+            Console.Write("Mobile Number: ");
+            contact.MobileNumber = Console.ReadLine();
+            isValid = String.IsNullOrEmpty(contact.MobileNumber) || Validator.IsValidPhoneNumber(contact.MobileNumber);
+            if (!isValid)
+            {
+                Console.WriteLine($"Please enter a valid mobile number ({Validator.PhoneNumberPatternDescription}).");
+            }
+        } while (!isValid);
+
+        do
+        {
             Console.Write("Email: ");
             contact.Email = Console.ReadLine();
             isValid = String.IsNullOrEmpty(contact.Email) || Validator.IsValidEmail(contact.Email);
