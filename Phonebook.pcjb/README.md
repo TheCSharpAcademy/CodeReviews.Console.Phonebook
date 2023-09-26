@@ -68,9 +68,9 @@ dotnet user-secrets set TwilioAuthToken "YOUR-TWILIO-AUTH-TOKEN-HERE"
 ```
 
 ## Notes/References
-* [The C# Academy Exercise "Phone Book"](https://thecsharpacademy.com/project/16)
-* https://learn.microsoft.com/en-us/ef/core/
-* https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli
-* https://learn.microsoft.com/en-us/ef/core/modeling/relationships/one-to-many#required-one-to-many
+*   [The C# Academy Exercise "Phone Book"](https://thecsharpacademy.com/project/16)
+*   https://learn.microsoft.com/en-us/ef/core/
+*   https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli
+*   https://learn.microsoft.com/en-us/ef/core/modeling/relationships/one-to-many#required-one-to-many
 
 

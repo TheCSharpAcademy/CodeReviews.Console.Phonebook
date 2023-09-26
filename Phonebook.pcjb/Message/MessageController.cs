@@ -91,7 +91,7 @@ class MessageController
         try
         {
             TwilioClient.Init(config.TwilioAccountSid, config.TwilioAuthToken);
-            var message = MessageResource.Create(
+            MessageResource.Create(
                 from: new Twilio.Types.PhoneNumber(config.TwilioFrom),
                 body: text,
                 to: new Twilio.Types.PhoneNumber(contact.MobileNumber)

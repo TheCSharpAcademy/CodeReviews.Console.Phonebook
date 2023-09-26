@@ -14,9 +14,7 @@ class MessageCreateSmsView : BaseView
     }
     public override void Body()
     {
-        var config = Configuration.GetInstance();
         string? text;
-
         Console.WriteLine($"Send SMS to '{contact.Name}'");
         Console.WriteLine($"Mobile Number: {contact.MobileNumber}");
         Console.WriteLine("Text [Press <ESC> to finish entering the text]: ");
