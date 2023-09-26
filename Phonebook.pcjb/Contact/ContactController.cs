@@ -108,7 +108,7 @@ class ContactController
         }
         catch (Exception)
         {
-            ShowList(contact.Category, $"ERROR - Failed to update contact. ID: {contact.ContactID}");
+            ShowList(contact.Category, $"ERROR - Failed to update contact. ID: {contact.Id}");
         }
     }
 
