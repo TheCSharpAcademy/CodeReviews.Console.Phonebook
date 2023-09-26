@@ -6,11 +6,11 @@ using Twilio.Rest.Api.V2010.Account;
 
 class MessageController
 {
-    private ContactController? contactController;
+    private readonly MainController mainController;
 
-    public void SetContactController(ContactController contactController)
+    public MessageController(MainController mainController)
     {
-        this.contactController = contactController;
+        this.mainController = mainController;
     }
 
     public void ShowCreateMail(Contact contact)
@@ -113,10 +113,6 @@ class MessageController
 
     public void ShowContactDetails(Contact contact, string? message)
     {
-        if (contactController == null)
-        {
-            throw new InvalidOperationException("Required ContactController missing.");
-        }
-        contactController.ShowDetails(contact, message);
+        mainController.ShowContactDetails(contact, message);
     }
 }

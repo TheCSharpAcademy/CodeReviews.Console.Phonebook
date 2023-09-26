@@ -2,23 +2,13 @@ namespace PhoneBook;
 
 class ContactController
 {
+    private readonly MainController mainController;
     private readonly PhoneBookContext phoneBookContext;
-    private CategoryController? categoryController;
-    private MessageController? messageController;
 
-    public ContactController(PhoneBookContext phoneBookContext)
+    public ContactController(MainController mainController, PhoneBookContext phoneBookContext)
     {
+        this.mainController = mainController;
         this.phoneBookContext = phoneBookContext;
-    }
-
-    public void SetCategoryController(CategoryController categoryController)
-    {
-        this.categoryController = categoryController;
-    }
-
-    public void SetMessageController(MessageController messageController)
-    {
-        this.messageController = messageController;
     }
 
     public void ShowList(Category category)
@@ -36,11 +26,7 @@ class ContactController
 
     public void ChangeCategory()
     {
-        if (categoryController == null)
-        {
-            throw new InvalidOperationException("Required CategoryController missing.");
-        }
-        categoryController.ShowList();
+        mainController.ShowCategories();
     }
 
     public void ShowDetails(Contact contact)
@@ -135,19 +121,11 @@ class ContactController
 
     public void SendMail(Contact contact)
     {
-        if (messageController == null)
-        {
-            throw new InvalidOperationException("Required MessageController missing.");
-        }
-        messageController.ShowCreateMail(contact);
+        mainController.SendMail(contact);
     }
 
     public void SendSms(Contact contact)
     {
-        if (messageController == null)
-        {
-            throw new InvalidOperationException("Required MessageController missing.");
-        }
-        messageController.ShowCreateSms(contact);
+        mainController.SendSms(contact);
     }
 }

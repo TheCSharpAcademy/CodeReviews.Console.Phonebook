@@ -2,13 +2,13 @@ namespace PhoneBook;
 
 class CategoryController
 {
+    private readonly MainController mainController;
     private readonly PhoneBookContext phoneBookContext;
-    private ContactController contactController;
 
-    public CategoryController(PhoneBookContext phoneBookContext, ContactController contactController)
+    public CategoryController(MainController mainController, PhoneBookContext phoneBookContext)
     {
+        this.mainController = mainController;
         this.phoneBookContext = phoneBookContext;
-        this.contactController = contactController;
     }
 
     public void ShowList()
@@ -54,8 +54,7 @@ class CategoryController
 
     public void ShowContacts(Category category)
     {
-        phoneBookContext.Entry(category).Collection(c => c.Contacts).Load();
-        contactController.ShowList(category);
+        mainController.ShowContacts(category);
     }
 
     public void ShowEdit(Category category)
