@@ -3,10 +3,16 @@ namespace PhoneBook;
 class ContactController
 {
     private readonly PhoneBookContext phoneBookContext;
+    private MessageController? messageController;
 
     public ContactController(PhoneBookContext phoneBookContext)
     {
         this.phoneBookContext = phoneBookContext;
+    }
+
+    public void SetMessageController(MessageController messageController)
+    {
+        this.messageController = messageController;
     }
 
     public void ShowList()
@@ -24,10 +30,16 @@ class ContactController
 
     public void ShowDetails(int id)
     {
+        ShowDetails(id, null);
+    }
+
+    public void ShowDetails(int id, string? message)
+    {
         try
         {
             var contact = phoneBookContext.Contacts.Where(c => c.ContactID == id).Single();
             var view = new ContactDetailView(this, contact);
+            view.SetMessage(message);
             view.Show();
         }
         catch (InvalidOperationException)
@@ -135,5 +147,14 @@ class ContactController
     {
         var view = new ExitView();
         view.Show();
+    }
+
+    public void SendMail(Contact contact)
+    {
+        if (messageController == null)
+        {
+            throw new InvalidOperationException("Required MessageController missing.");
+        }
+        messageController.ShowCreateMail(contact);
     }
 }

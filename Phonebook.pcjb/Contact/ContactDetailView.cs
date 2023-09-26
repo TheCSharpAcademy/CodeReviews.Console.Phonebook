@@ -21,6 +21,7 @@ class ContactDetailView : BaseView
         Console.WriteLine("Press arrow-left to select a different contact.");
         Console.WriteLine("Press 'e' to edit this contact.");
         Console.WriteLine("Press 'd' to delete this contact.");
+        Console.WriteLine("Press 'm' to send an email to this contact.");
         Console.WriteLine("Press 'x' to exit.");
         switch (Console.ReadKey().Key)
         {
@@ -32,6 +33,9 @@ class ContactDetailView : BaseView
                 break;
             case ConsoleKey.D:
                 controller.ShowDelete(contact.ContactID);
+                break;
+            case ConsoleKey.M:
+                controller.SendMail(contact);
                 break;
             case ConsoleKey.X:
                 ContactController.ShowExit();
