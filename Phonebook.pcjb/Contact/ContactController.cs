@@ -141,4 +141,13 @@ class ContactController
         }
         messageController.ShowCreateMail(contact);
     }
+
+    public void SendSms(Contact contact)
+    {
+        if (messageController == null)
+        {
+            throw new InvalidOperationException("Required MessageController missing.");
+        }
+        messageController.ShowCreateSms(contact);
+    }
 }

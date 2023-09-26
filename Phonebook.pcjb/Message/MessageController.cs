@@ -1,20 +1,22 @@
 namespace PhoneBook;
 
 using System.Net.Mail;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 
 class MessageController
 {
     private ContactController? contactController;
 
+    public void SetContactController(ContactController contactController)
+    {
+        this.contactController = contactController;
+    }
+
     public void ShowCreateMail(Contact contact)
     {
         var view = new MessageCreateMailView(this, contact);
         view.Show();
-    }
-
-    public void SetContactController(ContactController contactController)
-    {
-        this.contactController = contactController;
     }
 
     public void SendMail(Contact contact, string? subject, string? body)
@@ -64,10 +66,50 @@ class MessageController
         ShowContactDetails(contact, $"OK - Email sent to '{message.To}'");
     }
 
+    public void ShowCreateSms(Contact contact)
+    {
+        var view = new MessageCreateSmsView(this, contact);
+        view.Show();
+    }
+
+    public void SendSms(Contact contact, string? text)
+    {
+        if (string.IsNullOrEmpty(contact.MobileNumber))
+        {
+            ShowContactDetails(contact, "Mobile Number must not be empty.");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(text))
+        {
+            ShowContactDetails(contact, "Text must not be empty.");
+            return;
+        }
+
+        var config = Configuration.GetInstance();
+
+        try
+        {
+            TwilioClient.Init(config.TwilioAccountSid, config.TwilioAuthToken);
+            var message = MessageResource.Create(
+                from: new Twilio.Types.PhoneNumber(config.TwilioFrom),
+                body: text,
+                to: new Twilio.Types.PhoneNumber(contact.MobileNumber)
+            );
+            ShowContactDetails(contact, $"OK - SMS sent to '{contact.MobileNumber}'");
+        }
+        catch (Exception)
+        {
+            ShowContactDetails(contact, $"ERROR - Failed to send SMS to '{contact.Name}'");
+            return;
+        }
+
+    }
+
     public void ShowContactDetails(Contact contact)
     {
         ShowContactDetails(contact, null);
-        }
+    }
 
     public void ShowContactDetails(Contact contact, string? message)
     {

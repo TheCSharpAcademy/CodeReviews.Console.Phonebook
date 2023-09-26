@@ -2,12 +2,12 @@ namespace PhoneBook;
 
 using System.Text;
 
-class MessageCreateMailView : BaseView
+class MessageCreateSmsView : BaseView
 {
     private readonly MessageController controller;
     private readonly Contact contact;
 
-    public MessageCreateMailView(MessageController controller, Contact contact)
+    public MessageCreateSmsView(MessageController controller, Contact contact)
     {
         this.controller = controller;
         this.contact = contact;
@@ -15,40 +15,36 @@ class MessageCreateMailView : BaseView
     public override void Body()
     {
         var config = Configuration.GetInstance();
-        string? subject;
-        string? body;
+        string? text;
 
-        Console.WriteLine($"Send Email to '{contact.Name}'");
-        Console.WriteLine($"From: {config.MailFrom}");
-        Console.WriteLine($"To  : {contact.Email}");
-        Console.Write("Subject: ");
-        subject = Console.ReadLine();
-        Console.WriteLine("Body [Press <ESC> to finish entering the body text]: ");
+        Console.WriteLine($"Send SMS to '{contact.Name}'");
+        Console.WriteLine($"Mobile Number: {contact.MobileNumber}");
+        Console.WriteLine("Text [Press <ESC> to finish entering the text]: ");
         ConsoleKeyInfo keyInfo;
-        var bodyStringBuilder = new StringBuilder();
+        var textStringBuilder = new StringBuilder();
         do
         {
             keyInfo = Console.ReadKey(true);
             if (keyInfo.Key.Equals(ConsoleKey.Enter))
             {
-                bodyStringBuilder.Append(System.Environment.NewLine);
+                textStringBuilder.Append(System.Environment.NewLine);
                 Console.Write(System.Environment.NewLine);
             }
             else if (!keyInfo.Key.Equals(ConsoleKey.Escape))
             {
-                bodyStringBuilder.Append(keyInfo.KeyChar);
+                textStringBuilder.Append(keyInfo.KeyChar);
                 Console.Write(keyInfo.KeyChar);
             }
         } while (!keyInfo.Key.Equals(ConsoleKey.Escape));
         Console.WriteLine("---");
-        body = bodyStringBuilder.ToString();
+        text = textStringBuilder.ToString();
 
-        Console.WriteLine("Send email? [y/n]");
+        Console.WriteLine("Send SMS? [y/n]");
         switch (Console.ReadKey(true).Key)
         {
             case ConsoleKey.Y:
-                Console.WriteLine("Sending email. Please wait...");
-                controller.SendMail(contact, subject, body);
+                Console.WriteLine("Sending SMS. Please wait...");
+                controller.SendSms(contact, text);
                 break;
             default:
                 controller.ShowContactDetails(contact);

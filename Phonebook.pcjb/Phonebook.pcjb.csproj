@@ -22,6 +22,7 @@
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <PackageReference Include="Twilio" Version="6.14.0" />
   </ItemGroup>
 
 </Project>

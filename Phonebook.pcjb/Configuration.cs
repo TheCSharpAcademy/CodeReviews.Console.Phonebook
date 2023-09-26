@@ -89,4 +89,43 @@ internal sealed class Configuration
             return password ?? "";
         }
     }
+
+    internal string TwilioFrom
+    {
+        get
+        {
+            var from = config["Twilio:From"];
+            if (!String.IsNullOrEmpty(from))
+            {
+                from = from.Replace("{TwilioFrom}", config["TwilioFrom"]);
+            }
+            return from ?? "";
+        }
+    }
+    
+    internal string TwilioAccountSid
+    {
+        get
+        {
+            var accountSid = config["Twilio:AccountSid"];
+            if (!String.IsNullOrEmpty(accountSid))
+            {
+                accountSid = accountSid.Replace("{TwilioAccountSid}", config["TwilioAccountSid"]);
+            }
+            return accountSid ?? "";
+        }
+    }
+
+    internal string TwilioAuthToken
+    {
+        get
+        {
+            var authToken = config["Twilio:AuthToken"];
+            if (!String.IsNullOrEmpty(authToken))
+            {
+                authToken = authToken.Replace("{TwilioAuthToken}", config["TwilioAuthToken"]);
+            }
+            return authToken ?? "";
+        }
+    }
 }

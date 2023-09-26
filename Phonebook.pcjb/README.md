@@ -47,6 +47,26 @@ docker run -d -p 1025:1025 -p 8025:8025 mailhog/mailhog
 ```
 The local email server will listen for SMPT requests on port 1025 and provide a user interface to check emails on port 8025: http://localhost:8025/
 
+## SMS Setup
+The application needs access to the [Twilio API](https://www.twilio.com/) to send SMS.
+Please configure the Twilio API in appsettings.json:
+```
+{
+    "Twilio": {
+        "From": "{TwilioFrom}", 
+        "AccountSid": "{TwilioAccountSid}",
+        "AuthToken": "{TwilioAuthToken}"
+    }
+}
+```
+### Development SMS-API Secrets
+The placeholders '{TwilioFrom}', '{TwilioAccountSid}' and '{TwilioAuthToken}' should not be modified or replaced with the real values. The app will read these values from the user-secrets provided by dotnet:
+```
+dotnet user-secrets set TwilioFrom "YOUR-TWILIO-PHONE-NUMBER-HERE"
+dotnet user-secrets set TwilioAccountSid "YOUR-TWILIO-ACCOUNT-SID-HERE"
+dotnet user-secrets set TwilioAuthToken "YOUR-TWILIO-AUTH-TOKEN-HERE"
+```
+
 ## Notes/References
 * [The C# Academy Exercise "Phone Book"](https://thecsharpacademy.com/project/16)
 * https://learn.microsoft.com/en-us/ef/core/
