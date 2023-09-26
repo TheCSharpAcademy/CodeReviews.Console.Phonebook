@@ -18,7 +18,7 @@ class CategoryController
 
     public void ShowList(string? message)
     {
-        var categories = phoneBookContext.Category.OrderBy(c => c.Name).ToList();
+        var categories = phoneBookContext.Categories.OrderBy(c => c.Name).ToList();
         var view = new CategoryListView(this, categories);
         view.SetMessage(message);
         view.Show();
