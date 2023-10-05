@@ -35,6 +35,9 @@ namespace PhoneBook
                 case SELECTOR.DELETE:
                     DeleteContact();
                     break;
+                case SELECTOR.VIEWALL:
+                    ViewAllContact();
+                    break;
                 case SELECTOR.EXIT:
                     Environment.Exit(0);
                     break;
@@ -43,6 +46,27 @@ namespace PhoneBook
                     break;
             }
             Selector = Ui.GoToMainMenu("Type any keys to continue.");
+        }
+
+        private void ViewAllContact()
+        {
+            UI.Clear();
+
+            try
+            {
+                var contact = Service.Contacts;
+                var contactData = new List<List<object>>();
+                foreach (var c in contact)
+                {
+                    contactData.Add(new List<object> { c.Id, c.Name, c.Email, c.PhoneNumber } );
+
+                }
+                UI.MakeTable(contactData, "All Contacts");
+            }
+            catch
+            {
+                UI.Write("Error.");
+            }
         }
 
         private void CreateContact()
@@ -84,14 +108,14 @@ namespace PhoneBook
         }
         private void UpdateContact()
         {
-            UI.Clear();
+            ViewAllContact();
             var name = Ui.GetInput("Type a name to update.").str;
 
             try
             {
                 var contact = Service.Contacts.Where(c => c.Name == name).First();
-                contact.Email = Validation.CheckEmail(Ui.GetInput("Type an email address.").str);
-                contact.PhoneNumber = Validation.CheckPhoneNumber(Ui.GetInput("Type a phone number.").str);
+                contact.Email = Validation.CheckEmail(Ui.GetInput("Type an email address. (myname@email.com)").str);
+                contact.PhoneNumber = Validation.CheckPhoneNumber(Ui.GetInput("Type a phone number. (000-0000-0000)").str);
                 Service.SaveChanges();
                 var contactData = new List<List<object>>() { new List<object> { contact.Id, contact.Name, contact.Email, contact.PhoneNumber } };
                 UI.MakeTable(contactData, "Contact");
@@ -104,7 +128,7 @@ namespace PhoneBook
         }
         private void DeleteContact()
         {
-            UI.Clear();
+            ViewAllContact();
             var name = Ui.GetInput("Type a name to delete.").str;
 
             try

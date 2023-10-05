@@ -15,6 +15,7 @@ namespace PhoneBook
             Write("2. View a contact");
             Write("3. Update a contact");
             Write("4. Delete a contact");
+            Write("5. View all contact");
             Write("0. Exit\n");
             var selector = (SELECTOR)GetInput("Select ").val;
 
