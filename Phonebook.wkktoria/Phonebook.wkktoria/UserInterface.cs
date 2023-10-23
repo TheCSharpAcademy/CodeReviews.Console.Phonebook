@@ -5,7 +5,7 @@ using Spectre.Console;
 
 namespace Phonebook.wkktoria;
 
-public class UserInterface
+public partial class UserInterface
 {
     private readonly CategoryController _categoryController = new();
     private readonly ContactController _contactController = new();
@@ -139,7 +139,7 @@ public class UserInterface
         }
     }
 
-    private static string GetOption(List<string> choices)
+    private static string GetOption(IEnumerable<string> choices)
     {
         var option = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
@@ -147,7 +147,7 @@ public class UserInterface
                 .AddChoices(choices)
         );
 
-        return Regex.Replace(option, @"\s+", string.Empty);
+        return WhitespaceRegex().Replace(option, string.Empty);
     }
 
     private static void PressAnyKeyToContinue()
@@ -155,4 +155,7 @@ public class UserInterface
         Console.Write("\nPress any key to continue...");
         Console.ReadKey();
     }
+
+    [GeneratedRegex("\\s+")]
+    private static partial Regex WhitespaceRegex();
 }

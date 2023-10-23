@@ -86,7 +86,7 @@ public class ContactController
 
         do
         {
-            email = AnsiConsole.Ask<string>("Email Address (format: name@domain, e.g. john@gmail.com):");
+            email = AnsiConsole.Ask<string>("Email address (format: name@domain, e.g. john@gmail.com):");
 
             if (!ContactValidator.IsEmailValid(email)) Outputs.InvalidInputMessage("Invalid email address.");
         } while (!ContactValidator.IsEmailValid(email));
@@ -101,7 +101,7 @@ public class ContactController
         do
         {
             phoneNumber =
-                AnsiConsole.Ask<string>("Phone Number (format: most of common phone number formats are valid):");
+                AnsiConsole.Ask<string>("Phone number (format: most of common phone number formats are valid):");
 
             if (!ContactValidator.IsPhoneNumberValid(phoneNumber))
                 Outputs.InvalidInputMessage("Invalid phone number.");

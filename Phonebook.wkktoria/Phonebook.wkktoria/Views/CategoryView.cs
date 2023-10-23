@@ -16,9 +16,9 @@ public static class CategoryView
 
         foreach (var contact in contacts)
             table.AddRow(
-                contact.Name,
-                contact.Email,
-                contact.PhoneNumber
+                contact.Name!,
+                contact.Email!,
+                contact.PhoneNumber!
             );
 
         AnsiConsole.Write(table);
@@ -31,7 +31,7 @@ public static class CategoryView
         table.AddColumn("Name");
         table.AddColumn("Contacts");
 
-        foreach (var category in categories) table.AddRow(category.Name, category.Contacts.Count.ToString());
+        foreach (var category in categories) table.AddRow(category.Name!, category.Contacts!.Count.ToString());
 
         AnsiConsole.Write(table);
     }

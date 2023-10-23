@@ -50,7 +50,7 @@ public class ContactService
     {
         try
         {
-            var contacts = _db.Contacts
+            var contacts = _db.Contacts!
                 .Include(co => co.Category)
                 .ToList();
 

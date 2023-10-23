@@ -6,8 +6,8 @@ namespace Phonebook.wkktoria;
 
 public class AppDbContext : DbContext
 {
-    public DbSet<Contact> Contacts { get; set; }
-    public DbSet<Category> Categories { get; set; }
+    public DbSet<Contact>? Contacts { get; set; }
+    public DbSet<Category>? Categories { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
