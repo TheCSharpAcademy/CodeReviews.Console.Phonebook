@@ -11,8 +11,8 @@ using Phonebook.wkktoria;
 namespace Phonebook.wkktoria.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231023194520_AddCategory")]
-    partial class AddCategory
+    [Migration("20231023201931_CreateCategory")]
+    partial class CreateCategory
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

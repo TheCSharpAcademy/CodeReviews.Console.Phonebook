@@ -7,7 +7,7 @@
 namespace Phonebook.wkktoria.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCategory : Migration
+    public partial class CreateCategory : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
