@@ -71,7 +71,10 @@ public class ContactController
             PhoneNumber = c.PhoneNumber
         }).ToList();
 
-        ContactView.ShowContactsTable(contacts);
+        if (contacts.Any())
+            ContactView.ShowContactsTable(contacts);
+        else
+            Console.WriteLine("No contacts found in database.");
     }
 
     private static string GetEmailInput()

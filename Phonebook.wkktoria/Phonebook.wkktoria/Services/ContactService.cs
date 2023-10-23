@@ -8,33 +8,72 @@ public class ContactService
 
     public void AddContact(Contact contact)
     {
-        _db.Add(contact);
-        _db.SaveChanges();
+        try
+        {
+            _db.Add(contact);
+            _db.SaveChanges();
+        }
+        catch (Exception)
+        {
+            Outputs.ExceptionMessage("Failed to add contact to database.");
+        }
     }
 
     public void UpdateContact(Contact contact)
     {
-        _db.Update(contact);
-        _db.SaveChanges();
+        try
+        {
+            _db.Update(contact);
+            _db.SaveChanges();
+        }
+        catch (Exception)
+        {
+            Outputs.ExceptionMessage("Failed to update contact.");
+        }
     }
 
     public void RemoveContact(Contact contact)
     {
-        _db.Remove(contact);
-        _db.SaveChanges();
+        try
+        {
+            _db.Remove(contact);
+            _db.SaveChanges();
+        }
+        catch (Exception)
+        {
+            Outputs.ExceptionMessage("Failed to remove contact from database.");
+        }
     }
 
     public Contact? GetContactById(int id)
     {
-        var contact = _db.Contacts.SingleOrDefault(c => c.Id == id);
+        try
+        {
+            var contact = _db.Contacts.SingleOrDefault(c => c.Id == id);
 
-        return contact;
+            return contact;
+        }
+        catch (Exception)
+        {
+            Outputs.ExceptionMessage("Failed to get contact from database.");
+        }
+
+        return null;
     }
 
     public List<Contact> GetContacts()
     {
-        var contacts = _db.Contacts.ToList();
+        try
+        {
+            var contacts = _db.Contacts.ToList();
 
-        return contacts;
+            return contacts;
+        }
+        catch (Exception)
+        {
+            Outputs.ExceptionMessage("Failed to get contacts from database.");
+        }
+
+        return new List<Contact>();
     }
 }
