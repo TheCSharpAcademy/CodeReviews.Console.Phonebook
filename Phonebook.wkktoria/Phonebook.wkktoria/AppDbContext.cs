@@ -48,42 +48,5 @@ public class AppDbContext : DbContext
                     }
                 }
             );
-
-        modelBuilder.Entity<Contact>()
-            .HasData(new List<Contact>
-            {
-                new()
-                {
-                    Id = 1,
-                    CategoryId = 1,
-                    Name = "John",
-                    Email = "john@email.com",
-                    PhoneNumber = "123-123-123"
-                },
-                new()
-                {
-                    Id = 2,
-                    CategoryId = 1,
-                    Name = "Adam",
-                    Email = "adam@email.com",
-                    PhoneNumber = "111-111-111"
-                },
-                new()
-                {
-                    Id = 3,
-                    CategoryId = 2,
-                    Name = "Anne",
-                    Email = "anne@email.com",
-                    PhoneNumber = "321-321-321"
-                },
-                new()
-                {
-                    Id = 4,
-                    CategoryId = 3,
-                    Name = "Victoria",
-                    Email = "victoria@email.com",
-                    PhoneNumber = "333-333-333"
-                }
-            });
     }
 }
