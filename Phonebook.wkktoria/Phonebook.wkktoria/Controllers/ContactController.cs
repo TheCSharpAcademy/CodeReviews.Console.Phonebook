@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using Phonebook.wkktoria.Models;
 using Phonebook.wkktoria.Models.Dtos;
 using Phonebook.wkktoria.Services;
@@ -118,7 +117,8 @@ public class ContactController
         {
             Name = c.Name,
             Email = c.Email,
-            PhoneNumber = c.PhoneNumber
+            PhoneNumber = c.PhoneNumber,
+            Category = c.Category
         }.ToString()).ToList();
 
         var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
@@ -126,10 +126,11 @@ public class ContactController
             .AddChoices(contactsDtos)
         );
 
-        var selectedContact = Regex.Replace(option, @"\s+", string.Empty).Split("|");
+        var selectedContact = option.Split("|");
 
         var contact = contacts.Single(c =>
-            c.Name == selectedContact[0] && c.Email == selectedContact[1] && c.PhoneNumber == selectedContact[2]);
+            c.Name == selectedContact[0].Trim() && c.Email == selectedContact[1].Trim() &&
+            c.PhoneNumber == selectedContact[2].Trim());
 
         return contact;
     }
