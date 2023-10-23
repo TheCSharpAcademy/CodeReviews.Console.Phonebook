@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Phonebook.wkktoria.Models;
 
 namespace Phonebook.wkktoria.Services;
@@ -45,27 +46,13 @@ public class ContactService
         }
     }
 
-    public Contact? GetContactById(int id)
+    public List<Contact> GetAllContacts()
     {
         try
         {
-            var contact = _db.Contacts.SingleOrDefault(c => c.Id == id);
-
-            return contact;
-        }
-        catch (Exception)
-        {
-            Outputs.ExceptionMessage("Failed to get contact from database.");
-        }
-
-        return null;
-    }
-
-    public List<Contact> GetContacts()
-    {
-        try
-        {
-            var contacts = _db.Contacts.ToList();
+            var contacts = _db.Contacts
+                .Include(co => co.Category)
+                .ToList();
 
             return contacts;
         }

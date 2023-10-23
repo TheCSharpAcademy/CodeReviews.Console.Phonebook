@@ -7,6 +7,7 @@ namespace Phonebook.wkktoria;
 
 public class UserInterface
 {
+    private readonly CategoryController _categoryController = new();
     private readonly ContactController _contactController = new();
 
     public void Run()
@@ -25,6 +26,7 @@ public class UserInterface
             var option = GetOption(new List<string>
             {
                 MainMenuOptions.ManageContacts.ToDescription(),
+                MainMenuOptions.ManageCategories.ToDescription(),
                 MainMenuOptions.Quit.ToDescription()
             });
 
@@ -32,6 +34,9 @@ public class UserInterface
             {
                 case nameof(MainMenuOptions.ManageContacts):
                     ContactsMenu();
+                    break;
+                case nameof(MainMenuOptions.ManageCategories):
+                    CategoriesMenu();
                     break;
                 case nameof(MainMenuOptions.Quit):
                     isAppRunning = false;
@@ -81,6 +86,38 @@ public class UserInterface
                     PressAnyKeyToContinue();
                     break;
                 case nameof(ContactMenuOptions.GoBack):
+                    goBack = true;
+                    break;
+            }
+        }
+    }
+
+    private void CategoriesMenu()
+    {
+        var goBack = false;
+
+        while (!goBack)
+        {
+            Console.Clear();
+
+            var option = GetOption(new List<string>
+            {
+                CategoryMenuOptions.ViewContactsInCategory.ToDescription(),
+                CategoryMenuOptions.ViewCategories.ToDescription(),
+                CategoryMenuOptions.GoBack.ToDescription()
+            });
+
+            switch (option)
+            {
+                case nameof(CategoryMenuOptions.ViewContactsInCategory):
+                    _categoryController.ViewContactsInCategory();
+                    PressAnyKeyToContinue();
+                    break;
+                case nameof(CategoryMenuOptions.ViewCategories):
+                    _categoryController.ViewCategories();
+                    PressAnyKeyToContinue();
+                    break;
+                case nameof(CategoryMenuOptions.GoBack):
                     goBack = true;
                     break;
             }

@@ -11,6 +11,7 @@ public static class ContactView
                                Name: {contact.Name}
                                Email Address: {contact.Email}
                                Phone Number: {contact.PhoneNumber}
+                               Category: {contact.Category.Name}
                                """)
         {
             Header = new PanelHeader("Contact Details"),
@@ -27,12 +28,14 @@ public static class ContactView
         table.AddColumn("Name");
         table.AddColumn("Email");
         table.AddColumn("Phone Number");
+        table.AddColumn("Category");
 
         foreach (var contact in contacts)
             table.AddRow(
                 contact.Name,
                 contact.Email,
-                contact.PhoneNumber
+                contact.PhoneNumber,
+                contact.Category.Name
             );
 
         AnsiConsole.Write(table);

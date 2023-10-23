@@ -10,6 +10,7 @@ namespace Phonebook.wkktoria.Controllers;
 
 public class ContactController
 {
+    private readonly CategoryService _categoryService = new();
     private readonly ContactService _contactService = new();
 
     public void AddContact()
@@ -18,7 +19,8 @@ public class ContactController
         {
             Name = AnsiConsole.Ask<string>("Name:"),
             Email = GetEmailInput(),
-            PhoneNumber = GetPhoneNumberInput()
+            PhoneNumber = GetPhoneNumberInput(),
+            CategoryId = GetCategoryIdOptionInput()
         };
 
         _contactService.AddContact(contact);
@@ -28,7 +30,7 @@ public class ContactController
     {
         var contact = GetContactOptionInput();
 
-        contact!.Name = AnsiConsole.Confirm("Update name?")
+        contact.Name = AnsiConsole.Confirm("Update name?")
             ? AnsiConsole.Ask<string>("Name:")
             : contact.Name;
 
@@ -47,7 +49,7 @@ public class ContactController
     {
         var contact = GetContactOptionInput();
 
-        _contactService.RemoveContact(contact!);
+        _contactService.RemoveContact(contact);
     }
 
     public void ViewContactDetails()
@@ -56,19 +58,21 @@ public class ContactController
 
         ContactView.ShowContactDetails(new ContactDto
         {
-            Name = contact!.Name,
+            Name = contact.Name,
             Email = contact.Email,
-            PhoneNumber = contact.PhoneNumber
+            PhoneNumber = contact.PhoneNumber,
+            Category = contact.Category
         });
     }
 
     public void ViewContacts()
     {
-        var contacts = new ContactService().GetContacts().Select(c => new ContactDto
+        var contacts = _contactService.GetAllContacts().Select(c => new ContactDto
         {
             Name = c.Name,
             Email = c.Email,
-            PhoneNumber = c.PhoneNumber
+            PhoneNumber = c.PhoneNumber,
+            Category = c.Category
         }).ToList();
 
         if (contacts.Any())
@@ -107,9 +111,9 @@ public class ContactController
         return phoneNumber;
     }
 
-    private Contact? GetContactOptionInput()
+    private Contact GetContactOptionInput()
     {
-        var contacts = _contactService.GetContacts();
+        var contacts = _contactService.GetAllContacts();
         var contactsDtos = contacts.Select(c => new ContactDto
         {
             Name = c.Name,
@@ -124,9 +128,23 @@ public class ContactController
 
         var selectedContact = Regex.Replace(option, @"\s+", string.Empty).Split("|");
 
-        var contact = contacts.Find(c =>
+        var contact = contacts.Single(c =>
             c.Name == selectedContact[0] && c.Email == selectedContact[1] && c.PhoneNumber == selectedContact[2]);
 
         return contact;
+    }
+
+    private int GetCategoryIdOptionInput()
+    {
+        var categories = _categoryService.GetAllCategories();
+        var categoriesNames = categories.Select(c => c.Name).ToList();
+
+        var selectedCategory = AnsiConsole.Prompt(new SelectionPrompt<string>()
+            .Title("Choose category")
+            .AddChoices(categoriesNames));
+
+        var id = categories.Single(c => c.Name == selectedCategory).Id;
+
+        return id;
     }
 }
