@@ -11,6 +11,37 @@ public class CategoryController
     private readonly CategoryService _categoryService = new();
     private readonly ContactService _contactService = new();
 
+    public void AddCategory()
+    {
+        var category = new Category
+        {
+            Name = AnsiConsole.Ask<string>("Name:")
+        };
+
+        var categories = _categoryService.GetAllCategories();
+
+        if (categories.Any(c => string.Equals(c.Name, category.Name, StringComparison.InvariantCultureIgnoreCase)))
+            Outputs.InvalidInputMessage("Category already exists.");
+        else
+            _categoryService.AddCategory(category);
+    }
+
+    public void UpdateCategory()
+    {
+        var category = GetCategoryOptionInput();
+
+        category.Name = AnsiConsole.Ask<string>("Name:");
+
+        _categoryService.UpdateCategory(category);
+    }
+
+    public void DeleteCategory()
+    {
+        var category = GetCategoryOptionInput();
+
+        _categoryService.RemoveCategory(category);
+    }
+
     public void ViewContactsInCategory()
     {
         var category = GetCategoryOptionInput();
@@ -33,6 +64,8 @@ public class CategoryController
             .ToList();
 
         if (categoryContacts.Any()) CategoryView.ShowContactsInCategory(categoryDto, categoryContacts);
+        else
+            Console.WriteLine("No contacts found in selected category.");
     }
 
     public void ViewCategories()

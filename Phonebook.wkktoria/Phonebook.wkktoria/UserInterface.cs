@@ -102,6 +102,9 @@ public class UserInterface
 
             var option = GetOption(new List<string>
             {
+                CategoryMenuOptions.AddCategory.ToDescription(),
+                CategoryMenuOptions.UpdateCategory.ToDescription(),
+                CategoryMenuOptions.DeleteCategory.ToDescription(),
                 CategoryMenuOptions.ViewContactsInCategory.ToDescription(),
                 CategoryMenuOptions.ViewCategories.ToDescription(),
                 CategoryMenuOptions.GoBack.ToDescription()
@@ -109,8 +112,20 @@ public class UserInterface
 
             switch (option)
             {
+                case nameof(CategoryMenuOptions.AddCategory):
+                    _categoryController.AddCategory();
+                    PressAnyKeyToContinue();
+                    break;
                 case nameof(CategoryMenuOptions.ViewContactsInCategory):
                     _categoryController.ViewContactsInCategory();
+                    PressAnyKeyToContinue();
+                    break;
+                case nameof(CategoryMenuOptions.UpdateCategory):
+                    _categoryController.UpdateCategory();
+                    PressAnyKeyToContinue();
+                    break;
+                case nameof(CategoryMenuOptions.DeleteCategory):
+                    _categoryController.DeleteCategory();
                     PressAnyKeyToContinue();
                     break;
                 case nameof(CategoryMenuOptions.ViewCategories):
