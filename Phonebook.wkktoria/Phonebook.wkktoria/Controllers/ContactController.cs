@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using Phonebook.wkktoria.Models;
 using Phonebook.wkktoria.Models.Dtos;
 using Phonebook.wkktoria.Services;
+using Phonebook.wkktoria.Validators;
 using Phonebook.wkktoria.Views;
 using Spectre.Console;
 
@@ -16,8 +17,8 @@ public class ContactController
         var contact = new Contact
         {
             Name = AnsiConsole.Ask<string>("Name:"),
-            Email = AnsiConsole.Ask<string>("Email Address:"),
-            PhoneNumber = AnsiConsole.Ask<string>("Phone Number:")
+            Email = GetEmailInput(),
+            PhoneNumber = GetPhoneNumberInput()
         };
 
         _contactService.AddContact(contact);
@@ -32,11 +33,11 @@ public class ContactController
             : contact.Name;
 
         contact.Email = AnsiConsole.Confirm("Update email address?")
-            ? AnsiConsole.Ask<string>("Email Address:")
+            ? GetEmailInput()
             : contact.Email;
 
         contact.PhoneNumber = AnsiConsole.Confirm("Update phone number?")
-            ? AnsiConsole.Ask<string>("Phone Number:")
+            ? GetPhoneNumberInput()
             : contact.PhoneNumber;
 
         _contactService.UpdateContact(contact);
@@ -71,6 +72,36 @@ public class ContactController
         }).ToList();
 
         ContactView.ShowContactsTable(contacts);
+    }
+
+    private static string GetEmailInput()
+    {
+        string email;
+
+        do
+        {
+            email = AnsiConsole.Ask<string>("Email Address (format: name@domain, e.g. john@gmail.com):");
+
+            if (!ContactValidator.IsEmailValid(email)) Outputs.InvalidInputMessage("Invalid email address.");
+        } while (!ContactValidator.IsEmailValid(email));
+
+        return email;
+    }
+
+    private static string GetPhoneNumberInput()
+    {
+        string phoneNumber;
+
+        do
+        {
+            phoneNumber =
+                AnsiConsole.Ask<string>("Phone Number (format: most of common phone number formats are valid):");
+
+            if (!ContactValidator.IsPhoneNumberValid(phoneNumber))
+                Outputs.InvalidInputMessage("Invalid phone number.");
+        } while (!ContactValidator.IsPhoneNumberValid(phoneNumber));
+
+        return phoneNumber;
     }
 
     private Contact? GetContactOptionInput()
