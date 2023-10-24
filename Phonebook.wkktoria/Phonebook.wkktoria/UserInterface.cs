@@ -1,14 +1,14 @@
 using System.Text.RegularExpressions;
-using Phonebook.wkktoria.Controllers;
 using Phonebook.wkktoria.Enums;
+using Phonebook.wkktoria.Services;
 using Spectre.Console;
 
 namespace Phonebook.wkktoria;
 
 public partial class UserInterface
 {
-    private readonly CategoryController _categoryController = new();
-    private readonly ContactController _contactController = new();
+    private readonly CategoryService _categoryService = new();
+    private readonly ContactService _contactService = new();
 
     public void Run()
     {
@@ -66,23 +66,23 @@ public partial class UserInterface
             switch (option)
             {
                 case nameof(ContactMenuOptions.AddContact):
-                    _contactController.AddContact();
+                    _contactService.AddContact();
                     PressAnyKeyToContinue();
                     break;
                 case nameof(ContactMenuOptions.UpdateContact):
-                    _contactController.UpdateContact();
+                    _contactService.UpdateContact();
                     PressAnyKeyToContinue();
                     break;
                 case nameof(ContactMenuOptions.DeleteContact):
-                    _contactController.DeleteContact();
+                    _contactService.DeleteContact();
                     PressAnyKeyToContinue();
                     break;
                 case nameof(ContactMenuOptions.ViewContactDetails):
-                    _contactController.ViewContactDetails();
+                    _contactService.ViewContactDetails();
                     PressAnyKeyToContinue();
                     break;
                 case nameof(ContactMenuOptions.ViewContacts):
-                    _contactController.ViewContacts();
+                    _contactService.ViewContacts();
                     PressAnyKeyToContinue();
                     break;
                 case nameof(ContactMenuOptions.GoBack):
@@ -113,23 +113,23 @@ public partial class UserInterface
             switch (option)
             {
                 case nameof(CategoryMenuOptions.AddCategory):
-                    _categoryController.AddCategory();
+                    _categoryService.AddCategory();
                     PressAnyKeyToContinue();
                     break;
                 case nameof(CategoryMenuOptions.ViewContactsInCategory):
-                    _categoryController.ViewContactsInCategory();
+                    _categoryService.ViewContactsInCategory();
                     PressAnyKeyToContinue();
                     break;
                 case nameof(CategoryMenuOptions.UpdateCategory):
-                    _categoryController.UpdateCategory();
+                    _categoryService.UpdateCategory();
                     PressAnyKeyToContinue();
                     break;
                 case nameof(CategoryMenuOptions.DeleteCategory):
-                    _categoryController.DeleteCategory();
+                    _categoryService.DeleteCategory();
                     PressAnyKeyToContinue();
                     break;
                 case nameof(CategoryMenuOptions.ViewCategories):
-                    _categoryController.ViewCategories();
+                    _categoryService.ViewCategories();
                     PressAnyKeyToContinue();
                     break;
                 case nameof(CategoryMenuOptions.GoBack):

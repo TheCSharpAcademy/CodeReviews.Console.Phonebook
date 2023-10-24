@@ -1,98 +1,66 @@
+using Microsoft.EntityFrameworkCore;
 using Phonebook.wkktoria.Models;
-using Phonebook.wkktoria.Models.Dtos;
-using Phonebook.wkktoria.Services;
-using Phonebook.wkktoria.Views;
-using Spectre.Console;
 
 namespace Phonebook.wkktoria.Controllers;
 
 public class CategoryController
 {
-    private readonly CategoryService _categoryService = new();
-    private readonly ContactService _contactService = new();
+    private readonly AppDbContext _db = new();
 
-    public void AddCategory()
+    public void AddCategory(Category category)
     {
-        var category = new Category
+        try
         {
-            Name = AnsiConsole.Ask<string>("Name:")
-        };
-
-        var categories = _categoryService.GetAllCategories();
-
-        if (categories.Any(c => string.Equals(c.Name, category.Name, StringComparison.InvariantCultureIgnoreCase)))
-            Outputs.InvalidInputMessage("Category already exists.");
-        else
-            _categoryService.AddCategory(category);
-    }
-
-    public void UpdateCategory()
-    {
-        var category = GetCategoryOptionInput();
-
-        category.Name = AnsiConsole.Ask<string>("Name:");
-
-        _categoryService.UpdateCategory(category);
-    }
-
-    public void DeleteCategory()
-    {
-        var category = GetCategoryOptionInput();
-
-        _categoryService.RemoveCategory(category);
-    }
-
-    public void ViewContactsInCategory()
-    {
-        var category = GetCategoryOptionInput();
-        var categoryDto = new CategoryDto
+            _db.Add(category);
+            _db.SaveChanges();
+        }
+        catch (Exception)
         {
-            Name = category.Name,
-            Contacts = category.Contacts
-        };
-
-        var categoryContacts = _contactService
-            .GetAllContacts()
-            .Where(c => c.CategoryId == category.Id)
-            .Select(c => new ContactDto
-            {
-                Name = c.Name,
-                Category = c.Category,
-                Email = c.Email,
-                PhoneNumber = c.PhoneNumber
-            })
-            .ToList();
-
-        if (categoryContacts.Any()) CategoryView.ShowContactsInCategory(categoryDto, categoryContacts);
-        else
-            Console.WriteLine("No contacts found in selected category.");
+            Outputs.ExceptionMessage("Failed to add category to database.");
+        }
     }
 
-    public void ViewCategories()
+    public void UpdateCategory(Category category)
     {
-        var categories = _categoryService.GetAllCategories().Select(c => new CategoryDto
+        try
         {
-            Name = c.Name,
-            Contacts = c.Contacts
-        }).ToList();
-
-        if (categories.Any())
-            CategoryView.ShowCategoriesTable(categories);
-        else
-            Console.Write("No categories found in database.");
+            _db.Update(category);
+            _db.SaveChanges();
+        }
+        catch (Exception)
+        {
+            Outputs.ExceptionMessage("Failed to update category.");
+        }
     }
 
-    private Category GetCategoryOptionInput()
+    public void RemoveCategory(Category category)
     {
-        var categories = _categoryService.GetAllCategories();
-        var categoriesNames = categories.Select(c => c.Name).ToList();
+        try
+        {
+            _db.Remove(category);
+            _db.SaveChanges();
+        }
+        catch (Exception)
+        {
+            Outputs.ExceptionMessage("Failed to remove category from database.");
+        }
+    }
 
-        var selectedCategory = AnsiConsole.Prompt(new SelectionPrompt<string>()
-            .Title("Choose category")
-            .AddChoices(categoriesNames));
+    public List<Category> GetAllCategories()
+    {
+        try
+        {
+            var categories = _db.Categories!
+                .Include(c => c.Contacts)
+                .ToList();
 
-        var category = categories.Single(c => c.Name == selectedCategory);
+            return categories;
+        }
+        catch (Exception)
+        {
+            Outputs.ExceptionMessage("Failed to get categories from database.");
+        }
 
-        return category;
+        return new List<Category>();
     }
 }

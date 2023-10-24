@@ -1,151 +1,66 @@
+using Microsoft.EntityFrameworkCore;
 using Phonebook.wkktoria.Models;
-using Phonebook.wkktoria.Models.Dtos;
-using Phonebook.wkktoria.Services;
-using Phonebook.wkktoria.Validators;
-using Phonebook.wkktoria.Views;
-using Spectre.Console;
 
 namespace Phonebook.wkktoria.Controllers;
 
 public class ContactController
 {
-    private readonly CategoryService _categoryService = new();
-    private readonly ContactService _contactService = new();
+    private readonly AppDbContext _db = new();
 
-    public void AddContact()
+    public void AddContact(Contact contact)
     {
-        var contact = new Contact
+        try
         {
-            Name = AnsiConsole.Ask<string>("Name:"),
-            Email = GetEmailInput(),
-            PhoneNumber = GetPhoneNumberInput(),
-            CategoryId = GetCategoryIdOptionInput()
-        };
-
-        _contactService.AddContact(contact);
-    }
-
-    public void UpdateContact()
-    {
-        var contact = GetContactOptionInput();
-
-        contact.Name = AnsiConsole.Confirm("Update name?")
-            ? AnsiConsole.Ask<string>("Name:")
-            : contact.Name;
-
-        contact.Email = AnsiConsole.Confirm("Update email address?")
-            ? GetEmailInput()
-            : contact.Email;
-
-        contact.PhoneNumber = AnsiConsole.Confirm("Update phone number?")
-            ? GetPhoneNumberInput()
-            : contact.PhoneNumber;
-
-        _contactService.UpdateContact(contact);
-    }
-
-    public void DeleteContact()
-    {
-        var contact = GetContactOptionInput();
-
-        _contactService.RemoveContact(contact);
-    }
-
-    public void ViewContactDetails()
-    {
-        var contact = GetContactOptionInput();
-
-        ContactView.ShowContactDetails(new ContactDto
+            _db.Add(contact);
+            _db.SaveChanges();
+        }
+        catch (Exception)
         {
-            Name = contact.Name,
-            Email = contact.Email,
-            PhoneNumber = contact.PhoneNumber,
-            Category = contact.Category
-        });
+            Outputs.ExceptionMessage("Failed to add contact to database.");
+        }
     }
 
-    public void ViewContacts()
+    public void UpdateContact(Contact contact)
     {
-        var contacts = _contactService.GetAllContacts().Select(c => new ContactDto
+        try
         {
-            Name = c.Name,
-            Email = c.Email,
-            PhoneNumber = c.PhoneNumber,
-            Category = c.Category
-        }).ToList();
-
-        if (contacts.Any())
-            ContactView.ShowContactsTable(contacts);
-        else
-            Console.WriteLine("No contacts found in database.");
-    }
-
-    private static string GetEmailInput()
-    {
-        string email;
-
-        do
+            _db.Update(contact);
+            _db.SaveChanges();
+        }
+        catch (Exception)
         {
-            email = AnsiConsole.Ask<string>("Email address (format: name@domain, e.g. john@gmail.com):");
-
-            if (!ContactValidator.IsEmailValid(email)) Outputs.InvalidInputMessage("Invalid email address.");
-        } while (!ContactValidator.IsEmailValid(email));
-
-        return email;
+            Outputs.ExceptionMessage("Failed to update contact.");
+        }
     }
 
-    private static string GetPhoneNumberInput()
+    public void RemoveContact(Contact contact)
     {
-        string phoneNumber;
-
-        do
+        try
         {
-            phoneNumber =
-                AnsiConsole.Ask<string>("Phone number (format: most of common phone number formats are valid):");
-
-            if (!ContactValidator.IsPhoneNumberValid(phoneNumber))
-                Outputs.InvalidInputMessage("Invalid phone number.");
-        } while (!ContactValidator.IsPhoneNumberValid(phoneNumber));
-
-        return phoneNumber;
-    }
-
-    private Contact GetContactOptionInput()
-    {
-        var contacts = _contactService.GetAllContacts();
-        var contactsDtos = contacts.Select(c => new ContactDto
+            _db.Remove(contact);
+            _db.SaveChanges();
+        }
+        catch (Exception)
         {
-            Name = c.Name,
-            Email = c.Email,
-            PhoneNumber = c.PhoneNumber,
-            Category = c.Category
-        }.ToString()).ToList();
-
-        var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
-            .Title("Choose contact")
-            .AddChoices(contactsDtos)
-        );
-
-        var selectedContact = option.Split("|");
-
-        var contact = contacts.Single(c =>
-            c.Name == selectedContact[0].Trim() && c.Email == selectedContact[1].Trim() &&
-            c.PhoneNumber == selectedContact[2].Trim());
-
-        return contact;
+            Outputs.ExceptionMessage("Failed to remove contact from database.");
+        }
     }
 
-    private int GetCategoryIdOptionInput()
+    public List<Contact> GetAllContacts()
     {
-        var categories = _categoryService.GetAllCategories();
-        var categoriesNames = categories.Select(c => c.Name).ToList();
+        try
+        {
+            var contacts = _db.Contacts!
+                .Include(co => co.Category)
+                .ToList();
 
-        var selectedCategory = AnsiConsole.Prompt(new SelectionPrompt<string>()
-            .Title("Choose category")
-            .AddChoices(categoriesNames));
+            return contacts;
+        }
+        catch (Exception)
+        {
+            Outputs.ExceptionMessage("Failed to get contacts from database.");
+        }
 
-        var id = categories.Single(c => c.Name == selectedCategory).Id;
-
-        return id;
+        return new List<Contact>();
     }
 }

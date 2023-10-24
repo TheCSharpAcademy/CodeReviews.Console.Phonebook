@@ -1,66 +1,98 @@
-using Microsoft.EntityFrameworkCore;
+using Phonebook.wkktoria.Controllers;
 using Phonebook.wkktoria.Models;
+using Phonebook.wkktoria.Models.Dtos;
+using Phonebook.wkktoria.Views;
+using Spectre.Console;
 
 namespace Phonebook.wkktoria.Services;
 
 public class CategoryService
 {
-    private readonly AppDbContext _db = new();
+    private readonly CategoryController _categoryController = new();
+    private readonly ContactController _contactController = new();
 
-    public void AddCategory(Category category)
+    public void AddCategory()
     {
-        try
+        var category = new Category
         {
-            _db.Add(category);
-            _db.SaveChanges();
-        }
-        catch (Exception)
-        {
-            Outputs.ExceptionMessage("Failed to add category to database.");
-        }
+            Name = AnsiConsole.Ask<string>("Name:")
+        };
+
+        var categories = _categoryController.GetAllCategories();
+
+        if (categories.Any(c => string.Equals(c.Name, category.Name, StringComparison.InvariantCultureIgnoreCase)))
+            Outputs.InvalidInputMessage("Category already exists.");
+        else
+            _categoryController.AddCategory(category);
     }
 
-    public void UpdateCategory(Category category)
+    public void UpdateCategory()
     {
-        try
-        {
-            _db.Update(category);
-            _db.SaveChanges();
-        }
-        catch (Exception)
-        {
-            Outputs.ExceptionMessage("Failed to update category.");
-        }
+        var category = GetCategoryOptionInput();
+
+        category.Name = AnsiConsole.Ask<string>("Name:");
+
+        _categoryController.UpdateCategory(category);
     }
 
-    public void RemoveCategory(Category category)
+    public void DeleteCategory()
     {
-        try
-        {
-            _db.Remove(category);
-            _db.SaveChanges();
-        }
-        catch (Exception)
-        {
-            Outputs.ExceptionMessage("Failed to remove category from database.");
-        }
+        var category = GetCategoryOptionInput();
+
+        _categoryController.RemoveCategory(category);
     }
 
-    public List<Category> GetAllCategories()
+    public void ViewContactsInCategory()
     {
-        try
+        var category = GetCategoryOptionInput();
+        var categoryDto = new CategoryDto
         {
-            var categories = _db.Categories!
-                .Include(c => c.Contacts)
-                .ToList();
+            Name = category.Name,
+            Contacts = category.Contacts
+        };
 
-            return categories;
-        }
-        catch (Exception)
+        var categoryContacts = _contactController
+            .GetAllContacts()
+            .Where(c => c.CategoryId == category.Id)
+            .Select(c => new ContactDto
+            {
+                Name = c.Name,
+                Category = c.Category,
+                Email = c.Email,
+                PhoneNumber = c.PhoneNumber
+            })
+            .ToList();
+
+        if (categoryContacts.Any()) CategoryView.ShowContactsInCategory(categoryDto, categoryContacts);
+        else
+            Console.WriteLine("No contacts found in selected category.");
+    }
+
+    public void ViewCategories()
+    {
+        var categories = _categoryController.GetAllCategories().Select(c => new CategoryDto
         {
-            Outputs.ExceptionMessage("Failed to get categories from database.");
-        }
+            Name = c.Name,
+            Contacts = c.Contacts
+        }).ToList();
 
-        return new List<Category>();
+        if (categories.Any())
+            CategoryView.ShowCategoriesTable(categories);
+        else
+            Console.Write("No categories found in database.");
+    }
+
+    private Category GetCategoryOptionInput()
+    {
+        var categories = _categoryController.GetAllCategories();
+        var categoriesNames = categories.Select(c => c.Name).ToList();
+
+        var selectedCategory = AnsiConsole.Prompt(new SelectionPrompt<string>()
+            .Title("Choose category")
+            .AddChoices(categoriesNames));
+
+        var category = categories.Single(c => c.Name == selectedCategory);
+
+        return category;
     }
 }
