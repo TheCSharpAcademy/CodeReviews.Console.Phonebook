@@ -1,2 +1,7 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using Phonebook.K_MYR;
+
+var service = new ContactsService();
+var controller = new ContactsController(service);
+var ui = new UserInterface(controller);
+
+ui.ShowMainMenu();
