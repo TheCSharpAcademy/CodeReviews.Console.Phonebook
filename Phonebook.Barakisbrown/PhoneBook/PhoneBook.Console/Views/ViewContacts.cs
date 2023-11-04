@@ -13,7 +13,7 @@ public class ViewContacts
         _dbContext = _context;
     }
 
-    public void displayContacts()
+    public void DisplayContacts()
     {
         AnsiConsole.Clear();
         var table = new Table();

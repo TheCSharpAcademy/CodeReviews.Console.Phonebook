@@ -72,7 +72,7 @@ public class MainMenu
     private void ViewAllContacts()
     {
         ViewContacts contact = new(phoneContext);
-        contact.displayContacts();
+        contact.DisplayContacts();
     }
 
     private void EditContacts()
