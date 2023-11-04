@@ -18,7 +18,7 @@ public class ViewContacts
         AnsiConsole.Clear();
         var table = new Table();
         table.Border = TableBorder.Rounded;
-        table.Title = new TableTitle($"All {_dbContext.Contacts.Count()} Contacts Listed");
+        table.Title = new TableTitle($"{_dbContext.Contacts.Count()} Contacts Listed");
         // COLUMNS
         table.AddColumn(new TableColumn("Full Name").Centered());
         table.AddColumn(new TableColumn("Email").Centered());
