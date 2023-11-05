@@ -15,5 +15,20 @@ internal class ContactsContext : DbContext
     
     public DbSet<Contact> Contacts {get; set;}
 
+    public DbSet<Category> Categories {get; set;}
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer(_connectionString);
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Contact>()
+            .HasOne(con => con.Category)
+            .WithMany(cat => cat.Contacts)
+            .HasForeignKey(cat => cat.CategoryId)
+            .OnDelete(DeleteBehavior.SetNull);
+        
+        modelBuilder.Entity<Category>()
+            .HasIndex(c => c.Name)
+            .IsUnique();
+    }
 }

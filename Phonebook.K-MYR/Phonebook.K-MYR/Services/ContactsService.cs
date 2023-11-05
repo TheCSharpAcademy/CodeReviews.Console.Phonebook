@@ -10,10 +10,26 @@ internal class ContactsService
         var name = AnsiConsole.Ask<string>("Contact Name:");
         var phoneNumber = AnsiConsole.Ask<string>("Phone Number:");
         var emailAdress = AnsiConsole.Ask<string>("Email Adress:");
+        var categoryId = GetCategoryInput().CategoryId;
 
         using var db = new ContactsContext();
-        db.Add(new Contact(name, emailAdress, phoneNumber ));
+        db.Add(new Contact
+        {
+            Name = name,
+            EmailAdress = emailAdress,
+            PhoneNumber = phoneNumber,
+            CategoryId = categoryId
+         });
         db.SaveChanges();
+    }
+
+    private Category GetCategoryInput()
+    {
+        using var db = new ContactsContext();
+        var category = AnsiConsole.Prompt(new SelectionPrompt<string>()
+                                            .Title("Choose a Category:")
+                                            .AddChoices(db.Categories.Select(c => c.Name).ToList()));
+        return db.Categories.Single(x => x.Name == category);
     }
 
     internal void DeleteContact()
@@ -42,13 +58,18 @@ internal class ContactsService
         db.SaveChanges();
     }
 
-    internal List<Contact> GetContacts()
+    internal IEnumerable<Contact> GetAllContacts()
     {
         using var db = new ContactsContext();
-        return db.Contacts.ToList();        
+        return db.Contacts;        
     }
 
-    internal Contact GetContactInput(string message = "")
+    internal Contact GetContact()
+    {
+        return GetContactInput();
+    } 
+
+    private Contact GetContactInput(string message = "")
     {
         using var db = new ContactsContext();
 

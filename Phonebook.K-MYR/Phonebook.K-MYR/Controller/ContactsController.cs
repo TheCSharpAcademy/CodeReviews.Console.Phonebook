@@ -1,3 +1,5 @@
+using Phonebook.K_MYR.Models;
+
 namespace Phonebook.K_MYR;
 
 internal class ContactsController
@@ -25,13 +27,13 @@ internal class ContactsController
         _contactsService.UpdateContact();
     }
 
-    internal void ViewAllContacts()
+    internal IEnumerable<Contact> GetAllContacts()
     {
-        var contacts = _contactsService.GetContacts();
+        return _contactsService.GetAllContacts();
     }
 
-    internal void ViewContact()
+    internal Contact GetContact()
     {
-        var contact =_contactsService.GetContactInput();
+        return _contactsService.GetContact();
     }
 }
