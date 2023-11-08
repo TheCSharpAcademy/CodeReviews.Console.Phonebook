@@ -10,7 +10,8 @@ internal class ContactsContext : DbContext
         DataSource = ConfigurationManager.AppSettings.Get("DataSource"),
         InitialCatalog = ConfigurationManager.AppSettings.Get("DatabaseName"),
         UserID = ConfigurationManager.AppSettings.Get("UserName"),
-        Password = ConfigurationManager.AppSettings.Get("Password")
+        Password = ConfigurationManager.AppSettings.Get("Password"),
+        TrustServerCertificate = true
     }.ConnectionString;
 
     public DbSet<Contact> Contacts { get; set; }

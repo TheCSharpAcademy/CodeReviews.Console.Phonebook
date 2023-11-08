@@ -79,6 +79,10 @@ internal class ContactsService
             if (AnsiConsole.Confirm("Update Phone Number?"))
                 contact.PhoneNumber = GetPhoneNumberInput();
 
+            if (AnsiConsole.Confirm("Update Category?"))
+                contact.CategoryId = GetCategoryInput().CategoryId;
+                
+
             db.Update(contact);
             db.SaveChanges();
         }
