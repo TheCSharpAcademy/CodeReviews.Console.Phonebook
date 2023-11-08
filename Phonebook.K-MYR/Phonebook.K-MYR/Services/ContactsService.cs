@@ -1,3 +1,5 @@
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Phonebook.K_MYR.Models;
 using Spectre.Console;
 
@@ -7,75 +9,185 @@ internal class ContactsService
 {
     internal void AddContact()
     {
-        var name = AnsiConsole.Ask<string>("Contact Name:");
-        var phoneNumber = AnsiConsole.Ask<string>("Phone Number:");
-        var emailAdress = AnsiConsole.Ask<string>("Email Adress:");
+        var name = GetContactName();
+        var phoneNumber = GetPhoneNumberInput();
+        var emailAdress = GetEmailInput();
         var categoryId = GetCategoryInput().CategoryId;
 
-        using var db = new ContactsContext();
-        db.Add(new Contact
+        try
         {
-            Name = name,
-            EmailAdress = emailAdress,
-            PhoneNumber = phoneNumber,
-            CategoryId = categoryId
-         });
-        db.SaveChanges();
-    }
-
-    private Category GetCategoryInput()
-    {
-        using var db = new ContactsContext();
-        var category = AnsiConsole.Prompt(new SelectionPrompt<string>()
-                                            .Title("Choose a Category:")
-                                            .AddChoices(db.Categories.Select(c => c.Name).ToList()));
-        return db.Categories.Single(x => x.Name == category);
+            using var db = new ContactsContext();
+            db.Add(new Contact
+            {
+                Name = name,
+                EmailAdress = emailAdress,
+                PhoneNumber = phoneNumber,
+                CategoryId = categoryId
+            });
+            db.SaveChanges();
+        }
+        catch (SqlException ex)
+        {
+            Helpers.WriteMessageAndWait($"An Error Occured Calling The Database| {ex.Message} | Press Any Key To Return");
+        }
     }
 
     internal void DeleteContact()
     {
-        using var db = new ContactsContext();
-        var contact = GetContactInput("Which Contact Do You Want To Delete?");
-        db.Remove(contact);
-        db.SaveChanges();
+        try
+        {
+            using var db = new ContactsContext();
+
+            if (!db.Contacts.Any())
+            {
+                AnsiConsole.Write(new Panel("No Contacts Were Found. Press Any Key To Return").BorderColor(Color.DarkOrange3_1));
+                Console.ReadKey();
+                return;
+            }
+
+            var contact = GetContactInput("Which Contact Do You Want To Delete?");
+            db.Remove(contact);
+            db.SaveChanges();
+        }
+        catch (SqlException ex)
+        {
+            Helpers.WriteMessageAndWait($"An Error Occured Calling The Database| {ex.Message} | Press Any Key To Return");
+        }
     }
 
     internal void UpdateContact()
     {
-        using var db = new ContactsContext();
-        var contact = GetContactInput("Which Contact Do You Want To Update?");
-        
-        if (AnsiConsole.Confirm("Update Name?"))
-            contact.Name = AnsiConsole.Ask<string>("Name:");
-        
-        if (AnsiConsole.Confirm("Update Email-Adress?"))
-            contact.EmailAdress = AnsiConsole.Ask<string>("Email Adress:");
+        try
+        {
+            using var db = new ContactsContext();
 
-        if (AnsiConsole.Confirm("Update Phone Number?"))
-            contact.Name = AnsiConsole.Ask<string>("Phone Number:");
+            if (!db.Contacts.Any())
+            {
+                AnsiConsole.Write(new Panel("No Contacts Were Found. Press Any Key To Return").BorderColor(Color.DarkOrange3_1));
+                Console.ReadKey();
+                return;
+            }
 
-        db.Update(contact);
-        db.SaveChanges();
+            var contact = GetContactInput("Which Contact Do You Want To Update?");
+
+            if (AnsiConsole.Confirm("Update Name?"))
+                contact.Name = GetContactName();
+
+            if (AnsiConsole.Confirm("Update Email-Adress?"))
+                contact.EmailAdress = GetEmailInput();
+
+            if (AnsiConsole.Confirm("Update Phone Number?"))
+                contact.PhoneNumber = GetPhoneNumberInput();
+
+            db.Update(contact);
+            db.SaveChanges();
+        }
+        catch (SqlException ex)
+        {
+            Helpers.WriteMessageAndWait($"An Error Occured Calling The Database| {ex.Message} | Press Any Key To Return");
+        }
     }
 
-    internal IEnumerable<Contact> GetAllContacts()
+    internal List<ContactDTO> GetAllContacts()
     {
-        using var db = new ContactsContext();
-        return db.Contacts;        
+        try
+        {
+            using var db = new ContactsContext();
+            return db.Contacts
+                        .Include(c => c.Category)
+                        .Select(c => new ContactDTO
+                        {
+                            FullName = c.Name,
+                            EmailAdress = c.EmailAdress,
+                            PhoneNumber = c.PhoneNumber,
+                            CategoryName = c.Category!.Name
+                        })
+                        .ToList();
+        }
+        catch (SqlException ex)
+        {
+            Helpers.WriteMessageAndWait($"An Error Occured Calling The Database| {ex.Message} | Press Any Key To Return");
+            return new List<ContactDTO>();
+        }
     }
 
-    internal Contact GetContact()
+    internal ContactDTO? GetContact()
     {
-        return GetContactInput();
-    } 
+        try
+        {
+            using var db = new ContactsContext();
+
+            if (!db.Contacts.Any())
+                return null;
+
+            var contact = GetContactInput("Which Contact Do You Want To View?");
+
+            return new ContactDTO { FullName = contact.Name, EmailAdress = contact.EmailAdress, CategoryName = contact.Category!.Name, PhoneNumber = contact.PhoneNumber };
+        }
+        catch (SqlException ex)
+        {
+            Helpers.WriteMessageAndWait($"An Error Occured Calling The Database| {ex.Message} | Press Any Key To Return");
+            return null;
+        }
+    }
 
     private Contact GetContactInput(string message = "")
     {
+        Console.Clear();
+
         using var db = new ContactsContext();
 
+        var contacts = db.Contacts.Include(c => c.Category);
+
         var contact = AnsiConsole.Prompt(new SelectionPrompt<string>()
-                                            .AddChoices(db.Contacts.Select(x => x.Name).ToArray())
+                                            .AddChoices(contacts.Select(x => x.Name).ToArray())
                                             .Title(message));
-        return db.Contacts.Single(x => x.Name == contact);      
+        return contacts.Single(x => x.Name == contact);
+    }
+
+    private Category GetCategoryInput()
+    {
+        Console.Clear();
+
+        using var db = new ContactsContext();
+
+        var category = AnsiConsole.Prompt(new SelectionPrompt<string>()
+                                            .Title("Choose a Category:")
+                                            .AddChoices(db.Categories.Select(c => c.Name).ToList()));
+
+        return db.Categories.Single(x => x.Name == category);
+    }
+
+    private string GetEmailInput()
+    {
+        string email;
+
+        do
+        {
+            email = AnsiConsole.Ask<string>("Please Enter A Valid Email Adress:").Trim();
+        } while (!Validator.EmailIsValid(email));
+
+        return email;
+    }
+
+    private string GetPhoneNumberInput()
+    {
+        string phoneNumber;
+        do
+        {
+            phoneNumber = AnsiConsole.Ask<string>("Please Enter A Valid Phone Number (Format: +[[Country Code]][[Number]]): ").Trim();
+        } while (!Validator.PhoneNumberIsValid(phoneNumber));
+        return phoneNumber;
+    }
+
+    private string GetContactName()
+    {
+        string contactName;
+        do
+        {
+            contactName = AnsiConsole.Ask<string>("Contact Name (max 50):").Trim();
+        } while (contactName.Length > 50);
+
+        return contactName;
     }
 }

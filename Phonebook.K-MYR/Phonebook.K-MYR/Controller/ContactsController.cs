@@ -10,7 +10,7 @@ internal class ContactsController
     {
         _contactsService = contactsService;
     }
-    
+
     internal void AddContact()
     {
         _contactsService.AddContact();
@@ -19,7 +19,6 @@ internal class ContactsController
     internal void DeleteContact()
     {
         _contactsService.DeleteContact();
-
     }
 
     internal void UpdateContact()
@@ -27,12 +26,12 @@ internal class ContactsController
         _contactsService.UpdateContact();
     }
 
-    internal IEnumerable<Contact> GetAllContacts()
+    internal List<ContactDTO> GetAllContacts()
     {
         return _contactsService.GetAllContacts();
     }
 
-    internal Contact GetContact()
+    internal ContactDTO? GetContact()
     {
         return _contactsService.GetContact();
     }

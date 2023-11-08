@@ -10,7 +10,7 @@ internal class CategoriesController
     {
         _categoriesService = categoriesService;
     }
-    
+
     internal void AddCategory()
     {
         _categoriesService.AddCategory();
@@ -19,7 +19,6 @@ internal class CategoriesController
     internal void DeleteCategory()
     {
         _categoriesService.DeleteCategory();
-
     }
 
     internal void UpdateCategory()
@@ -32,7 +31,7 @@ internal class CategoriesController
         return _categoriesService.GetAllCategories();
     }
 
-    internal Category GetCategory()
+    internal CategoryDTO? GetCategory()
     {
         return _categoriesService.GetCategory();
     }

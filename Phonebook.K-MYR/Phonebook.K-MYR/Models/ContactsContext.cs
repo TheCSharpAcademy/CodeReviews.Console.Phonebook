@@ -12,10 +12,10 @@ internal class ContactsContext : DbContext
         UserID = ConfigurationManager.AppSettings.Get("UserName"),
         Password = ConfigurationManager.AppSettings.Get("Password")
     }.ConnectionString;
-    
-    public DbSet<Contact> Contacts {get; set;}
 
-    public DbSet<Category> Categories {get; set;}
+    public DbSet<Contact> Contacts { get; set; }
+
+    public DbSet<Category> Categories { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer(_connectionString);
 
@@ -25,10 +25,13 @@ internal class ContactsContext : DbContext
             .HasOne(con => con.Category)
             .WithMany(cat => cat.Contacts)
             .HasForeignKey(cat => cat.CategoryId)
-            .OnDelete(DeleteBehavior.SetNull);
-        
+            .OnDelete(DeleteBehavior.Cascade);
+
         modelBuilder.Entity<Category>()
             .HasIndex(c => c.Name)
             .IsUnique();
+
+        modelBuilder.Entity<Category>()
+            .HasData(new Category { CategoryId = 1, Name = "General" });
     }
 }

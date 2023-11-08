@@ -17,15 +17,14 @@ internal class UserInterface
 
     internal void ShowMainMenu()
     {
-        while(true)
+        while (true)
         {
             Console.Clear();
-
+            AnsiConsole.Write(new Panel("[darkorange3_1] Main Menu [/]").RoundedBorder().Padding(3, 0, 3, 0));
             var option = AnsiConsole.Prompt(new SelectionPrompt<MainMenu>()
-                                                .AddChoices(Enum.GetValues(typeof(MainMenu)).Cast<MainMenu>())
-                                                .Title("MainMenu"));
+                                                .AddChoices(Enum.GetValues(typeof(MainMenu)).Cast<MainMenu>()));
 
-            switch(option)
+            switch (option)
             {
                 case MainMenu.ManageCategories:
                     ShowCategoriesMenu();
@@ -47,12 +46,15 @@ internal class UserInterface
         while (!exit)
         {
             Console.Clear();
+            AnsiConsole.Write(new Panel("[darkorange3_1] Category Menu [/]")
+                                .Padding(3, 0, 3, 0)
+                                .BorderColor(Color.DarkOrange3_1));
+
             var option = AnsiConsole.Prompt(new SelectionPrompt<CategoriesMenu>()
-                                                .AddChoices(Enum.GetValues(typeof(CategoriesMenu)).Cast<CategoriesMenu>())
-                                                .Title("Categories Menu"));
+                                                .AddChoices(Enum.GetValues(typeof(CategoriesMenu)).Cast<CategoriesMenu>()));
 
             switch (option)
-            {      
+            {
                 case CategoriesMenu.AddCategory:
                     _categoriesController.AddCategory();
                     break;
@@ -63,28 +65,37 @@ internal class UserInterface
                     _categoriesController.DeleteCategory();
                     break;
                 case CategoriesMenu.ViewCategory:
-                    ViewCategory();
+                    ShowCategory();
                     break;
                 case CategoriesMenu.Exit:
                     exit = true;
-                    break;    
-            
-            }            
+                    break;
+
+            }
         }
     }
 
-    private void ViewCategory()
+    private void ShowCategory()
     {
-        bool exit = false;
+        Console.Clear();
 
-        while (!exit)
+        var category = _categoriesController.GetCategory();
+
+        if (category is null)
+            return;
+
+        var table = new Table()
+                        .AddColumns("Name", "Email Adress", "Phone Number")
+                        .Title($"[darkorange3_1]{category.Name}[/]")
+                        .BorderColor(Color.DarkOrange3_1);
+
+        foreach (var contact in category.Contacts)
         {
-            Console.Clear();
-
-            var category = _categoriesController.GetCategory();
-
-            
+            table.AddRow(contact.FullName, contact.EmailAdress, contact.PhoneNumber);
         }
+
+        AnsiConsole.Write(table);
+        Helpers.WriteMessageAndWait("Press Any Key To Return");
     }
 
     private void ShowContactsMenu()
@@ -94,11 +105,14 @@ internal class UserInterface
         while (!exit)
         {
             Console.Clear();
-            var option = AnsiConsole.Prompt(new SelectionPrompt<ContactsMenu>()
-                                                .AddChoices(Enum.GetValues(typeof(ContactsMenu)).Cast<ContactsMenu>())
-                                                .Title("Contacts Menu"));
+            AnsiConsole.Write(new Panel("[darkorange3_1] Contact Menu [/]")
+                                .Padding(3, 0, 3, 0)
+                                .BorderColor(Color.DarkOrange3_1));
 
-            switch(option)
+            var option = AnsiConsole.Prompt(new SelectionPrompt<ContactsMenu>()
+                                                .AddChoices(Enum.GetValues(typeof(ContactsMenu)).Cast<ContactsMenu>()));
+
+            switch (option)
             {
                 case ContactsMenu.AddContact:
                     _contactsController.AddContact();
@@ -117,9 +131,9 @@ internal class UserInterface
                     break;
                 case ContactsMenu.Exit:
                     exit = true;
-                    break;    
+                    break;
             }
-        }        
+        }
     }
 
     private void ShowContacts()
@@ -128,29 +142,33 @@ internal class UserInterface
 
         var table = new Table()
                         .AddColumns("Name", "Email Adress", "Phone Number", "Category")
-                        .Title("Contacts");
+                        .Title("[darkorange3_1]Contacts[/]")
+                        .BorderColor(Color.DarkOrange3_1);
 
         foreach (var contact in contacts)
         {
-            table.AddRow(contact.Name, contact.EmailAdress, contact.PhoneNumber, contact.Category.Name);
+            table.AddRow(contact.FullName, contact.EmailAdress, contact.PhoneNumber, contact.CategoryName);
         }
 
         Console.Clear();
         AnsiConsole.Write(table);
-        Console.ReadKey();           
+        Helpers.WriteMessageAndWait("Press Any Key To Return");
     }
 
     internal void ShowContact()
     {
         var contact = _contactsController.GetContact();
 
-        var panel = new Panel($"{contact.Name}\n{contact.PhoneNumber}\n{contact.EmailAdress}\n{contact.Category.Name}")
-                        .Padding(2,2,2,2)
-                        .RoundedBorder();
-
         Console.Clear();
-        AnsiConsole.Write(panel);
-        Console.ReadKey();           
 
+        if (contact is null)
+            AnsiConsole.Write(new Panel("No Contacts Were Found. Please Add A Contact First").BorderColor(Color.DarkOrange3_1));
+
+        else
+            AnsiConsole.Write(new Panel($"{contact.PhoneNumber}\n{contact.EmailAdress}\n{contact.CategoryName}")
+                        .Padding(2, 1, 2, 1)
+                        .BorderColor(Color.DarkOrange3_1));
+
+        Helpers.WriteMessageAndWait("Press Any Key To Return");
     }
 }

@@ -1,7 +1,11 @@
 ﻿using Phonebook.K_MYR;
 
-var service = new ContactsService();
-var controller = new ContactsController(service);
-var ui = new UserInterface(controller);
+var contactsService = new ContactsService();
+var contactsController = new ContactsController(contactsService);
 
-ui.ShowContactsMenu();
+var categoriesService = new CategoriesService();
+var categoriesController = new CategoriesController(categoriesService);
+
+var ui = new UserInterface(contactsController, categoriesController);
+
+ui.ShowMainMenu();
