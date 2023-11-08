@@ -162,12 +162,17 @@ internal class UserInterface
         Console.Clear();
 
         if (contact is null)
+        {
             AnsiConsole.Write(new Panel("No Contacts Were Found. Please Add A Contact First").BorderColor(Color.DarkOrange3_1));
+        }
 
         else
+        {
+            AnsiConsole.Write(new Panel(contact.FullName).BorderColor(Color.DarkOrange3_1));
             AnsiConsole.Write(new Panel($"{contact.PhoneNumber}\n{contact.EmailAdress}\n{contact.CategoryName}")
                         .Padding(2, 1, 2, 1)
                         .BorderColor(Color.DarkOrange3_1));
+        }            
 
         Helpers.WriteMessageAndWait("Press Any Key To Return");
     }

@@ -80,8 +80,10 @@ internal class ContactsService
                 contact.PhoneNumber = GetPhoneNumberInput();
 
             if (AnsiConsole.Confirm("Update Category?"))
+            {
                 contact.CategoryId = GetCategoryInput().CategoryId;
-                
+                contact.Category = null;
+            }
 
             db.Update(contact);
             db.SaveChanges();
