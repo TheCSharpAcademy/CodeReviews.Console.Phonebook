@@ -1,2 +1,7 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using Phonebook.StanimalTheMan;
+
+var context = new ContactsContext();
+context.Database.EnsureDeleted();
+context.Database.EnsureCreated();
+
+UserInterface.MainMenu();
