@@ -1,4 +1,5 @@
-﻿using Phonebook.StanimalTheMan.Services;
+﻿using Phonebook.StanimalTheMan.Models;
+using Phonebook.StanimalTheMan.Services;
 using Spectre.Console;
 using static Phonebook.StanimalTheMan.Enums;
 
@@ -33,6 +34,7 @@ namespace Phonebook.StanimalTheMan
                     case MenuOptions.UpdateContact:
                         break;
                     case MenuOptions.ViewAllContacts:
+                        ContactService.GetContacts();
                         break;
                     case MenuOptions.ViewContact:
                         break;
@@ -42,6 +44,31 @@ namespace Phonebook.StanimalTheMan
                         break;
                 }
             }
+        }
+
+        internal static void ShowContactTable(List<Contact> contacts)
+        {
+            var table = new Table();
+            table.AddColumn("Id");
+            table.AddColumn("Name");
+            table.AddColumn("Email");
+            table.AddColumn("Phone Number");
+
+            foreach (Contact contact in contacts)
+            {
+                table.AddRow(
+                    contact.Id.ToString(),
+                    contact.Name,
+                    contact.Email,
+                    contact.PhoneNumber
+                    );
+            }
+
+            AnsiConsole.Write(table);
+
+            Console.WriteLine("Enter any key to continue");
+            Console.ReadLine();
+            Console.Clear();
         }
     }
 }

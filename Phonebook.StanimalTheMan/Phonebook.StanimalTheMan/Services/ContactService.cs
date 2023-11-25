@@ -7,6 +7,12 @@ namespace Phonebook.StanimalTheMan.Services;
 
 internal class ContactService
 {
+    internal static void GetContacts()
+    {
+        var contacts = ContactController.GetContacts();
+        UserInterface.ShowContactTable(contacts);
+    }
+
     internal static void InsertContact()
     {
         var contact = new Contact
