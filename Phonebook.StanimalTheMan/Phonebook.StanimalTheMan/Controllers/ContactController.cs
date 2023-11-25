@@ -12,6 +12,15 @@ internal class ContactController
         db.SaveChanges();
     }
 
+    internal static Contact GetContactById(int id)
+    {
+        using var db = new ContactsContext();
+        var contact = db.Contacts
+            .SingleOrDefault(contact => contact.Id == id);
+
+        return contact;
+    }
+
     internal static List<Contact> GetContacts()
     {
         using var db = new ContactsContext();

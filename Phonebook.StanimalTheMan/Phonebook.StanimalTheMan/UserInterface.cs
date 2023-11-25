@@ -37,6 +37,7 @@ namespace Phonebook.StanimalTheMan
                         ContactService.GetContacts();
                         break;
                     case MenuOptions.ViewContact:
+                        ContactService.GetContact();
                         break;
                     case MenuOptions.Quit:
                         Console.WriteLine("Goodbye");
@@ -44,6 +45,22 @@ namespace Phonebook.StanimalTheMan
                         break;
                 }
             }
+        }
+
+        internal static void ShowContact(Contact contact)
+        {
+            var panel = new Panel($@"Id: {contact.Id}
+Name: {contact.Name}
+Email: {contact.Email}
+Phone Number: {contact.PhoneNumber}");
+            panel.Header = new PanelHeader("Contact Info");
+            panel.Padding = new Padding(2, 2, 2, 2);
+
+            AnsiConsole.Write(panel);
+
+            Console.WriteLine("Press Any Key to Return to Meniu");
+            Console.ReadLine();
+            Console.Clear();
         }
 
         internal static void ShowContactTable(List<Contact> contacts)

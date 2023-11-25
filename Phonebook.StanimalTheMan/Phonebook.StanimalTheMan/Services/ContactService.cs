@@ -7,6 +7,12 @@ namespace Phonebook.StanimalTheMan.Services;
 
 internal class ContactService
 {
+    internal static void GetContact()
+    {
+        var contact = GetContactOptionInput();
+        UserInterface.ShowContact(contact);
+    }
+
     internal static void GetContacts()
     {
         var contacts = ContactController.GetContacts();
@@ -23,5 +29,18 @@ internal class ContactService
         };
 
         ContactController.AddContact(contact);
+    }
+
+    private static Contact GetContactOptionInput()
+    {
+        var contacts = ContactController.GetContacts();
+        var contactsArray = contacts.Select(contact => contact.Name).ToArray();
+        var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
+            .Title("Choose Contact")
+            .AddChoices(contactsArray));
+        var id = contacts.Single(contact => contact.Name == option).Id;
+        var contact = ContactController.GetContactById(id);
+
+        return contact;
     }
 }
