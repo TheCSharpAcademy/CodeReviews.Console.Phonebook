@@ -33,6 +33,7 @@ static internal class UserInterface
                     ContactService.DeleteContact();
                     break;
                 case MenuOptions.UpdateContact:
+                    ContactService.UpdateContact();
                     break;
                 case MenuOptions.ViewAllContacts:
                     ContactService.GetContacts();

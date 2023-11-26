@@ -41,4 +41,13 @@ internal class ContactController
 
         return contacts;
     }
+
+    internal static void UpdateContact(Contact contact)
+    {
+        using var db = new ContactsContext();
+
+        db.Update(contact);
+
+        db.SaveChanges();
+    }
 }

@@ -37,6 +37,23 @@ internal class ContactService
         ContactController.AddContact(contact);
     }
 
+    internal static void UpdateContact()
+    {
+        var contact = GetContactOptionInput();
+
+        contact.Name = AnsiConsole.Confirm("Update name?")
+            ? AnsiConsole.Ask<string>("Contact's new name:")
+            : contact.Name;
+        contact.Email = AnsiConsole.Confirm("Update email?")
+            ? Validator.GetEmail(AnsiConsole.Ask<string>("Contact's new email:"))
+            : contact.Email;
+        contact.PhoneNumber = AnsiConsole.Confirm("Update phone number?")
+            ? Validator.GetPhoneNumber(AnsiConsole.Ask<string>("Contact's new phone number:"))
+            : contact.PhoneNumber;
+
+        ContactController.UpdateContact(contact);
+    }
+
     private static Contact GetContactOptionInput()
     {
         var contacts = ContactController.GetContacts();
