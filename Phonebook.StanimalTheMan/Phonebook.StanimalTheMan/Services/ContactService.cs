@@ -57,6 +57,14 @@ internal class ContactService
     private static Contact GetContactOptionInput()
     {
         var contacts = ContactController.GetContacts();
+        if (contacts.Count == 0)
+        {
+            Console.WriteLine("No contacts available.  Add a contact before trying to access options.");
+            // force user to add a contact to avoid runtime error
+            InsertContact();
+        }
+        // kind of weird to prompt user to take action on just recently created contact...any suggestion for better user interaction is appreciated.
+        contacts = ContactController.GetContacts();
         var contactsArray = contacts.Select(contact => contact.Name).ToArray();
         var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
             .Title("Choose Contact")
