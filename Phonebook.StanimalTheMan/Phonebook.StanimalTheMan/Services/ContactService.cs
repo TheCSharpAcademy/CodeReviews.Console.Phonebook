@@ -7,6 +7,12 @@ namespace Phonebook.StanimalTheMan.Services;
 
 internal class ContactService
 {
+    internal static void DeleteContact()
+    {
+        var contact = GetContactOptionInput();
+        ContactController.DeleteContact(contact);
+    }
+
     internal static void GetContact()
     {
         var contact = GetContactOptionInput();

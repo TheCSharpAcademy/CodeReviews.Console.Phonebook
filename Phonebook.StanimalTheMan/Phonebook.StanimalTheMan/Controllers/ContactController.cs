@@ -8,7 +8,18 @@ internal class ContactController
     internal static void AddContact(Contact contact)
     {
         using var db = new ContactsContext();
+
         db.Add(contact);
+
+        db.SaveChanges();
+    }
+
+    internal static void DeleteContact(Contact contact)
+    {
+        using var db = new ContactsContext();
+
+        db.Remove(contact);
+
         db.SaveChanges();
     }
 
