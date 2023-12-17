@@ -2,19 +2,17 @@
 
 public class ContactsController
 {
-    private ContactsContext _context { get; set; }
-
-    public ContactsController()
+    public static List<Contact> GetContacts()
     {
-        _context = new ContactsContext();
+        using var db = new ContactsContext();
+        var contacts = db.Contacts.OrderBy(c => c.ContactId).ToList();
+        return contacts;
     }
 
-    public List<Contact> GetContacts()
+    public static void AddContact(string name, string email, string phoneNumber)
     {
-        using (_context)
-        {
-            var contacts = _context.Contacts.OrderBy(c => c.ContactId).ToList();
-            return contacts;
-        }
+        using var db = new ContactsContext();
+        db.Contacts.Add(new Contact { Name = name, Email = email, Number = phoneNumber });
+        db.SaveChanges();
     }
 }

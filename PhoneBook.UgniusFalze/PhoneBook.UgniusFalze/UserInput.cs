@@ -18,7 +18,7 @@ public static class UserInput
                     }
                     else
                     {
-                        return ValidationResult.Error("Phone number must be valid.");
+                        return ValidationResult.Error("Phone number must all have digits and the length between 7 and 15");
                     }
                 }));
         return phoneNumber;
@@ -36,7 +36,7 @@ public static class UserInput
                     }
                     else
                     {
-                        return ValidationResult.Error("Email must be valid;");
+                        return ValidationResult.Error("Email must have a valid email format such as test@gmail.com");
                     }
                 }));
         return email;

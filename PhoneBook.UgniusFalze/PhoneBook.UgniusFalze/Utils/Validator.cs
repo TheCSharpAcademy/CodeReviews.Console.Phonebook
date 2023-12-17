@@ -12,8 +12,18 @@ public static class Validator
 
     public static bool IsValidPhoneNumber(string number)
     {
-        Regex phonePattern = new Regex(@"\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*");
-        return phonePattern.Match(number).Success;
+        if (number.Length > 15 || number.Length < 7)
+        {
+            return false;
+        }
+        
+        foreach (char c in number)
+        {
+            if (c < '0' || c > '9')
+                return false;
+        }
+
+        return true;
     }
     
 }
