@@ -9,6 +9,6 @@ public class ContactsContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(
-            "Server=(LocalDb)\\PhoneBook;Initial Catalog=PhoneBook;Integrated Security=SSPI;Trusted_Connection=yes;AttachDBFilename=");
+            "Server=(LocalDb)\\PhoneBook;Initial Catalog=PhoneBook;Integrated Security=SSPI;Trusted_Connection=yes;AttachDBFilename=C:\\Users\\ugniu\\source\\repos\\CodeReviews.Console.Phonebook\\PhoneBook.UgniusFalze\\PhoneBook.UgniusFalze\\PhoneBook.mdf");
     }
 }
