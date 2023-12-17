@@ -1,4 +1,4 @@
-﻿namespace PhoneBook.UgniusFalze;
+﻿namespace PhoneBook.UgniusFalze.Models;
 
 public class Contact
 {

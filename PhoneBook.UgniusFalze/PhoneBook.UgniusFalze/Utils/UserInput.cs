@@ -1,7 +1,6 @@
-﻿using PhoneBook.UgniusFalze.Utils;
-using Spectre.Console;
+﻿using Spectre.Console;
 
-namespace PhoneBook.UgniusFalze;
+namespace PhoneBook.UgniusFalze.Utils;
 
 public static class UserInput
 {

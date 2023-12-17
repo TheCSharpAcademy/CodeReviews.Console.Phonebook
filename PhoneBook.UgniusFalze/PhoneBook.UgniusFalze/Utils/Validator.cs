@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using EmailValidation;
+﻿using EmailValidation;
 
 namespace PhoneBook.UgniusFalze.Utils;
 
@@ -12,14 +11,14 @@ public static class Validator
 
     public static bool IsValidPhoneNumber(string number)
     {
-        if (number.Length > 15 || number.Length < 7)
+        if (number.Length is > 15 or < 7)
         {
             return false;
         }
         
-        foreach (char c in number)
+        foreach (var c in number)
         {
-            if (c < '0' || c > '9')
+            if (c is < '0' or > '9')
                 return false;
         }
 

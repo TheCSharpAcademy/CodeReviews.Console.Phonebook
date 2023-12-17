@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
-using EmailValidation;
+using PhoneBook.UgniusFalze.Controllers;
+using PhoneBook.UgniusFalze.Models;
 using PhoneBook.UgniusFalze.Utils;
 using Spectre.Console;
 
@@ -63,6 +64,13 @@ public class Menu
     private void DisplayContacts()
     {
         var contacts = ContactsController.GetContacts();
+        if (contacts.Count < 1)
+        {
+            Console.WriteLine("Contacts is empty.");
+            Console.ReadKey();
+            return;
+        }
+
         var table = new Table();
         table.AddColumns("Id", "Name", "Email", "Phone Number");
         foreach (var contact in contacts)
@@ -87,6 +95,12 @@ public class Menu
     private void ManageContacts()
     {
         var contacts = ContactsController.GetContacts();
+        if (contacts.Count < 1)
+        {
+            Console.WriteLine("Contacts is empty.");
+            Console.ReadKey();
+            return;
+        }
         var selectionPrompt = new SelectionPrompt<Contact>()
             .Title("Select Which Contact you want to edit");
         selectionPrompt.Converter = contact => contact.Name;
@@ -114,6 +128,31 @@ public class Menu
             options => Regex.Replace(options.ToString(), "(\\B[A-Z])",
                 " $1");
         var option = AnsiConsole.Prompt(selectionPrompt);
+        switch (option)
+        {
+            case ManageOptions.ChangeName:
+                contact.Name = UserInput.GetName();
+                ContactsController.Update(contact);
+                break;
+            case ManageOptions.ChangeEmail:
+                contact.Email = UserInput.GetEmail("Please enter updated contacts email: ");
+                ContactsController.Update(contact);
+                break;
+            case ManageOptions.ChangePhoneNumber:
+                contact.Number = UserInput.GetPhoneNumber("Please enter updated contacts phone number: ");
+                ContactsController.Update(contact);
+                break;
+            case ManageOptions.Delete:
+                ContactsController.Delete(contact);
+                Console.WriteLine("Contact deleted. Press any key to continue..");
+                Console.ReadKey();
+                return;
+            case ManageOptions.Exit:
+                return;
+        }
+        
+        Console.WriteLine("Contact updated. Press any key to continue...");
+        Console.ReadKey();
     }
 
 
