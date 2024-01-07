@@ -31,10 +31,20 @@ public class UI
         TableUI.PrintTableWithSelection(MainMenuOptions);
     }
 
-    public static void DisplayContacts(List<ContactDTO> contacts)
+    public static void DisplayContacts(List<ContactDTOWithSelection> contacts, int selection, int prevSelection) 
     {
         Console.Clear();
-        TableUI.PrintTableAddSelection(contacts);
+        contacts[prevSelection].Selected = "[ ]";
+        contacts[selection].Selected = "[x]";
+        TableUI.PrintTable(contacts);
+        Console.WriteLine("Press any key to return.");
+    }
+
+    public static void DisplayContactData(List<EmailDTO>? emailData, List<PhoneNumberDTO>? phoneData, int selection, string? contactName) //to 
+    {
+        Console.Clear();
+        TableUI.PrintTable(phoneData, contactName);
+        TableUI.PrintTable(emailData, contactName);
         Console.WriteLine("Press any key to return.");
     }
 

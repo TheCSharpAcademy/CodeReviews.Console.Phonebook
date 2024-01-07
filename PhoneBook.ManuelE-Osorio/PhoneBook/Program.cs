@@ -40,11 +40,15 @@ public class PhoneBook
         // db.SaveChanges();
 
         // var contact = db.Contacts   //INSERT WHERE CONTACTNAME = ""
-        //     .Where(c => c.ContactName == "John Doe" )
+        //     .Where(c => c.ContactName == "John Doe3" )
         //     .First();
 
         // contact.Emails?.Add( new Email {LocalName = "22334455", DomainName = "csharpacademy.com"});
-        // contact.Emails?.Add( new Email{ LocalName = "test", DomainName = "csharacademy.com"});
+        // contact.Emails?.Add( new Email {LocalName = "test", DomainName = "csharacademy.com"});
+        // contact.Emails?.Add( new Email {LocalName = "testing", DomainName = "csharacademy.com"});
+        // contact.PhoneNumbers?.Add( new PhoneNumber {CountryCode = "1", LocalNumber = "123456789"});
+        // contact.PhoneNumbers?.Add( new PhoneNumber {CountryCode = "1", LocalNumber = "12345678"});
+        // contact.PhoneNumbers?.Add( new PhoneNumber {CountryCode = "1", LocalNumber = "1234567"});
         // db.SaveChanges();
 
         
