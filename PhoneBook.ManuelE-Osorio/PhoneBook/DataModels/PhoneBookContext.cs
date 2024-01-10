@@ -58,5 +58,13 @@ public class PhoneBookContext : DbContext
             .HasMaxLength(15)
             .IsUnicode(false)
             .IsRequired(true);
+
+        modelBuilder.Entity<Contact>()
+            .Navigation(p => p.Emails)
+            .AutoInclude(false);
+        
+        modelBuilder.Entity<Contact>()
+            .Navigation(p => p.PhoneNumbers)
+            .AutoInclude(false);
     }
 }

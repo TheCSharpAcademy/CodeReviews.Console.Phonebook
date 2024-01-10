@@ -14,7 +14,6 @@ public class PhoneBook
 
         // using var db = new PhoneBookContext();
 
-        // Console.WriteLine(db.Database.EnsureDeleted());
         // Console.WriteLine(db.Database.EnsureCreated());
         // Console.WriteLine(db.Database.GenerateCreateScript());
 
@@ -40,7 +39,7 @@ public class PhoneBook
         // db.SaveChanges();
 
         // var contact = db.Contacts   //INSERT WHERE CONTACTNAME = ""
-        //     .Where(c => c.ContactName == "John Doe3" )
+        //     .Where(c => c.ContactName == "John Doe5" )
         //     .First();
 
         // contact.Emails?.Add( new Email {LocalName = "22334455", DomainName = "csharpacademy.com"});

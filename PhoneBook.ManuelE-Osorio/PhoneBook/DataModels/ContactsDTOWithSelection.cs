@@ -1,6 +1,6 @@
 namespace PhoneBookProgram;
 
-public class ContactDTOWithSelection(Contact contact)
+public class ContactDtoWithSelection(Contact contact)
 {
     public string? Selected { get; set; } = "[ ]";
     public string? ContactName { get; } = contact.ContactName;

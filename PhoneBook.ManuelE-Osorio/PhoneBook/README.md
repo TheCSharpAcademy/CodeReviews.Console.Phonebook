@@ -11,4 +11,5 @@
 9) https://stackoverflow.com/questions/5663754/entity-framework-4-lifespan-scope-of-context-in-a-winform-application
 10) https://learn.microsoft.com/en-us/ef/core/dbcontext-configuration/
 11) https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
-12) 
+12) https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.metadata.builders.navigationbuilder-2.autoinclude?view=efcore-5.0
+13) 

@@ -1,6 +1,6 @@
 namespace PhoneBookProgram;
 
-public class ContactDTO(Contact contact)
+public class ContactDto(Contact contact)
 {
     public int ContactId { get; } = contact.ContactId;
     public string? ContactName { get; } = contact.ContactName;

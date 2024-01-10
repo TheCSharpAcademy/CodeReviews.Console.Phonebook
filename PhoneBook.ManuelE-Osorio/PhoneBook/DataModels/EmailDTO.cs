@@ -1,6 +1,7 @@
 namespace PhoneBookProgram;
 
-public class EmailDTO(Email email)
+public class EmailDto(Email email)
 {
+    public string? Selected { get; set; } = "[ ]";
     public string? Email {get; set;} = email.GetEmail();
 }

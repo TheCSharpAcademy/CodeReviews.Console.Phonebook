@@ -31,7 +31,7 @@ public class UI
         TableUI.PrintTableWithSelection(MainMenuOptions);
     }
 
-    public static void DisplayContacts(List<ContactDTOWithSelection> contacts, int selection, int prevSelection) 
+    public static void DisplayContacts(List<ContactDtoWithSelection> contacts, int selection, int prevSelection) 
     {
         Console.Clear();
         contacts[prevSelection].Selected = "[ ]";
@@ -40,12 +40,38 @@ public class UI
         Console.WriteLine("Press any key to return.");
     }
 
-    public static void DisplayContactData(List<EmailDTO>? emailData, List<PhoneNumberDTO>? phoneData, int selection, string? contactName) //to 
+    public static void DisplayContactData(List<EmailDto> emailsDto, List<PhoneNumberDto> phonesDto, 
+        int selection, int prevSelection, string? contactName) //to 
     {
         Console.Clear();
-        TableUI.PrintTable(phoneData, contactName);
-        TableUI.PrintTable(emailData, contactName);
-        Console.WriteLine("Press any key to return.");
+        int length = emailsDto.Count + phonesDto.Count;
+        if(length>0)
+        {
+            if(prevSelection < phonesDto.Count)  // error is emails or phones are empty fix
+                phonesDto[prevSelection].Selected = "[ ]";
+            else
+                emailsDto[prevSelection - phonesDto.Count].Selected = "[ ]";
+            if(selection < phonesDto.Count)
+                phonesDto[selection].Selected = "[X]";
+            else
+                emailsDto[selection - phonesDto.Count].Selected = "[X]";
+        }
+        
+        TableUI.PrintTable(phonesDto, contactName);
+        TableUI.PrintTable(emailsDto, contactName);
+        Console.WriteLine("Press any key to return."); // instructions
+    }
+
+    public static void DisplayConfirmationPromt(string objectToDelete) //make it better
+    {
+        Console.Clear();
+        Console.WriteLine($"Do you want to delete the selected {objectToDelete}? [y/N]");
+    }
+
+    public static void DisplayInsert(string objectToInsert)  //make it better
+    {
+        Console.Clear();
+        Console.WriteLine($"Please write the {objectToInsert}");
     }
 
     public static void ExitMessage(string? errorMessage)
