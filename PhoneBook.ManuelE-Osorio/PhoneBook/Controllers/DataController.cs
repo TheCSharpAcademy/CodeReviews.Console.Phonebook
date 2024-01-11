@@ -6,90 +6,37 @@ public class DataController
 {
     private readonly int MainMenuOptionsQuantity = 4;
     // private readonly int PageSize = 10;
-    public bool RunMainMenuController;
     public bool RunViewContacts;
 
     public bool RunContactDetail;
+    public DBController DBInstance;
 
     public DataController()
     {
-        RunMainMenuController = true;
-        RunViewContacts = false;
+        RunViewContacts = true;
         RunContactDetail = false;
+        DBInstance = new();
     }
 
     public void MainMenuController()
     {
         UI.WelcomeMessage();
 
-        ConsoleKey pressedKey;
-        int selection = 0;
-        string? errorMessage = null;
-            
-        while(RunMainMenuController)
-        {
-            UI.MainMenu(selection, errorMessage);
-            pressedKey = Console.ReadKey().Key;
-            switch(pressedKey)
-            {
-                case(ConsoleKey.UpArrow):
-                    selection--;
-                    if(selection < 0)
-                        selection = 0;
-                    break;
-
-                case(ConsoleKey.DownArrow):
-                    selection++;
-                    if(selection > MainMenuOptionsQuantity - 1)
-                        selection = MainMenuOptionsQuantity - 1;
-                    break;
-
-                case(ConsoleKey.Backspace):
-                case(ConsoleKey.Escape):
-                    RunMainMenuController = false;
-                    break;
-
-                case(ConsoleKey.Enter):
-                    switch(selection)
-                    {
-                        case(0):
-                            RunViewContacts = true;
-                            ViewContacts();
-                            break;
-                        case(1):
-                            break;
-                        case(2):
-                            break;
-                        case(3):
-                            break;                            
-                    }
-                    break;
-            }
-        }
-
-        UI.ExitMessage(errorMessage);
-    }
-
-    public void ViewContacts()
-    {
         var contacts = new List<Contact>();
-        var contactsToUI = new List<ContactDtoWithSelection>();
-        
+        var contactsToUI = new List<ContactDtoWithSelection>();    
         bool getContacts = true;
         int selection = 0;
         int prevSelection = 0;
         ConsoleKey pressedKey;
+        string? errorMessage = null;
 
         while(RunViewContacts)
         {
             if(getContacts)
             {
-                using var dbController = new DBController();
-                {
-                    contacts = dbController.GetContacts();
-                    contactsToUI = 
-                        contacts.Select(contact => new ContactDtoWithSelection(contact)).ToList();
-                }
+                contacts = DBInstance.GetContacts();
+                contactsToUI = contacts
+                    .Select(contact => new ContactDtoWithSelection(contact)).ToList();
                 getContacts = false;
                 selection = 0;
                 prevSelection = 0;
@@ -135,24 +82,22 @@ public class DataController
                     break;
             }
         }
+        UI.ExitMessage(errorMessage);
     }
 
-    public static bool DeleteContact(int contactId)
+    public bool DeleteContact(int contactId)
     {
         UI.DisplayConfirmationPromt("contact");
         var selection = Console.ReadLine() ?? "";
         if(selection.Equals("y", StringComparison.OrdinalIgnoreCase))
-            {
-                using var dbController = new DBController();
-                {
-                    dbController.DeleteContact(contactId);
-                }
-                return true;
-            }
+        {
+            DBInstance.Delete(contactId);
+            return true;
+        }
         return false;
     }
 
-    public static bool ModifyContact(int contactId)
+    public bool ModifyContact(int contactId)
     {
         var validContact = true;
         string modifyContactName;
@@ -162,17 +107,14 @@ public class DataController
             modifyContactName = Console.ReadLine() ?? "";  //pending validation pending cancel
             if(true)
             {
-                using var dbController = new DBController();
-                    {
-                        dbController.ModifyContact(modifyContactName, contactId);
-                    }
+                DBInstance.Modify(modifyContactName, contactId);
                 return true;
             }
         }        
         return false;
     }
 
-    public static bool InsertContact()
+    public bool InsertContact()
     {
         var validContact = true;
         string newContactName;
@@ -182,10 +124,7 @@ public class DataController
             newContactName = Console.ReadLine() ?? "";  //pending validation pending cancel
             if(true)
             {
-                using var dbController = new DBController();
-                    {
-                        dbController.InsertContact(newContactName);
-                    }
+                DBInstance.Insert(newContactName);
                 return true;
             }
         }        
@@ -194,6 +133,7 @@ public class DataController
 
     public void ViewContactDetail(int contactId)
     {
+        var contact = new Contact();
         var emailsDto = new List<EmailDto>();
         var phonesDto = new List<PhoneNumberDto>();
         bool getContactDetails = true;
@@ -205,16 +145,18 @@ public class DataController
         {
             if(getContactDetails)
             {
-                using var dbController = new DBController();
-                {
-                    emailsDto = dbController.GetEmails(contactId)
-                        .Select(p => new EmailDto(p)).ToList();
-                    phonesDto = dbController.GetPhones(contactId)
-                        .Select(p => new PhoneNumberDto(p)).ToList();
-                }
+                
+                contact = DBInstance.GetEmails(contactId);
+                emailsDto = contact.Emails
+                    .Select(p => new EmailDto(p)).ToList();
+                phonesDto = contact.PhoneNumbers
+                    .Select(p => new PhoneNumberDto(p)).ToList();
                 getContactDetails = false;
+                selection = 0;
+                prevSelection = 0;
             } 
-            UI.DisplayContactData(emailsDto, phonesDto, selection, prevSelection, "test");
+
+            UI.DisplayContactData(phonesDto, emailsDto, selection, prevSelection, "test");
             pressedKey = Console.ReadKey().Key;
             switch(pressedKey)
             {
@@ -231,9 +173,18 @@ public class DataController
                     if(selection > phonesDto.Count + emailsDto.Count - 1)
                         selection = phonesDto.Count + emailsDto.Count - 1;
                     break;
+
                 case(ConsoleKey.I):
+                    if(selection < phonesDto.Count)
+                        getContactDetails = Insert("phone number", new PhoneNumber{ContactId = contactId});
+                    else
+                        getContactDetails = Insert("email", new Email{ ContactId = contactId});
                     break;
                 case(ConsoleKey.D):
+                    if(selection < phonesDto.Count)
+                        getContactDetails = Delete("phone number", contact.PhoneNumbers[selection]);
+                    else
+                        getContactDetails = Delete("email", contact.Emails[selection - phonesDto.Count]);
                     break;
                 case(ConsoleKey.M):
                     break;
@@ -243,5 +194,76 @@ public class DataController
                     break;
             }
         }
+    }
+
+    public bool Delete(string objectType, Email objectToDelete)
+    {
+        UI.DisplayConfirmationPromt(objectType);
+        var selection = Console.ReadLine() ?? "";
+        if(selection.Equals("y", StringComparison.OrdinalIgnoreCase))
+            {
+                DBInstance.Delete(objectToDelete);
+                return true;
+            }
+        return false;
+    }
+
+    public bool Delete(string objectType, PhoneNumber objectToDelete)
+    {
+        UI.DisplayConfirmationPromt(objectType);
+        var selection = Console.ReadLine() ?? "";
+        if(selection.Equals("y", StringComparison.OrdinalIgnoreCase))
+            {
+                
+                DBInstance.Delete(objectToDelete);
+                
+                return true;
+            }
+        return false;
+    }
+    public bool Insert(string objectType,Email emailToInsert) // improvemethod
+    {
+        UI.DisplayInsert(objectType);
+
+        var validContact = true;
+        string data;
+        string data2;
+        while(validContact)
+        {
+            UI.DisplayInsert(objectType);
+            data = Console.ReadLine() ?? "";  //pending validation pending cancel, pending divide string
+            data2 = Console.ReadLine() ?? ""; 
+            if(true)
+            {
+                emailToInsert.LocalName = data;
+                emailToInsert.DomainName = data2;
+                DBInstance.Insert(emailToInsert);
+                return true;
+            }
+        }        
+        return false;
+    }
+
+    public bool Insert(string objectType, PhoneNumber phoneToInsert) // improvemethod
+    {
+        UI.DisplayInsert(objectType);
+
+        var validContact = true;
+        string data;
+        string data2;
+        while(validContact)
+        {
+            UI.DisplayInsert(objectType);
+            data = Console.ReadLine() ?? "";  //pending validation pending cancel, pending divide string
+            data2 = Console.ReadLine() ?? ""; 
+            if(true)
+            {
+                phoneToInsert.CountryCode = data;
+                phoneToInsert.LocalNumber = data2;
+                DBInstance.Insert(phoneToInsert);
+                return true;
+            }
+        }        
+        return false;
     }
 }

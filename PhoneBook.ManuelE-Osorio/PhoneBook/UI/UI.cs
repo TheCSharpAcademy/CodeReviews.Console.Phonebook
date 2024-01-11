@@ -40,7 +40,7 @@ public class UI
         Console.WriteLine("Press any key to return.");
     }
 
-    public static void DisplayContactData(List<EmailDto> emailsDto, List<PhoneNumberDto> phonesDto, 
+    public static void DisplayContactData(List<PhoneNumberDto> phonesDto, List<EmailDto> emailsDto, 
         int selection, int prevSelection, string? contactName) //to 
     {
         Console.Clear();
