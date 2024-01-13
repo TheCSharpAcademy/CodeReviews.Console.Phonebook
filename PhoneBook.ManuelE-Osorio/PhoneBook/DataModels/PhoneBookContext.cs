@@ -1,26 +1,45 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Configuration;
+using System.Net.Mail;
 
 namespace PhoneBookProgram;
 public class PhoneBookContext : DbContext
 {
-    public static readonly string? connectionString = 
-        ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString; // switch to json
+    public static readonly int ContactNameLenght = 150;
+    public static readonly int ContactCategoryLenght = 150;
+    public static readonly int EmailLocalNameLenght = 64;
+    public static readonly int EmailDomainNameLenght = 254;
+    public static readonly int PhoneNumberCountryCodeLenght = 3;
+    public static readonly int PhoneNumberLocalNumberLenght = 15;
+    public readonly string? PhoneBookConnectionString;
     public DbSet<Contact> Contacts {get; set;}
-    public DbSet<Email> Emails {get; set;} 
+    public DbSet<Email> Emails {get; set;}
     public DbSet<PhoneNumber> PhoneNumbers {get; set;}
+    public PhoneBookContext()
+    {
+        try
+        {
+            PhoneBookConnectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        }
+        catch
+        {
+            throw new Exception(); //test
+        }
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options
-        .UseSqlServer(connectionString)
+        .UseSqlServer(PhoneBookConnectionString)
         .LogTo(Console.WriteLine, LogLevel.Information);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Contact>()
             .Property(p => p.ContactName)
-            .HasMaxLength(100)
-            .IsRequired();
+            .HasMaxLength(ContactNameLenght)
+            .IsRequired()
+            .IsUnicode(true);
 
         modelBuilder.Entity<Contact>()
             .HasIndex(p => p.ContactName)
@@ -28,43 +47,43 @@ public class PhoneBookContext : DbContext
 
         modelBuilder.Entity<Contact>()
             .Property(p => p.Category)
-            .HasMaxLength(50)
+            .HasMaxLength(ContactCategoryLenght)
             .IsUnicode(true);
 
         modelBuilder.Entity<Contact>()
             .OwnsMany(p => p.Emails)
             .Property(p => p.LocalName)
-            .HasMaxLength(64)
-            .IsUnicode(false)
+            .HasMaxLength(EmailLocalNameLenght)
+            .IsUnicode(true)
             .IsRequired(true);
 
         modelBuilder.Entity<Contact>()
             .OwnsMany(p => p.Emails)
             .Property(p => p.DomainName)
-            .HasMaxLength(254)
-            .IsUnicode(false)
+            .HasMaxLength(EmailDomainNameLenght)
+            .IsUnicode(true)
             .IsRequired(true);
 
         modelBuilder.Entity<Contact>()
             .OwnsMany(p => p.PhoneNumbers)
             .Property(p => p.CountryCode)
-            .HasMaxLength(3)
+            .HasMaxLength(PhoneNumberCountryCodeLenght)
             .IsUnicode(false)
             .IsRequired(true);
 
         modelBuilder.Entity<Contact>()
             .OwnsMany(p => p.PhoneNumbers)
             .Property(p => p.LocalNumber)
-            .HasMaxLength(15)
+            .HasMaxLength(PhoneNumberLocalNumberLenght)
             .IsUnicode(false)
             .IsRequired(true);
 
-        // modelBuilder.Entity<Contact>()
-        //     .Navigation(p => p.Emails)
-        //     .AutoInclude(false);
+        modelBuilder.Entity<Contact>()
+            .Navigation(p => p.Emails)
+            .AutoInclude(false);
         
-        // modelBuilder.Entity<Contact>()
-        //     .Navigation(p => p.PhoneNumbers)
-        //     .AutoInclude(false);
+        modelBuilder.Entity<Contact>()
+            .Navigation(p => p.PhoneNumbers)
+            .AutoInclude(false);
     }
 }

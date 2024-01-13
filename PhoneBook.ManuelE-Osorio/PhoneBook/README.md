@@ -12,4 +12,10 @@
 10) https://learn.microsoft.com/en-us/ef/core/dbcontext-configuration/
 11) https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
 12) https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.metadata.builders.navigationbuilder-2.autoinclude?view=efcore-5.0
-13) 
+13) https://regex101.com/
+14) https://learn.microsoft.com/en-us/dotnet/csharp/tutorials/ranges-indexes
+15) https://stackoverflow.com/questions/21733756/best-way-to-split-string-by-last-occurrence-of-character
+16) https://learn.microsoft.com/en-us/dotnet/csharp/advanced-topics/reflection-and-attributes/accessing-attributes-by-using-reflection
+17) https://learn.microsoft.com/en-us/dotnet/api/system.net.mail?view=net-8.0
+18) https://github.com/google/libphonenumber
+19) https://github.com/dotnet/runtime/issues/82689  isuue on MailAddress validation

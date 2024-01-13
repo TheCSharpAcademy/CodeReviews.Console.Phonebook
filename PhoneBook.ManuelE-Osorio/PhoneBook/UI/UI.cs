@@ -2,50 +2,35 @@ namespace PhoneBookProgram;
 
 public class UI
 {
-    public static List<List<object>> MainMenuOptions {get; set;} = [["[ ]", "View all the contacts"],
-        ["[ ]", "Add a new contact"],
-        ["[ ]", "Modify a contact"],
-        ["[ ]", "Delete a contact"]];
-
-    public static List<List<object>> ModifyMenuOptions {get; set;} = [["[ ]", "View all the contacts"],
-        ["[ ]", "Add a new contact"],
-        ["[ ]", "Modify a contact"],
-        ["[ ]", "Delete a contact"]];
-
     public static void WelcomeMessage()
     {
         Console.Clear();
         Console.WriteLine("Welcome to the Phone Book App!\n");
         Thread.Sleep(2000);
     }
-    public static void MainMenu(int selection, string? errorMessage = null)
-    {
-        Console.Clear();
-
-        if(errorMessage != null)
-            Console.WriteLine($"Error: {errorMessage}");
-        Console.WriteLine("Please select one of the following options:\n");
-        
-        Helpers.ClearSelection(MainMenuOptions);
-        MainMenuOptions[selection][0] = "[x]";
-        TableUI.PrintTableWithSelection(MainMenuOptions);
-    }
 
     public static void DisplayContacts(List<ContactDtoWithSelection> contacts, int selection, int prevSelection) 
     {
         Console.Clear();
-        contacts[prevSelection].Selected = "[ ]";
-        contacts[selection].Selected = "[x]";
+        if(contacts.Count > 0)
+        {
+            contacts[prevSelection].Selected = "[ ]";
+            contacts[selection].Selected = "[x]";
+        }
         TableUI.PrintTable(contacts);
-        Console.WriteLine("Press any key to return.");
+        Console.WriteLine("User the arrows to select a contact\n"+
+            "Press enter to check the details of the selected contact\n"+
+            "Press I to create a new contact\n"+
+            "Press M to modify the selected contact\n"+
+            "Press D to delete the selected contact\n"+
+            "Press Backspace/Esc to exit the application\n");
     }
 
     public static void DisplayContactData(List<PhoneNumberDto> phonesDto, List<EmailDto> emailsDto, 
         int selection, int prevSelection, string? contactName) //to 
     {
         Console.Clear();
-        int length = emailsDto.Count + phonesDto.Count;
-        if(length>0)
+        if(emailsDto.Count+phonesDto.Count  > 0)
         {
             if(prevSelection < phonesDto.Count)  // error is emails or phones are empty fix
                 phonesDto[prevSelection].Selected = "[ ]";
@@ -59,19 +44,26 @@ public class UI
         
         TableUI.PrintTable(phonesDto, contactName);
         TableUI.PrintTable(emailsDto, contactName);
-        Console.WriteLine("Press any key to return."); // instructions
+        Console.WriteLine("User the arrows to select a phone number/email\n"+
+            "Press enter to send an SMS/email to the selection\n"+          //pending
+            "Press P/E to create a new phone/email to the selected contact\n"+
+            "Press M to modify your selection\n"+
+            "Press D to delete your selection\n"+
+            "Press Backspace/Esc to return\n");
     }
 
-    public static void DisplayConfirmationPromt(string objectToDelete) //make it better
+    public static void DisplayConfirmationPromt(string objectName)
     {
         Console.Clear();
-        Console.WriteLine($"Do you want to delete the selected {objectToDelete}? [y/N]");
+        Console.WriteLine($"Do you want to delete the selected {objectName}? [y/N]");
     }
 
-    public static void DisplayInsert(string objectToInsert)  //make it better
+    public static void DisplayInsert(string objectToInsert, string? errorMessage) //Pending restrictions
     {
         Console.Clear();
-        Console.WriteLine($"Please write the {objectToInsert}");
+        if(errorMessage != null)
+            Console.WriteLine($"Error: {errorMessage}");
+        Console.WriteLine($"Please write the new {objectToInsert} or enter \"0\" to cancel.");
     }
 
     public static void ExitMessage(string? errorMessage)

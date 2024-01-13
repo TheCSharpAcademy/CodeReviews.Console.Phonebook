@@ -1,6 +1,4 @@
-using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 
 namespace PhoneBookProgram;
 
@@ -16,6 +14,15 @@ public class DBController: IDisposable
     public List<Contact> GetContacts()
     {
         List<Contact> contacts = [.. db.Contacts];
+        return contacts;
+    }
+
+    public List<Contact> GetContacts(char value)
+    {
+        List<Contact> contacts = [];
+        contacts = db.Contacts.ToList()
+                    .Where(p => p.ContactName.StartsWith(value) || p.ContactName.StartsWith(char.ToUpper(value)) ).ToList();
+        // .Select( p => EF.Functions.Like(p.ContactName, $"{value}%"));
         return contacts;
     }
 
@@ -48,22 +55,11 @@ public class DBController: IDisposable
         db.SaveChanges();
     }
 
-    public void Modify(string modifyContactName, int contactId)
-    {
-        var contactToModify = db.Contacts.Where( p => p.ContactId == contactId).First();
-        contactToModify.ContactName = modifyContactName;
-        db.SaveChanges();
-    }
-
     public void Delete(Email objectToDelete)
     {
         var contact = db.Contacts.Include(p => p.Emails)
             .Where(p => p.ContactId == objectToDelete.ContactId).First();
-
-        var email = contact.Emails.Find(p => p.EmailId == objectToDelete.EmailId);
-        if(email != null)
-            contact.Emails.Remove(email);
-
+        contact.Emails.Remove(objectToDelete);
         db.SaveChanges();
     }
 
@@ -71,7 +67,6 @@ public class DBController: IDisposable
     {
         var contact = db.Contacts.Include(p => p.PhoneNumbers)
             .Where(p => p.ContactId == objectToDelete.ContactId).First();
-        
         contact.PhoneNumbers.Remove(objectToDelete);
         db.SaveChanges();
     }
@@ -95,12 +90,21 @@ public class DBController: IDisposable
         db.SaveChanges();
     }
 
+    public void Modify(string modifyContactName, int contactId)
+    {
+        var contactToModify = db.Contacts.Where( p => p.ContactId == contactId).First();
+        contactToModify.ContactName = modifyContactName;
+        db.SaveChanges();
+    }
+
     public void Modify(Email objectToModify)
     {
         var contactToModify = db.Contacts.Include(p => p.Emails)
             .Where( p => p.ContactId == objectToModify.ContactId).First();
+
+        var emailToModify = contactToModify.Emails
+            .Find(p => p.EmailId == objectToModify.EmailId);
         
-        var emailToModify = contactToModify.Emails.Find(p => p.EmailId == objectToModify.EmailId);
         emailToModify = objectToModify;
         db.SaveChanges();
     }
