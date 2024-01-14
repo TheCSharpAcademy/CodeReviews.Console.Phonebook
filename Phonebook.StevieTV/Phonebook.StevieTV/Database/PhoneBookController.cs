@@ -21,6 +21,13 @@ public class PhoneBookController
             phoneBookContext.SaveChanges();
         }
     }
+    
+    public void UpdateContact(Contact contact)
+    {
+        using var phoneBookContext = new PhoneBookContext();
+        phoneBookContext.Contacts.Update(contact);
+        phoneBookContext.SaveChanges();
+    }
 
     public static void DeleteContact(Contact contact)
     {
@@ -31,4 +38,5 @@ public class PhoneBookController
             phoneBookContext.SaveChanges();
         }
     }
+
 }

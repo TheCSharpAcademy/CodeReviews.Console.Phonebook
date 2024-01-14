@@ -15,3 +15,11 @@ public enum MainMenuOptions
     [Description("Exit")]
     Exit
 }
+
+public enum UpdateContactOptions
+{
+    Name,
+    Email,
+    Phone,
+    Save
+}
