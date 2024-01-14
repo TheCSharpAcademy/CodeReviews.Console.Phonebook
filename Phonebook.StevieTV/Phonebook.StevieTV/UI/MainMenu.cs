@@ -22,6 +22,7 @@ public class MainMenu
             menuSelection.Title("Please choose an option");
             menuSelection.AddChoice(MainMenuOptions.ViewContacts);
             menuSelection.AddChoice(MainMenuOptions.AddContact);
+            menuSelection.AddChoice(MainMenuOptions.DeleteContact);
             menuSelection.AddChoice(MainMenuOptions.Exit);
             menuSelection.UseConverter(option => option.GetEnumDescription());
 
@@ -34,6 +35,9 @@ public class MainMenu
                     break;
                 case MainMenuOptions.AddContact:
                     AddContact();
+                    break;
+                case MainMenuOptions.DeleteContact:
+                    DeleteContact();
                     break;
                 case MainMenuOptions.Exit:
                     Environment.Exit(0);
@@ -64,11 +68,35 @@ public class MainMenu
     private static void AddContact()
     {
         AnsiConsole.Clear();
-        AnsiConsole.Write(new FigletText("Add Contact"));
+        AnsiConsole.Write(new FigletText("Add Contact")
+            .Color(Color.Green));
         var name = AnsiConsole.Ask<string>("Name:");
         var email = AnsiConsole.Ask<string>("Email:");
         var phone = AnsiConsole.Ask<string>("Phone:");
 
         _phoneBookController.AddContact(new Contact {Name = name, Email = email, Phone = phone});
     }
+
+    private static void DeleteContact()
+    {
+        AnsiConsole.Clear();
+        AnsiConsole.Write(new FigletText("Delete Contact")
+            .Color(Color.Red));
+
+        var contacts = _phoneBookController.GetContacts();
+
+        var deleteOptions = new SelectionPrompt<Contact>();
+        deleteOptions.AddChoice(new Contact {Id = 0});
+        deleteOptions.AddChoices(contacts);
+        deleteOptions.UseConverter(contact => (contact.Id == 0 ? "CANCEL" : $"{contact.Name} - {contact.Email} - {contact.Phone}"));
+
+        var selectedContact = AnsiConsole.Prompt(deleteOptions);
+
+        if (selectedContact.Id != 0)
+        {
+            _phoneBookController.DeleteContact(selectedContact);
+        }
+        
+    }
+    
 }

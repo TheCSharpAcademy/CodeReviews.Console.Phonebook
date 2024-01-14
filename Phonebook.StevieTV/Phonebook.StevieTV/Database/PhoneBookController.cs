@@ -21,4 +21,14 @@ public class PhoneBookController
             phoneBookContext.SaveChanges();
         }
     }
+
+    public void DeleteContact(Contact contact)
+    {
+        if (AnsiConsole.Confirm($"Remove {contact.Name} - {contact.Email} - {contact.Phone}?"))       
+        {
+            using var phoneBookContext = new PhoneBookContext();
+            phoneBookContext.Contacts.Remove(contact);
+            phoneBookContext.SaveChanges();
+        }
+    }
 }

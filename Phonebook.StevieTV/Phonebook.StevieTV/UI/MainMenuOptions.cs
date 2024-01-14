@@ -8,6 +8,8 @@ public enum MainMenuOptions
     ViewContacts,
     [Description("Add a Contact")]
     AddContact,
+    [Description("Delete a Contact")]
+    DeleteContact,
     [Description("Exit")]
     Exit
 }
