@@ -10,6 +10,8 @@ public enum MainMenuOptions
     AddContact,
     [Description("Delete a Contact")]
     DeleteContact,
+    [Description("Update a Contact")]
+    UpdateContact,
     [Description("Exit")]
     Exit
 }
