@@ -6,13 +6,13 @@ namespace PhoneBook.StevieTV.Database;
 public class PhoneBookController
 {
 
-    public List<Contact> GetContacts()
+    public static List<Contact> GetContacts()
     {
         using var phoneBookContext = new PhoneBookContext();
         return phoneBookContext.Contacts.OrderBy(c => c.Name).ToList();
     }
 
-    public void AddContact(Contact contact)
+    public static void AddContact(Contact contact)
     {
         if (AnsiConsole.Confirm($"Add {contact.Name} - {contact.Email} - {contact.Phone}?"))       
         {
@@ -22,7 +22,7 @@ public class PhoneBookController
         }
     }
 
-    public void DeleteContact(Contact contact)
+    public static void DeleteContact(Contact contact)
     {
         if (AnsiConsole.Confirm($"Remove {contact.Name} - {contact.Email} - {contact.Phone}?"))       
         {

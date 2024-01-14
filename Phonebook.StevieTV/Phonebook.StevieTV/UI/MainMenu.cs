@@ -1,3 +1,4 @@
+using EmailValidation;
 using PhoneBook.StevieTV.Database;
 using Phonebook.StevieTV.Helpers;
 using PhoneBook.StevieTV.Models;
@@ -5,9 +6,9 @@ using Spectre.Console;
 
 namespace Phonebook.StevieTV.UI;
 
-public class MainMenu
+public static class MainMenu
 {
-    private static PhoneBookController _phoneBookController = new();
+    private static readonly PhoneBookController PhoneBookController = new();
 
     public static void ShowMenu()
     {
@@ -50,7 +51,7 @@ public class MainMenu
 
     private static void ShowContacts()
     {
-        var contacts = _phoneBookController.GetContacts();
+        var contacts = PhoneBookController.GetContacts();
 
         var table = new Table();
         table.AddColumns("Name", "E-mail", "Phone Number");
@@ -71,10 +72,11 @@ public class MainMenu
         AnsiConsole.Write(new FigletText("Add Contact")
             .Color(Color.Green));
         var name = AnsiConsole.Ask<string>("Name:");
-        var email = AnsiConsole.Ask<string>("Email:");
+        var email = AnsiConsole.Prompt(new TextPrompt<string>("Email:")
+            .Validate(input => EmailValidator.Validate(input), "Please enter a valid email:"));
         var phone = AnsiConsole.Ask<string>("Phone:");
 
-        _phoneBookController.AddContact(new Contact {Name = name, Email = email, Phone = phone});
+        PhoneBookController.AddContact(new Contact {Name = name, Email = email, Phone = phone});
     }
 
     private static void DeleteContact()
@@ -83,7 +85,7 @@ public class MainMenu
         AnsiConsole.Write(new FigletText("Delete Contact")
             .Color(Color.Red));
 
-        var contacts = _phoneBookController.GetContacts();
+        var contacts = PhoneBookController.GetContacts();
 
         var deleteOptions = new SelectionPrompt<Contact>();
         deleteOptions.AddChoice(new Contact {Id = 0});
@@ -94,7 +96,7 @@ public class MainMenu
 
         if (selectedContact.Id != 0)
         {
-            _phoneBookController.DeleteContact(selectedContact);
+            PhoneBookController.DeleteContact(selectedContact);
         }
         
     }
