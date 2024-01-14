@@ -13,22 +13,28 @@ public class DBController: IDisposable
 
     public List<Contact> GetContacts()
     {
-        List<Contact> contacts = [.. db.Contacts];
+        List<Contact> contacts = [.. db.Contacts.OrderBy(p => p.ContactName)];
         return contacts;
     }
 
     public List<Contact> GetContacts(char value)
     {
         List<Contact> contacts = [];
-        contacts = db.Contacts.ToList()
+        contacts = db.Contacts.OrderBy(p => p.ContactName).ToList()
                     .Where(p => p.ContactName.StartsWith(value) || p.ContactName.StartsWith(char.ToUpper(value)) ).ToList();
-        // .Select( p => EF.Functions.Like(p.ContactName, $"{value}%"));
+        return contacts;
+    }
+
+    public List<Contact> GetContacts(string value)
+    {
+        List<Contact> contacts = [];
+        contacts = db.Contacts.OrderBy(p => p.ContactName).ToList()
+                    .Where(p => p.Category != null && p.Category.Equals(value, StringComparison.OrdinalIgnoreCase)).ToList();
         return contacts;
     }
 
     public Contact GetEmails(int contactId)
     {
-        // List<Email> emails = [];
         var emails = db.Contacts.Include(p => p.Emails)
             .Include(p => p.PhoneNumbers)
             .Where(p => p.ContactId == contactId).First();
@@ -49,9 +55,9 @@ public class DBController: IDisposable
         db.SaveChanges();
     }
 
-    public void Insert(string newContactName)
+    public void Insert(string newContactName, string newCategoryName)
     {
-        db.Contacts.Add(new Contact{ContactName = newContactName});
+        db.Contacts.Add(new Contact{ContactName = newContactName, Category = newCategoryName});
         db.SaveChanges();
     }
 
@@ -90,10 +96,11 @@ public class DBController: IDisposable
         db.SaveChanges();
     }
 
-    public void Modify(string modifyContactName, int contactId)
+    public void Modify(Contact modifyContact)
     {
-        var contactToModify = db.Contacts.Where( p => p.ContactId == contactId).First();
-        contactToModify.ContactName = modifyContactName;
+        var contactToModify = db.Contacts.Where( p => p.ContactId == modifyContact.ContactId).First();
+        contactToModify.ContactName = modifyContact.ContactName;
+        contactToModify.Category = modifyContact.Category;
         db.SaveChanges();
     }
 

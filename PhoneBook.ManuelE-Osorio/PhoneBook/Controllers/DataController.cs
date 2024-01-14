@@ -1,12 +1,11 @@
 using System.Net.Mail;
-using System.Runtime.Serialization;
 using PhoneValidation = PhoneNumbers;
 
 namespace PhoneBookProgram;
 
 public class DataController
 {
-    // private readonly int PageSize = 10;
+    public static readonly int PageSize = 10;
     public bool RunViewContacts;
     public bool RunContactDetail;
     public DBController DBInstance;
@@ -28,32 +27,37 @@ public class DataController
     {
         UI.WelcomeMessage();
 
-        var contactsToUI = new List<ContactDtoWithSelection>();    
+        var contactsToUI = new List<ContactDto>();    
         var getContacts = true;
         var selection = 0;
         var prevSelection = 0;
+        var currentPage = 0;
         var pressedKey = new ConsoleKey();
         string? errorMessage = null;
         char? filterKey = null;
+        string filterCategory = "";
 
         while(RunViewContacts)
         {
             if(getContacts)
             {
-                if(filterKey == null)
+                if(filterKey == null && filterCategory == "")
                     Contacts = DBInstance.GetContacts();
-                else
+                else if (filterKey != null && filterCategory == "")
                     Contacts = DBInstance.GetContacts(filterKey ?? ' ');
+                else if (filterCategory != "")
+                    Contacts = DBInstance.GetContacts(filterCategory);
                 contactsToUI = Contacts
-                    .Select(contact => new ContactDtoWithSelection(contact)).ToList();
+                    .Select(contact => new ContactDto(contact)).ToList();
                 getContacts = false;
                 selection = 0;
                 prevSelection = 0;
                 filterKey = null;
             }
 
-            UI.DisplayContacts(contactsToUI, selection, prevSelection);
-            pressedKey = Console.ReadKey().Key;
+            UI.DisplayContacts(contactsToUI, 
+                selection, prevSelection, currentPage);
+            pressedKey = Console.ReadKey(false).Key;
             switch(pressedKey)
             {
                 case(ConsoleKey.UpArrow):
@@ -61,6 +65,7 @@ public class DataController
                     selection--;
                     if(selection < 0)
                         selection = 0;
+                    currentPage = selection/PageSize;
                     break;
 
                 case(ConsoleKey.DownArrow):
@@ -68,6 +73,23 @@ public class DataController
                     selection++;
                     if(selection > contactsToUI.Count - 1)
                         selection = contactsToUI.Count - 1;
+                    currentPage = selection/PageSize;
+                    break;
+
+                case(ConsoleKey.RightArrow):
+                    currentPage++;
+                    if(currentPage*PageSize > contactsToUI.Count - 1)
+                        currentPage--;
+                    prevSelection = selection;
+                    selection = currentPage*PageSize;
+                    break;
+
+                case(ConsoleKey.LeftArrow):
+                    currentPage--;
+                    if(currentPage < 0)
+                        currentPage++;
+                    prevSelection = selection;
+                    selection = currentPage*PageSize;
                     break;
 
                 case(ConsoleKey.I):
@@ -75,11 +97,26 @@ public class DataController
                     break;
 
                 case(ConsoleKey.M):
-                    getContacts = Modify(Contacts[selection].ContactId);
+                    if(Contacts.Count > 0)
+                        getContacts = Modify(Contacts[selection].ContactId);
                     break;
 
                 case(ConsoleKey.D):
-                    getContacts = Delete(Contacts[selection].ContactId);
+                    if(Contacts.Count > 0)
+                        getContacts = Delete(Contacts[selection].ContactId);
+                    break;
+
+                case(ConsoleKey.C):
+                    getContacts = true;
+                    currentPage = 0;
+                    UI.FilterByCategory();
+                    filterCategory = Console.ReadLine() ?? "";
+                    break;
+
+                case(ConsoleKey.Q):
+                    getContacts = true;
+                    currentPage = 0;
+                    filterCategory = "";
                     break;
 
                 case(ConsoleKey.Enter):
@@ -88,8 +125,10 @@ public class DataController
                     break;
 
                 case(ConsoleKey.F):
-                    filterKey = Console.ReadKey().KeyChar;
+                    UI.FilterByFirstLetter();
+                    filterKey = Console.ReadKey(false).KeyChar;
                     getContacts = true;
+                    currentPage = 0;
                     break;
 
                 case(ConsoleKey.Backspace):
@@ -115,7 +154,6 @@ public class DataController
         {
             if(getContactDetails)
             {
-                
                 contact = DBInstance.GetEmails(contactId);
                 emailsDto = contact.Emails
                     .Select(p => new EmailDto(p)).ToList();
@@ -153,16 +191,16 @@ public class DataController
                     break;
                 
                 case(ConsoleKey.D):
-                    if(selection < phonesDto.Count)
+                    if(selection < PhoneNumbers.Count)
                         getContactDetails = Delete(contact.PhoneNumbers[selection]);
-                    else
+                    else if (Emails.Count > 0)
                         getContactDetails = Delete(contact.Emails[selection - phonesDto.Count]);
                     break;
 
                 case(ConsoleKey.M):
-                    if(selection < phonesDto.Count)
+                    if(selection < PhoneNumbers.Count)
                         getContactDetails = Modify(contact.PhoneNumbers[selection]);
-                    else
+                    else if (Emails.Count > 0)
                         getContactDetails = Modify(contact.Emails[selection - phonesDto.Count]);
                     break;
 
@@ -177,19 +215,27 @@ public class DataController
     public bool Insert(string objectName = "contact name")
     {
         string newContactName;
-        string? errorMessage = null;
+        string newCategoryName = "";
+        string? contactErrorMessage = null;
+        string? categoryErrorMessage = null;
 
         while(true)
         {
-            UI.DisplayInsert(objectName, errorMessage);
+            UI.DisplayInsert(objectName, contactErrorMessage);
             newContactName = Console.ReadLine() ?? ""; 
-            errorMessage = InputValidation.ContactNameValidation(newContactName, Contacts);
-            
+            contactErrorMessage = InputValidation.ContactNameValidation(newContactName, Contacts);
+            if( contactErrorMessage == null)
+            {
+                UI.DisplayCategoryInsert("contact category", categoryErrorMessage);
+                newCategoryName = Console.ReadLine() ?? "";
+                categoryErrorMessage = InputValidation.CategoryNameValidation(newCategoryName);
+            }
+
             if(newContactName.Equals("0"))
                 return false;
-            if(errorMessage == null)
+            else if(categoryErrorMessage == null && contactErrorMessage == null)
             {
-                DBInstance.Insert(newContactName);
+                DBInstance.Insert(newContactName, newCategoryName);
                 return true;
             }
         }  
@@ -245,19 +291,28 @@ public class DataController
     public bool Modify(int contactId, string objectName = "contact")
     {
         string modifyContactName;
-        string? errorMessage = null;
+        string modifyCategoryName = "";
+        string? contactErrorMessage = null;
+        string? categoryErrorMessage = null;
 
         while(true)
         {
-            UI.DisplayInsert(objectName, errorMessage); //Pending UI
+            UI.DisplayInsert(objectName, contactErrorMessage); //Pending UI
             modifyContactName = Console.ReadLine() ?? "";
-            errorMessage = InputValidation.ContactNameValidation(modifyContactName, Contacts);
+            contactErrorMessage = InputValidation.ContactNameValidation(modifyContactName, Contacts);
+            if( contactErrorMessage == null && modifyContactName != "0")
+            {
+                UI.DisplayCategoryInsert("contact category", categoryErrorMessage);
+                modifyCategoryName = Console.ReadLine() ?? "";
+                categoryErrorMessage = InputValidation.CategoryNameValidation(modifyCategoryName);
+            }
 
             if(modifyContactName.Equals("0"))
                 return false;            
-            else if(errorMessage == null)
+            else if(contactErrorMessage == null && categoryErrorMessage == null)
             {
-                DBInstance.Modify(modifyContactName, contactId);
+                DBInstance.Modify(new Contact {ContactId = contactId, ContactName = modifyContactName, 
+                    Category = modifyCategoryName});
                 return true;
             }
         }        

@@ -16,6 +16,13 @@ public class InputValidation
         return null;
     }
 
+    public static string? CategoryNameValidation(string input)
+    {
+        if(input.Length >= PhoneBookContext.ContactCategoryLenght/2)
+            return "The category name is more than 50 caracters.";
+        return null;
+    }
+
     public static string? EmailValidation(string email)
     {
         if(email.Contains(' '))

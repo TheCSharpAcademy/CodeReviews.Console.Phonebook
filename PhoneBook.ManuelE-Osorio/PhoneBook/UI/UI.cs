@@ -9,20 +9,33 @@ public class UI
         Thread.Sleep(2000);
     }
 
-    public static void DisplayContacts(List<ContactDtoWithSelection> contacts, int selection, int prevSelection) 
+    public static void DisplayContacts(List<ContactDto> contacts, int selection, int prevSelection, int currentPage) 
     {
         Console.Clear();
+        int endRange;
+        int totalPages = (contacts.Count+DataController.PageSize-1)/DataController.PageSize;
+
         if(contacts.Count > 0)
         {
             contacts[prevSelection].Selected = "[ ]";
             contacts[selection].Selected = "[x]";
         }
-        TableUI.PrintTable(contacts);
-        Console.WriteLine("User the arrows to select a contact\n"+
+        if( currentPage*DataController.PageSize+10 > contacts.Count)
+            endRange = contacts.Count - currentPage*DataController.PageSize;
+        else
+            endRange = currentPage*DataController.PageSize + 10;
+
+
+        TableUI.PrintTable(contacts.GetRange(currentPage*DataController.PageSize, endRange));
+        Console.WriteLine($"Page No {currentPage+1} of {totalPages}\n"+
+            "User the arrows to select a contact\n"+
             "Press enter to check the details of the selected contact\n"+
             "Press I to create a new contact\n"+
             "Press M to modify the selected contact\n"+
             "Press D to delete the selected contact\n"+
+            "Press F to filter by first letter\n"+
+            "Press C to filter by category\n"+
+            "Press Q to clear the search\n"+
             "Press Backspace/Esc to exit the application\n");
     }
 
@@ -66,6 +79,26 @@ public class UI
         Console.WriteLine($"Please write the new {objectToInsert} or enter \"0\" to cancel.");
     }
 
+    public static void DisplayCategoryInsert(string objectToInsert, string? errorMessage) //Pending restrictions
+    {
+        Console.Clear();
+        if(errorMessage != null)
+            Console.WriteLine($"Error: {errorMessage}");
+        Console.WriteLine($"Please write the new {objectToInsert} or press enter to leave empty.");
+    }
+
+
+    public static void FilterByFirstLetter()
+    {
+        Console.Clear();
+        Console.WriteLine("Write the first letter to filter the contacts\n");
+    }
+
+    public static void FilterByCategory()
+    {
+        Console.Clear();
+        Console.WriteLine("Write the category name to filter the contacts\n");
+    }
     public static void ExitMessage(string? errorMessage)
     {
         Console.Clear();

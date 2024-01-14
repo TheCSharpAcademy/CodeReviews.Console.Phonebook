@@ -1,4 +1,5 @@
 ﻿using System.Net.Mail;
+using System.Net.NetworkInformation;
 using Microsoft.EntityFrameworkCore;
 
 namespace PhoneBookProgram;
@@ -8,6 +9,7 @@ public class PhoneBook
     public static void Main()
     {
         // PopulateDB();
+
 
         DataController controller = new ();
         controller.MainMenuController();
