@@ -8,12 +8,11 @@ public class PhoneBookContext : DbContext
 {
     public DbSet<Contact> Contacts { get; set; }
 
-    private static IConfiguration _config = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
+    private static readonly IConfiguration Config = new ConfigurationBuilder()
         .AddJsonFile("appsettings.json")
         .Build();
     
-    private readonly string _connectionString = _config.GetSection("Settings")["ConnectionString"];
+    private readonly string _connectionString = Config.GetSection("Settings")["ConnectionString"];
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
