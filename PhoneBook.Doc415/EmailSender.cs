@@ -36,11 +36,13 @@ internal class EmailSender
 
         var smtpClient = new SmtpClient(smtpServer)
         {
-            Port = 465,
-            Credentials = new NetworkCredential(userName, password),
+            Port = 587,
             EnableSsl = true,
         };
-              
+        smtpClient.UseDefaultCredentials = false;
+        smtpClient.Credentials = new NetworkCredential(userName, password);
+
+
 
         try
         {
