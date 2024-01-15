@@ -19,3 +19,4 @@
 17) https://learn.microsoft.com/en-us/dotnet/api/system.net.mail?view=net-8.0
 18) https://github.com/google/libphonenumber
 19) https://github.com/dotnet/runtime/issues/82689  isuue on MailAddress validation
+20) https://learn.microsoft.com/en-us/dotnet/api/system.consolekeyinfo.modifiers?view=net-8.0&redirectedfrom=MSDN#System_ConsoleKeyInfo_Modifiers

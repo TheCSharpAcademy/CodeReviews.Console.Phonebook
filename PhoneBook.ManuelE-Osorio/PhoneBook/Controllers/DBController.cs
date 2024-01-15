@@ -6,9 +6,9 @@ public class DBController: IDisposable
 {
     private PhoneBookContext db;
 
-    public DBController()
+    public DBController(string? connectionString)
     {
-        db = new();
+        db = new(connectionString);
     }
 
     public List<Contact> GetContacts()
@@ -33,11 +33,10 @@ public class DBController: IDisposable
         return contacts;
     }
 
-    public Contact GetEmails(int contactId)
+    public List<Email> GetEmails(int contactId)
     {
         var emails = db.Contacts.Include(p => p.Emails)
-            .Include(p => p.PhoneNumbers)
-            .Where(p => p.ContactId == contactId).First();
+            .Where(p => p.ContactId == contactId).First().Emails;
         return emails;
     }
 

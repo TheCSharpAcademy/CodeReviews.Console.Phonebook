@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Configuration;
+using System;
+using Microsoft.Extensions.Configuration;
 using System.Net.Mail;
 
 namespace PhoneBookProgram;
@@ -16,16 +17,9 @@ public class PhoneBookContext : DbContext
     public DbSet<Contact> Contacts {get; set;}
     public DbSet<Email> Emails {get; set;}
     public DbSet<PhoneNumber> PhoneNumbers {get; set;}
-    public PhoneBookContext()
+    public PhoneBookContext(string? connectionString)
     {
-        try
-        {
-            PhoneBookConnectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        }
-        catch
-        {
-            throw new Exception(); //test
-        }
+        PhoneBookConnectionString = connectionString;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)

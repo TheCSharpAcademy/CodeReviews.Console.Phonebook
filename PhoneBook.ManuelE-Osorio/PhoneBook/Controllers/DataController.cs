@@ -1,26 +1,34 @@
 using System.Net.Mail;
 using PhoneValidation = PhoneNumbers;
+using Microsoft.Extensions.Configuration;
 
 namespace PhoneBookProgram;
 
 public class DataController
 {
     public static readonly int PageSize = 10;
+    public static readonly int EmailBodySize = 1000;
     public bool RunViewContacts;
     public bool RunContactDetail;
     public DBController DBInstance;
     public List<Contact> Contacts;
     public List<Email> Emails;
     public List<PhoneNumber> PhoneNumbers;
-
+    public string UserEmail;
+    public string UserPhoneNumber;
     public DataController()
     {
+        IConfiguration jsonConfig = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
         Contacts = [];
         Emails = [];
         PhoneNumbers = [];
         RunViewContacts = true;
         RunContactDetail = false;
-        DBInstance = new();
+        DBInstance = new(jsonConfig.GetConnectionString("DefaultConnection"));
+        UserEmail = jsonConfig.GetSection("Settings")["UserEmail"] ?? "";
+        UserPhoneNumber = jsonConfig.GetSection("Settings")["UserPhoneNumber"] ?? "";
     }
 
     public void MainMenuController()
@@ -154,10 +162,11 @@ public class DataController
         {
             if(getContactDetails)
             {
-                contact = DBInstance.GetEmails(contactId);
-                emailsDto = contact.Emails
+                Emails = DBInstance.GetEmails(contactId);
+                PhoneNumbers = DBInstance.GetPhones(contactId);
+                emailsDto = Emails
                     .Select(p => new EmailDto(p)).ToList();
-                phonesDto = contact.PhoneNumbers
+                phonesDto = PhoneNumbers
                     .Select(p => new PhoneNumberDto(p)).ToList();
                 getContactDetails = false;
                 selection = 0;
@@ -192,16 +201,23 @@ public class DataController
                 
                 case(ConsoleKey.D):
                     if(selection < PhoneNumbers.Count)
-                        getContactDetails = Delete(contact.PhoneNumbers[selection]);
+                        getContactDetails = Delete(PhoneNumbers[selection]);
                     else if (Emails.Count > 0)
-                        getContactDetails = Delete(contact.Emails[selection - phonesDto.Count]);
+                        getContactDetails = Delete(Emails[selection - phonesDto.Count]);
                     break;
 
                 case(ConsoleKey.M):
                     if(selection < PhoneNumbers.Count)
-                        getContactDetails = Modify(contact.PhoneNumbers[selection]);
+                        getContactDetails = Modify(PhoneNumbers[selection]);
                     else if (Emails.Count > 0)
-                        getContactDetails = Modify(contact.Emails[selection - phonesDto.Count]);
+                        getContactDetails = Modify(Emails[selection - phonesDto.Count]);
+                    break;
+
+                case(ConsoleKey.Enter):
+                    if(selection < PhoneNumbers.Count)
+                        SendSMS();
+                    else if (Emails.Count > 0)
+                        SendEmail(Emails[selection - phonesDto.Count]);
                     break;
 
                 case(ConsoleKey.Backspace):
@@ -384,10 +400,10 @@ public class DataController
         UI.DisplayConfirmationPromt(objectType);
         var selection = Console.ReadLine() ?? "";
         if(selection.Equals("y", StringComparison.OrdinalIgnoreCase))
-            {
-                DBInstance.Delete(objectToDelete);
-                return true;
-            }
+        {
+            DBInstance.Delete(objectToDelete);
+            return true;
+        }
         return false;
     }
 
@@ -396,10 +412,83 @@ public class DataController
         UI.DisplayConfirmationPromt(objectType);
         var selection = Console.ReadLine() ?? "";
         if(selection.Equals("y", StringComparison.OrdinalIgnoreCase))
-            {
-                DBInstance.Delete(objectToDelete);
-                return true;
-            }
+        {
+            DBInstance.Delete(objectToDelete);
+            return true;
+        }
         return false;
+    }
+
+    public void SendEmail(Email emailToSend)
+    {
+        string? errorMessage;
+        string emailSubject;
+
+        errorMessage = InputValidation.EmailValidation(UserEmail);
+        if(errorMessage != null)
+        {
+            UI.ConfigureAppSettings();
+            Thread.Sleep(3000);
+            return;
+        }
+
+        while(true)
+        {
+            UI.DisplayEmailSubject(errorMessage);
+            emailSubject = Console.ReadLine() ?? "";
+            errorMessage = InputValidation.ValidateSubject(emailSubject);
+            if(errorMessage == null)
+            {
+                EnterEmailBody(emailSubject, new EmailDto(emailToSend));
+                return;
+            }
+        }
+    }
+
+    public void EnterEmailBody(string emailSubject, EmailDto emailToSend)
+    {
+        string emailBody = "";
+        string? errorMessage = null;
+        ConsoleKeyInfo pressedKey;
+        bool run = true;
+        while(run)
+        {
+            UI.DisplayEmail(UserEmail, emailToSend.Email, emailSubject, errorMessage);
+            Console.Write(emailBody);
+            pressedKey = Console.ReadKey();
+            
+            if((pressedKey.Modifiers & ConsoleModifiers.Control) != 0 && pressedKey.Key == ConsoleKey.S
+                && errorMessage == null)
+            {
+                UI.DisplaySendEmail();
+                run = false;
+            }
+            if((pressedKey.Modifiers & ConsoleModifiers.Control) != 0 && pressedKey.Key == ConsoleKey.Backspace)
+                run = false;
+        
+            switch(pressedKey.Key)
+            {
+                case(ConsoleKey.Enter):
+                    emailBody += "\n";
+                    break;
+                case(ConsoleKey.Backspace):
+                    if(emailBody.Length > 0)
+                        emailBody = emailBody.Remove(emailBody.Length-1);
+                    if(emailBody.Length < EmailBodySize)
+                        errorMessage = null;
+                    break;
+                default:
+                    emailBody += pressedKey.KeyChar.ToString();
+                    if(emailBody.Length > EmailBodySize)
+                        errorMessage = $"Email body has more than {EmailBodySize} characters";
+                    break;
+            }
+        }
+        return;
+    }
+
+    public void SendSMS()
+    {
+
     }
 }

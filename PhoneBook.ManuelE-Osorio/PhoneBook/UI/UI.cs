@@ -108,4 +108,39 @@ public class UI
         Console.WriteLine("Thank you for using the Phone Book App!\n");
         Thread.Sleep(2000);
     }
+
+    public static void ConfigureAppSettings()
+    {
+        Console.Clear();
+        Console.WriteLine("Please configure your appsettings.json file");
+    }
+
+    public static void DisplayEmailSubject(string? errorMessage)
+    {
+        Console.Clear();
+        if(errorMessage != null)
+            Console.WriteLine("Error: " + errorMessage);
+        Console.WriteLine("Please enter the email subject:");
+    }
+
+    public static void DisplayEmail(string emailFrom, string? emailTo, string emailSubject, string? errorMessage)
+    {
+        Console.Clear();
+        Console.WriteLine($"From: {emailFrom}");
+        Console.WriteLine($"To: {emailTo}");
+        Console.WriteLine($"Subject: {emailSubject}\n");
+        if(errorMessage != null)
+            Console.WriteLine("Error: " + errorMessage);
+        Console.WriteLine("Please write the email body, within 1000 characters, and press CRTL+S to send it"+
+                " or CRTL+BackSpace to cancel:\n");
+    }
+
+    public static void DisplaySendEmail()
+    {
+        Console.Clear();
+        Console.WriteLine("Sending email");
+        Thread.Sleep(2000);
+        Console.WriteLine("Email sent succesfully");
+        Thread.Sleep(2000);
+    }
 }

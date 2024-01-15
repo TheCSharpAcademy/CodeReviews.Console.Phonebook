@@ -57,4 +57,11 @@ public class InputValidation
             return "You've entered an invalid phone number.";
         return null;
     }
+
+    public static string? ValidateSubject(string emailSubject)
+    {
+        if(emailSubject.Length <0 || emailSubject.Length > 100)
+            return "Invalid subject";
+        return null;
+    }
 }

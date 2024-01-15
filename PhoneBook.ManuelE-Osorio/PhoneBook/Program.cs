@@ -1,5 +1,5 @@
 ﻿using System.Net.Mail;
-using System.Net.NetworkInformation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace PhoneBookProgram;
@@ -8,7 +8,10 @@ public class PhoneBook
 {
     public static void Main()
     {
+
+
         // PopulateDB();
+
 
 
         DataController controller = new ();
@@ -16,9 +19,9 @@ public class PhoneBook
         // EmailValidator();
     }
 
-    public static void PopulateDB()
+    public static void PopulateDB(string connectionString)
     {
-        var db = new PhoneBookContext();
+        var db = new PhoneBookContext(connectionString);
         Console.WriteLine(db.Database.EnsureDeleted());
         Console.WriteLine(db.Database.EnsureCreated());
         Console.WriteLine(db.Database.GenerateCreateScript());
