@@ -7,11 +7,13 @@ internal class DataAccess
 {
     public void AddContact(string _name, string _email, string _phone, string _title)
     {
-        Contact newContact= new Contact();
-        newContact.Name= _name;
-        newContact.Email= _email;
-        newContact.Title= _title;
-        newContact.PhoneNumber= _phone;
+        vat newContact = new Contact 
+        {
+            Name = _name,
+            Email = _email,
+            Title = _title,
+            PhoneNumber= _phone,
+        }
 
         try
         {
