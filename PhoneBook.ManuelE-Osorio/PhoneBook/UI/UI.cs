@@ -154,7 +154,7 @@ public class UI
             " or CRTL+BackSpace to cancel:\n");
     }
 
-    public static void DisplaySMS(string? smsFrom, string? smsTo, string? errorMessage)
+    public static void DisplaySms(string? smsFrom, string? smsTo, string? errorMessage)
     {
         Console.Clear();
         Console.WriteLine($"From: {smsFrom}");
@@ -175,7 +175,7 @@ public class UI
         Thread.Sleep(2000);
     }
 
-    public static void DisplaySendSMS()
+    public static void DisplaySendSms()
     {
         Console.Clear();
         Console.WriteLine("Sending SMS");

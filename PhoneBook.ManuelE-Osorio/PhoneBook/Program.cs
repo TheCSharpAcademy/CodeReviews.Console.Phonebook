@@ -6,7 +6,5 @@ public class PhoneBook
     {
         DataController controller = new();
         controller.Start();
-        
-        // EmailValidator();
     }
 }

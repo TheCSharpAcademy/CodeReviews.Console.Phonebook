@@ -265,7 +265,7 @@ public class DataController
                 case(ConsoleKey.Enter):
                 {
                     if(selection < PhoneNumbers.Count)
-                        SendSMS(phonesDto[selection]);
+                        SendSms(phonesDto[selection]);
                     else if (Emails.Count > 0)
                         SendEmail(emailsDto[selection - phonesDto.Count]);
                     break;
@@ -549,7 +549,7 @@ public class DataController
         }
     }
 
-    public void SendSMS(PhoneNumberDto phoneToSend)
+    public void SendSms(PhoneNumberDto phoneToSend)
     {
         string? errorMessage;
 
@@ -566,7 +566,7 @@ public class DataController
         ConsoleKeyInfo pressedKey;
         while(true)
         {
-            UI.DisplaySMS(UserPhoneNumber, phoneToSend.PhoneNumber, errorMessage);
+            UI.DisplaySms(UserPhoneNumber, phoneToSend.PhoneNumber, errorMessage);
             Console.Write(smsBody);
             pressedKey = Console.ReadKey();
                     
@@ -596,7 +596,7 @@ public class DataController
             if((pressedKey.Modifiers & ConsoleModifiers.Control) != 0 && pressedKey.Key == ConsoleKey.S
                 && errorMessage == null)
             {
-                UI.DisplaySendSMS();
+                UI.DisplaySendSms();
                 return;
             }
             if((pressedKey.Modifiers & ConsoleModifiers.Control) != 0 && pressedKey.Key == ConsoleKey.Backspace)
