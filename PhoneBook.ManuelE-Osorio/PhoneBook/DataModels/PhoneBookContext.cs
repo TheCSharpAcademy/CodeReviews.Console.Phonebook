@@ -1,8 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
-using Microsoft.Extensions.Configuration;
-using System.Net.Mail;
 
 namespace PhoneBookProgram;
 public class PhoneBookContext : DbContext
@@ -13,19 +9,15 @@ public class PhoneBookContext : DbContext
     public static readonly int EmailDomainNameLenght = 254;
     public static readonly int PhoneNumberCountryCodeLenght = 3;
     public static readonly int PhoneNumberLocalNumberLenght = 15;
-    public readonly string? PhoneBookConnectionString;
+    public static string? PhoneBookConnectionString {get; set;}
     public DbSet<Contact> Contacts {get; set;}
     public DbSet<Email> Emails {get; set;}
     public DbSet<PhoneNumber> PhoneNumbers {get; set;}
-    public PhoneBookContext(string? connectionString)
-    {
-        PhoneBookConnectionString = connectionString;
-    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options
-        .UseSqlServer(PhoneBookConnectionString)
-        .LogTo(Console.WriteLine, LogLevel.Information);
+        .UseSqlServer(PhoneBookConnectionString,
+        sqlServerOptions => sqlServerOptions.CommandTimeout(5));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -8,30 +8,54 @@ public class DataController
 {
     public static readonly int PageSize = 10;
     public static readonly int EmailBodySize = 1000;
+    public static readonly int SMSBodySize = 160;
     public bool RunViewContacts;
     public bool RunContactDetail;
     public DBController DBInstance;
     public List<Contact> Contacts;
     public List<Email> Emails;
     public List<PhoneNumber> PhoneNumbers;
-    public string UserEmail;
-    public string UserPhoneNumber;
+    public string? UserEmail;
+    public string? UserPhoneNumber;
     public DataController()
     {
-        IConfiguration jsonConfig = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .Build();
+        try
+        {
+            IConfiguration jsonConfig = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+            PhoneBookContext.PhoneBookConnectionString = jsonConfig.GetConnectionString("DefaultConnection");
+            UserEmail = jsonConfig.GetSection("Settings")["UserEmail"] ?? "";
+            UserPhoneNumber = jsonConfig.GetSection("Settings")["UserPhoneNumber"] ?? "";
+        }
+        catch
+        {
+            Console.WriteLine("Please configure your appsettings.json");
+        }
+        DBInstance = new();
         Contacts = [];
         Emails = [];
         PhoneNumbers = [];
         RunViewContacts = true;
         RunContactDetail = false;
-        DBInstance = new(jsonConfig.GetConnectionString("DefaultConnection"));
-        UserEmail = jsonConfig.GetSection("Settings")["UserEmail"] ?? "";
-        UserPhoneNumber = jsonConfig.GetSection("Settings")["UserPhoneNumber"] ?? "";
     }
 
-    public void MainMenuController()
+    public void Start()
+    {  
+        try
+        {
+            DBInstance.DBInit();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            Thread.Sleep(2000);
+            return;
+        }
+        MainMenuController();
+    }
+
+    private void MainMenuController()
     {
         UI.WelcomeMessage();
 
@@ -54,7 +78,10 @@ public class DataController
                 else if (filterKey != null && filterCategory == "")
                     Contacts = DBInstance.GetContacts(filterKey ?? ' ');
                 else if (filterCategory != "")
+                {
                     Contacts = DBInstance.GetContacts(filterCategory);
+                    filterCategory = "";
+                }
                 contactsToUI = Contacts
                     .Select(contact => new ContactDto(contact)).ToList();
                 getContacts = false;
@@ -65,41 +92,45 @@ public class DataController
 
             UI.DisplayContacts(contactsToUI, 
                 selection, prevSelection, currentPage);
-            pressedKey = Console.ReadKey(false).Key;
+            pressedKey = Console.ReadKey(true).Key;
             switch(pressedKey)
             {
                 case(ConsoleKey.UpArrow):
+                {
                     prevSelection = selection;
                     selection--;
                     if(selection < 0)
                         selection = 0;
                     currentPage = selection/PageSize;
                     break;
-
+                }
                 case(ConsoleKey.DownArrow):
+                {
                     prevSelection = selection;
                     selection++;
                     if(selection > contactsToUI.Count - 1)
                         selection = contactsToUI.Count - 1;
                     currentPage = selection/PageSize;
                     break;
-
+                }
                 case(ConsoleKey.RightArrow):
+                {
                     currentPage++;
                     if(currentPage*PageSize > contactsToUI.Count - 1)
                         currentPage--;
                     prevSelection = selection;
                     selection = currentPage*PageSize;
                     break;
-
+                }
                 case(ConsoleKey.LeftArrow):
+                {
                     currentPage--;
                     if(currentPage < 0)
                         currentPage++;
                     prevSelection = selection;
                     selection = currentPage*PageSize;
                     break;
-
+                }
                 case(ConsoleKey.I):
                     getContacts = Insert();
                     break;
@@ -115,30 +146,45 @@ public class DataController
                     break;
 
                 case(ConsoleKey.C):
+                {
                     getContacts = true;
                     currentPage = 0;
                     UI.FilterByCategory();
                     filterCategory = Console.ReadLine() ?? "";
                     break;
-
+                }
                 case(ConsoleKey.Q):
+                {
                     getContacts = true;
                     currentPage = 0;
                     filterCategory = "";
                     break;
-
-                case(ConsoleKey.Enter):
-                    RunContactDetail = true;
-                    ViewContactDetail(Contacts[selection].ContactId);
+                }
+                case(ConsoleKey.P):
+                {
+                    ImportController.ImportContacts();
+                    ImportController.ImportEmails();                    
+                    ImportController.ImportPhones();
+                    Console.WriteLine("\nPress any key to continue.");
+                    Console.ReadKey(true);
+                    getContacts = true;
                     break;
-
+                }
+                case(ConsoleKey.Enter):
+                {
+                    RunContactDetail = true;
+                    ViewContactDetail(Contacts[selection].ContactId, 
+                        Contacts[selection].ContactName);
+                    break;
+                }
                 case(ConsoleKey.F):
+                {
                     UI.FilterByFirstLetter();
                     filterKey = Console.ReadKey(false).KeyChar;
                     getContacts = true;
                     currentPage = 0;
                     break;
-
+                }
                 case(ConsoleKey.Backspace):
                 case(ConsoleKey.Escape):
                     RunViewContacts = false;
@@ -148,9 +194,8 @@ public class DataController
         UI.ExitMessage(errorMessage);
     }
 
-    public void ViewContactDetail(int contactId)
+    public void ViewContactDetail(int contactId, string contactName)
     {
-        var contact = new Contact();
         var emailsDto = new List<EmailDto>();
         var phonesDto = new List<PhoneNumberDto>();
         var getContactDetails = true;
@@ -173,24 +218,26 @@ public class DataController
                 prevSelection = 0;
             } 
 
-            UI.DisplayContactData(phonesDto, emailsDto, selection, prevSelection, "test");
+            UI.DisplayContactData(phonesDto, emailsDto, selection, prevSelection, contactName);
             pressedKey = Console.ReadKey().Key;
             switch(pressedKey)
             {
                 case(ConsoleKey.UpArrow):
+                {
                     prevSelection = selection;
                     selection--;
                     if(selection < 0)
                         selection = 0;
                     break;
-
+                }
                 case(ConsoleKey.DownArrow):
+                {
                     prevSelection = selection;
                     selection++;
                     if(selection > phonesDto.Count + emailsDto.Count - 1)
                         selection = phonesDto.Count + emailsDto.Count - 1;
                     break;
-
+                }
                 case(ConsoleKey.E):
                     getContactDetails = Insert(new Email {ContactId = contactId});
                     break;
@@ -200,26 +247,29 @@ public class DataController
                     break;
                 
                 case(ConsoleKey.D):
+                {
                     if(selection < PhoneNumbers.Count)
                         getContactDetails = Delete(PhoneNumbers[selection]);
                     else if (Emails.Count > 0)
                         getContactDetails = Delete(Emails[selection - phonesDto.Count]);
                     break;
-
+                }
                 case(ConsoleKey.M):
+                {
                     if(selection < PhoneNumbers.Count)
                         getContactDetails = Modify(PhoneNumbers[selection]);
                     else if (Emails.Count > 0)
                         getContactDetails = Modify(Emails[selection - phonesDto.Count]);
                     break;
-
+                }
                 case(ConsoleKey.Enter):
+                {
                     if(selection < PhoneNumbers.Count)
-                        SendSMS();
+                        SendSMS(phonesDto[selection]);
                     else if (Emails.Count > 0)
-                        SendEmail(Emails[selection - phonesDto.Count]);
+                        SendEmail(emailsDto[selection - phonesDto.Count]);
                     break;
-
+                }
                 case(ConsoleKey.Backspace):
                 case(ConsoleKey.Escape):
                     RunContactDetail = false;
@@ -240,6 +290,7 @@ public class DataController
             UI.DisplayInsert(objectName, contactErrorMessage);
             newContactName = Console.ReadLine() ?? ""; 
             contactErrorMessage = InputValidation.ContactNameValidation(newContactName, Contacts);
+            
             if( contactErrorMessage == null)
             {
                 UI.DisplayCategoryInsert("contact category", categoryErrorMessage);
@@ -261,6 +312,7 @@ public class DataController
     {
         string emailInput;
         string? errorMessage = null;
+       
         while(true)
         {
             UI.DisplayInsert(objectName, errorMessage);
@@ -284,6 +336,7 @@ public class DataController
     {
         string phoneNumber;
         string? errorMessage = null;
+        
         while(true)
         {
             UI.DisplayInsert(objectType, errorMessage);
@@ -304,7 +357,7 @@ public class DataController
         }        
     }
 
-    public bool Modify(int contactId, string objectName = "contact")
+    public bool Modify(int contactId, string objectName = "contact name")
     {
         string modifyContactName;
         string modifyCategoryName = "";
@@ -316,6 +369,7 @@ public class DataController
             UI.DisplayInsert(objectName, contactErrorMessage); //Pending UI
             modifyContactName = Console.ReadLine() ?? "";
             contactErrorMessage = InputValidation.ContactNameValidation(modifyContactName, Contacts);
+            
             if( contactErrorMessage == null && modifyContactName != "0")
             {
                 UI.DisplayCategoryInsert("contact category", categoryErrorMessage);
@@ -341,7 +395,7 @@ public class DataController
 
         while(true)
         {
-            UI.DisplayInsert(objectName, errorMessage); //Pending UI
+            UI.DisplayInsert(objectName, errorMessage);
             emailInput = Console.ReadLine() ?? ""; 
             errorMessage = InputValidation.EmailValidation(emailInput);
 
@@ -387,6 +441,7 @@ public class DataController
     {
         UI.DisplayConfirmationPromt(objectType);
         var selection = Console.ReadLine() ?? "";
+        
         if(selection.Equals("y", StringComparison.OrdinalIgnoreCase))
         {
             DBInstance.Delete(contactId);
@@ -399,6 +454,7 @@ public class DataController
     {
         UI.DisplayConfirmationPromt(objectType);
         var selection = Console.ReadLine() ?? "";
+        
         if(selection.Equals("y", StringComparison.OrdinalIgnoreCase))
         {
             DBInstance.Delete(objectToDelete);
@@ -411,6 +467,7 @@ public class DataController
     {
         UI.DisplayConfirmationPromt(objectType);
         var selection = Console.ReadLine() ?? "";
+        
         if(selection.Equals("y", StringComparison.OrdinalIgnoreCase))
         {
             DBInstance.Delete(objectToDelete);
@@ -419,15 +476,16 @@ public class DataController
         return false;
     }
 
-    public void SendEmail(Email emailToSend)
+    public void SendEmail(EmailDto emailToSend)
     {
         string? errorMessage;
         string emailSubject;
 
-        errorMessage = InputValidation.EmailValidation(UserEmail);
+        errorMessage = InputValidation.EmailValidation(UserEmail ?? "");
+        
         if(errorMessage != null)
         {
-            UI.ConfigureAppSettings();
+            UI.ConfigureAppSettings("email");
             Thread.Sleep(3000);
             return;
         }
@@ -439,7 +497,7 @@ public class DataController
             errorMessage = InputValidation.ValidateSubject(emailSubject);
             if(errorMessage == null)
             {
-                EnterEmailBody(emailSubject, new EmailDto(emailToSend));
+                EnterEmailBody(emailSubject, emailToSend);
                 return;
             }
         }
@@ -450,45 +508,99 @@ public class DataController
         string emailBody = "";
         string? errorMessage = null;
         ConsoleKeyInfo pressedKey;
-        bool run = true;
-        while(run)
+
+        while(true)
         {
             UI.DisplayEmail(UserEmail, emailToSend.Email, emailSubject, errorMessage);
             Console.Write(emailBody);
             pressedKey = Console.ReadKey();
-            
-            if((pressedKey.Modifiers & ConsoleModifiers.Control) != 0 && pressedKey.Key == ConsoleKey.S
-                && errorMessage == null)
-            {
-                UI.DisplaySendEmail();
-                run = false;
-            }
-            if((pressedKey.Modifiers & ConsoleModifiers.Control) != 0 && pressedKey.Key == ConsoleKey.Backspace)
-                run = false;
-        
+                    
             switch(pressedKey.Key)
             {
                 case(ConsoleKey.Enter):
                     emailBody += "\n";
                     break;
+
                 case(ConsoleKey.Backspace):
+                {
                     if(emailBody.Length > 0)
                         emailBody = emailBody.Remove(emailBody.Length-1);
                     if(emailBody.Length < EmailBodySize)
                         errorMessage = null;
                     break;
+                }
                 default:
+                {
                     emailBody += pressedKey.KeyChar.ToString();
                     if(emailBody.Length > EmailBodySize)
                         errorMessage = $"Email body has more than {EmailBodySize} characters";
                     break;
+                }
             }
+
+            if((pressedKey.Modifiers & ConsoleModifiers.Control) != 0 && pressedKey.Key == ConsoleKey.S
+                && errorMessage == null)
+            {
+                UI.DisplaySendEmail();
+                return;
+            }
+            if((pressedKey.Modifiers & ConsoleModifiers.Control) != 0 && pressedKey.Key == ConsoleKey.Backspace)
+                return;
         }
-        return;
     }
 
-    public void SendSMS()
+    public void SendSMS(PhoneNumberDto phoneToSend)
     {
+        string? errorMessage;
 
+        errorMessage = InputValidation.PhoneNumberValidation(UserPhoneNumber ?? "");
+        if(errorMessage != null)
+        {
+            UI.ConfigureAppSettings("phone number");
+            Thread.Sleep(3000);
+            return;
+        }
+
+        string smsBody = "";
+        errorMessage = null;
+        ConsoleKeyInfo pressedKey;
+        while(true)
+        {
+            UI.DisplaySMS(UserPhoneNumber, phoneToSend.PhoneNumber, errorMessage);
+            Console.Write(smsBody);
+            pressedKey = Console.ReadKey();
+                    
+            switch(pressedKey.Key)
+            {
+                case(ConsoleKey.Enter):
+                    smsBody += "\n";
+                    break;
+
+                case(ConsoleKey.Backspace):
+                {
+                    if(smsBody.Length > 0)
+                        smsBody = smsBody.Remove(smsBody.Length-1);
+                    if(smsBody.Length < SMSBodySize)
+                        errorMessage = null;
+                    break;
+                }
+                default:
+                {
+                    smsBody += pressedKey.KeyChar.ToString();
+                    if(smsBody.Length > SMSBodySize)
+                        errorMessage = $"SMS has more than {SMSBodySize} characters";
+                    break;
+                }
+            }
+
+            if((pressedKey.Modifiers & ConsoleModifiers.Control) != 0 && pressedKey.Key == ConsoleKey.S
+                && errorMessage == null)
+            {
+                UI.DisplaySendSMS();
+                return;
+            }
+            if((pressedKey.Modifiers & ConsoleModifiers.Control) != 0 && pressedKey.Key == ConsoleKey.Backspace)
+                return;
+        }
     }
 }

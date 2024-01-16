@@ -5,6 +5,15 @@ namespace PhoneBookProgram;
 
 public class InputValidation
 {
+    public static string? ContactNameValidation(string input)
+    {
+        if(input.Length<=0)
+            return "The contact name is empty";
+        else if(input.Length >= PhoneBookContext.ContactNameLenght/2)
+            return "The contact name is more than 50 caracters.";
+        return null;
+    }
+
     public static string? ContactNameValidation(string input, List<Contact> contacts)
     {
         if(input.Length<=0)
@@ -30,7 +39,6 @@ public class InputValidation
 
         if(MailAddress.TryCreate(email, out MailAddress? validEmail))
         {
-            Console.WriteLine(validEmail.DisplayName);
             string localName = validEmail.User;
             string domainName = validEmail.Host;
             if (localName.Length <= PhoneBookContext.EmailLocalNameLenght/2 && 
