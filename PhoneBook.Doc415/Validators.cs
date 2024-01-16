@@ -8,7 +8,7 @@ namespace PhoneBook.Doc415;
 internal class Validators
 {
     static Regex ValidEmailRegex = CreateValidEmailRegex();
-    public static bool isValidPhone(string phone) 
+    public static bool IsValidPhone(string phone) 
     {
         var PhoneValidator = PhoneNumberUtil.GetInstance();
         try
@@ -22,7 +22,7 @@ internal class Validators
         }
     }
 
-    static public bool isValidEmail(string email) 
+    static public bool IsValidEmail(string email) 
     {
         bool isValid = ValidEmailRegex.IsMatch(email);
         if (!isValid)

@@ -23,7 +23,7 @@ internal class EmailSender
         {
             myEmail = AnsiConsole.Ask<string>("Enter your e-mail adress (foo@foo.com):  ");
             
-        } while (!Validators.isValidEmail(myEmail));
+        } while (!Validators.IsValidEmail(myEmail));
         
     }
 

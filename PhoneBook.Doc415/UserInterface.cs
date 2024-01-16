@@ -62,14 +62,14 @@ internal class UserInterface
                                                   "(312 222 22 22)\n" +
                                                   "(3122222222)\n\n" +
                                                   "Please enter phone number: ");
-        } while (!Validators.isValidPhone(phoneNumber));
+        } while (!Validators.IsValidPhone(phoneNumber));
 
         do
         {
             email = AnsiConsole.Ask<string>("Enter e-mail adress (foo@foo.com) Press Enter to skip:  ", "");
             if (email == "")
                 break;
-        } while (!Validators.isValidEmail(email));
+        } while (!Validators.IsValidEmail(email));
 
         DataAccess dataaccess = new();
         dataaccess.AddContact(name, email, phoneNumber, title);
@@ -153,7 +153,7 @@ internal class UserInterface
                                                     "(312 222 22 22)\n" +
                                                     "(3122222222)\n\n" +
                                                     "Please enter phone number (press enter to skip): ", oldphone);
-        } while (!Validators.isValidPhone(phoneNumber));
+        } while (!Validators.IsValidPhone(phoneNumber));
         return phoneNumber;
     }
 
@@ -163,7 +163,7 @@ internal class UserInterface
         do
         {
             newemail = AnsiConsole.Ask<string>("Enter e-mail adress (foo@foo.com) (press Enter to skip):  ", email);
-        } while (!Validators.isValidEmail(newemail));
+        } while (!Validators.IsValidEmail(newemail));
 
         return newemail;
     }

@@ -14,7 +14,7 @@ internal class CountrySelection
             var selection = AnsiConsole.Prompt(new SelectionPrompt<string>()
                                 .Title("Please select default country")
                                 .AddChoices(countryList));
-            writer.WriteLine(selection.ToUpper());
+            writer.WriteLine(selection.ToUpper()+"\n");
             CountryCode = selection.ToUpper();
         } 
         else

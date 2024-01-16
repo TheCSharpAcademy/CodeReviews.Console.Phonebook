@@ -7,7 +7,6 @@ internal class PhoneBookContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // Data source to be replaced with config connection string.
-        string projPath = Path.GetFullPath(@"C:\Users\sipah\Desktop\serdar\projeler\PhoneBook.Doc415\");
         optionsBuilder.UseSqlServer($"Server=(localdb)\\MSSQLLocalDB;Initial Catalog=PhoneBook; Integrated Security=true;");
     }
 
