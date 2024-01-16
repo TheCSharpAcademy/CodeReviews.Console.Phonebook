@@ -5,19 +5,19 @@ namespace PhoneBook.Doc415;
 
 internal class DataAccess
 {
+    private readonly PhoneBookContext db = new();
     public void AddContact(string _name, string _email, string _phone, string _title)
     {
-        vat newContact = new Contact 
+        Contact newContact = new Contact()
         {
             Name = _name,
             Email = _email,
             Title = _title,
-            PhoneNumber= _phone,
-        }
+            PhoneNumber = _phone
+        };
 
         try
         {
-            var db = new PhoneBookContext();
             db.Contacts.Add(newContact);
             db.SaveChanges();
         }
@@ -29,13 +29,11 @@ internal class DataAccess
 
     public List<Contact> GetContacts()
     {
-        using var db = new PhoneBookContext();
         return db.Contacts.OrderBy(x=>x.Name).ToList();
     }
 
     public void DeleteContact(Contact todelete)
     {
-        using var db = new PhoneBookContext();
         db.Contacts.Remove(todelete);
         db.SaveChanges();
     }
@@ -47,7 +45,6 @@ internal class DataAccess
         toUpdate.Title= _title;
         toUpdate.PhoneNumber= _phone;
 
-        var db = new PhoneBookContext();
         db.Update(toUpdate);
         db.SaveChanges();
     }    
