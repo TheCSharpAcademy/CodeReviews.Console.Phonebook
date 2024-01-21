@@ -1,6 +1,8 @@
 ﻿using PhoneBook.Doc415.Models;
+using PhoneNumbers;
 using Spectre.Console;
 using static PhoneBook.Doc415.Enums;
+using static System.Collections.Specialized.BitVector32;
 namespace PhoneBook.Doc415;
 
 internal class UserInterface
@@ -14,9 +16,11 @@ internal class UserInterface
                                                     .Title("Main Menu")
                                                     .AddChoices(MainMenuSelections.AddContact,
                                                                 MainMenuSelections.ViewContacts,
+                                                                MainMenuSelections.ViewByCategory,
                                                                 MainMenuSelections.UpdateContact,
                                                                 MainMenuSelections.DeleteContact,
                                                                 MainMenuSelections.SendEmail,
+                                                                MainMenuSelections.SendSMS,
                                                                 MainMenuSelections.Quit
                                                    ));
             switch (selection)
@@ -27,6 +31,9 @@ internal class UserInterface
                 case MainMenuSelections.ViewContacts:
                     ViewContacts();
                     break;
+                case MainMenuSelections.ViewByCategory:
+                    ViewByCategory();
+                    break;
                 case MainMenuSelections.DeleteContact:
                     DeleteContact();
                     break;
@@ -36,6 +43,9 @@ internal class UserInterface
                 case MainMenuSelections.SendEmail:
                     SendEmail();
                     break;
+                case MainMenuSelections.SendSMS:
+                    SendSMS();
+                    break;
                 case MainMenuSelections.Quit:
                     Environment.Exit(0);
                     break;
@@ -43,17 +53,77 @@ internal class UserInterface
         }
     }
 
+    private void ViewByCategory()
+    {
+        DataAccess dataaccess = new();
+        var categories=dataaccess.GetCategories();
+        string selectedCategory =  AnsiConsole.Prompt(new SelectionPrompt<string>()
+            .Title($"Choose category")
+            .AddChoices(categories)
+            );
+        var contacts = dataaccess.GetContactsByCategory(selectedCategory);
+        var table = new Table();
+        table.AddColumns("Name", "Title","Category", "Phone number", "Email");
+        foreach (var contact in contacts)
+        {
+            table.AddRow(contact.Name, contact.Title,contact.Category, contact.PhoneNumber, contact.Email);
+        }
+        table.Centered();
+        AnsiConsole.Write(table);
+        EndOperation("Press Enter to continue...");
+    }
+
+    private void SendSMS()
+    {
+        string number = "";
+        if (!SMShandler.isFunctional())
+        {
+            Console.WriteLine("SMS sender has not setup.");
+            SetUpEmail.SetUp();
+            Console.Clear();
+        }
+        if (!SMShandler.isFunctional())
+            return;
+        else
+        {
+            var contact = SelectContact("send SMS");
+            Console.WriteLine($"Sending SMS to {contact.Name} :");
+            string message = AnsiConsole.Ask<string>("SMS message: ");
+            if (!contact.PhoneNumber.StartsWith("+"))
+            {
+                var phoneUtil = PhoneNumberUtil.GetInstance(); ;
+                string countryCode = phoneUtil.GetCountryCodeForRegion(CountrySelection.CountryCode).ToString();
+                number="+"+countryCode+contact.PhoneNumber;
+            }
+
+            SMShandler.SendSMS(number, message);
+        }
+    }
+
     private void SendEmail()
     {
-        var contact = SelectContact("send e-mail");
-        EmailSender sender = new EmailSender();
-        sender.SetUpSender();
-        sender.SendEmail(contact);
+        if (!SetUpEmail.isEmailFunctional())
+        {
+            Console.WriteLine("Email sender has not setup.");
+            SetUpEmail.SetUp();
+            Console.Clear();
+        }
+        if (!SetUpEmail.isEmailFunctional())
+            return;
+        else
+        {
+            var contact = SelectContact("send e-mail");
+            EmailSender sender = new EmailSender();
+            Console.WriteLine($"Sending e-mail to {contact.Email} :");
+            string subject = AnsiConsole.Ask<string>("Subject: ", "");
+            string body = AnsiConsole.Ask<string>("Mail: "); sender.SendEmail(contact.Email, subject, body);
+        }
     }
     private void AddContact()
     {
         string name = AnsiConsole.Ask<string>("Enter name: ");
         string title = AnsiConsole.Ask<string>("Enter title ", "");
+        string category = AnsiConsole.Ask<string>("Enter category ", "");
         string phoneNumber = "";
         string email = "";
         do
@@ -72,7 +142,7 @@ internal class UserInterface
         } while (!Validators.IsValidEmail(email));
 
         DataAccess dataaccess = new();
-        dataaccess.AddContact(name, email, phoneNumber, title);
+        dataaccess.AddContact(name, email, phoneNumber, title, category);
         EndOperation("Contact recorded. Press Enter to continue...");
     }
 
@@ -100,10 +170,10 @@ internal class UserInterface
         DataAccess dataaccess = new();
         var contacts = dataaccess.GetContacts();
         var table = new Table();
-        table.AddColumns("Name", "Title", "Phone number", "Email");
+        table.AddColumns("Name", "Title", "Category","Phone number", "Email");
         foreach (var contact in contacts)
         {
-            table.AddRow(contact.Name, contact.Title, contact.PhoneNumber, contact.Email);
+            table.AddRow(contact.Name, contact.Title, contact.Category, contact.PhoneNumber, contact.Email);
         }
         table.Centered();
         AnsiConsole.Write(table);
@@ -128,10 +198,11 @@ internal class UserInterface
         Contact toUpdate = SelectContact("update");
         var name = AnsiConsole.Ask<string>("Enter new name (press enter to skip): ", toUpdate.Name);
         var title = AnsiConsole.Ask<string>("Enter new title (press enter to skip): ", toUpdate.Title);
+        var category = AnsiConsole.Ask<string>("Enter new category (press enter to skip): ", toUpdate.Category);
         var phoneNumber = GetPhoneNumber(toUpdate.PhoneNumber);
         var email = GetEmail(toUpdate.Email);
         DataAccess dataAccess = new();
-        dataAccess.UpdateContact(name, title, phoneNumber, email, toUpdate);
+        dataAccess.UpdateContact(name, title, phoneNumber, email, category, toUpdate);
         EndOperation("Update completed. Press Enter to continue...");
     }
 

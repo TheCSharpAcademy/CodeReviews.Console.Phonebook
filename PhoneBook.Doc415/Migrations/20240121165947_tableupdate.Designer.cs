@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PhoneBook.Doc415.Context;
 
@@ -10,9 +11,11 @@ using PhoneBook.Doc415.Context;
 namespace PhoneBook.Doc415.Migrations
 {
     [DbContext(typeof(PhoneBookContext))]
-    partial class PhoneBookContextModelSnapshot : ModelSnapshot
+    [Migration("20240121165947_tableupdate")]
+    partial class tableupdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

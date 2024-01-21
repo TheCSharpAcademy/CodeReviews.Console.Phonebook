@@ -6,9 +6,11 @@ internal class Enums
     {
         AddContact,
         ViewContacts,
+        ViewByCategory,
         UpdateContact,
         DeleteContact,
         SendEmail,
+        SendSMS,
         Quit
     }
 }
