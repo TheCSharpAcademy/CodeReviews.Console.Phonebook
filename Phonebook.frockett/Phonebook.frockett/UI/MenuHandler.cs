@@ -71,7 +71,7 @@ public class MenuHandler
                 // TODO print groups, let user select group
                 break;
             case 3:
-                AddContact();
+                // TODO AddContact();
                 break;
             case 4:
                 ShowMainMenu();
