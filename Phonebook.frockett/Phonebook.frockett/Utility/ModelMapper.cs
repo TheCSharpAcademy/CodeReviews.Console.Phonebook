@@ -5,6 +5,45 @@ namespace Phonebook.frockett.Utility;
 
 public class ModelMapper
 {
+    Dictionary<int,int> sequenceMap = new Dictionary<int,int>();
+    int contactSequenceIndex = 0;
+    int groupSequenceIndex = 0;
+
+    public void BuildContactMap(List<Contact> contacts)
+    {
+        foreach (Contact contact in contacts)
+        {
+            sequenceMap.Add(contactSequenceIndex, contact.ContactId); 
+            contactSequenceIndex++;
+        }
+    }
+
+    public void BuildGroupMap(List<ContactGroup> contactGroups)
+    {
+        foreach (ContactGroup contactGroup in contactGroups)
+        {
+            sequenceMap.Add(groupSequenceIndex, contactGroup.ContactGroupId); 
+            groupSequenceIndex++;
+        }
+    }
+
+    public int GetIdFromMap(int sequenceIndex)
+    {
+        int id;
+
+        if (sequenceMap.ContainsKey(sequenceIndex))
+        {
+            id = sequenceMap[sequenceIndex];
+            sequenceMap.Clear();
+            return id;
+        }
+        else
+        {
+            sequenceMap.Clear();
+            return -1;
+        }
+    }
+
     public ContactDTO ToContactDto(Contact contact) 
     {
         return new ContactDTO()
@@ -16,7 +55,7 @@ public class ModelMapper
         };
     }
 
-    public Contact ToDomainModel(ContactDTO contactDto)
+    public Contact ToContactDomainModel(ContactDTO contactDto)
     {
         return new Contact()
         {
@@ -49,7 +88,7 @@ public class ModelMapper
 
         foreach(ContactDTO contact in contactGroupDto.Contacts)
         {
-            Contact contactToAdd = ToDomainModel(contact);
+            Contact contactToAdd = ToContactDomainModel(contact);
             contactGroup.Contacts.Add(contactToAdd);
         }
         // TODO make sure to get contact group info in service layer by searching by name
