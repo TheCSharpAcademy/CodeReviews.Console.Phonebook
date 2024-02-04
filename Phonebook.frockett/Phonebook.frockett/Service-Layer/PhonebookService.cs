@@ -2,7 +2,6 @@
 using Phonebook.frockett.DTOs;
 using Phonebook.frockett.Models;
 using Phonebook.frockett.Utility;
-using System.Text.RegularExpressions;
 
 namespace Phonebook.frockett.Service_Layer;
 
@@ -15,21 +14,26 @@ public class PhonebookService
         repository = phoneBookRepository;
     }
 
-    public void DeleteContact(ContactDTO contactDto)
+    public bool DeleteContact(ContactDTO contactDto)
     {
         Contact contactToDelete = ModelMapper.ToContactDomainModel(contactDto);
-        repository.RemoveContactById(contactToDelete);
+
+        return repository.RemoveContactById(contactToDelete);
     }
 
-    internal void AddContact(string name, string email, string phoneNumber)
+    internal bool AddContact(string name, string email, string phoneNumber)
     {
         Contact contactToAdd = ModelMapper.ToContactDomainModel(new ContactDTO { Name = name, Email = email, PhoneNumber = phoneNumber });
-        repository.AddContact(contactToAdd);
+
+        if (repository.AddContact(contactToAdd) != null) //If the contact isn't null, that means a contact was created, so return true.
+            return true;
+        else
+            return false;
     }
 
-    internal void UpdateGroupName(string newName)
+    internal bool UpdateGroupName(string newName, ContactGroupDTO groupToEdit)
     {
-        throw new NotImplementedException();
+        return repository.UpdateContactGroupName(groupToEdit.Id, newName);
     }
 
     internal bool CheckForGroupName(string newName)
@@ -52,33 +56,37 @@ public class PhonebookService
         return groupsToReturn;
     }
 
-    internal void DeleteGroup(ContactGroupDTO groupToDelete, bool shouldDeleteContacts)
+    internal bool DeleteGroup(ContactGroupDTO groupToDelete, bool shouldDeleteContacts)
     {
-        repository.DeleteContactGroup(groupToDelete.Id, shouldDeleteContacts);
+        return repository.DeleteContactGroup(groupToDelete.Id, shouldDeleteContacts);
     }
 
-    internal void AddNewGroup(string groupName)
+    internal bool AddNewGroup(string groupName)
     {
-        repository.AddContactGroup(groupName);
+        if (repository.AddContactGroup(groupName) != null) return true;
+        else return false;
     }
 
-    internal void UpdateContact(ContactDTO updatedContact)
+    internal bool UpdateContact(ContactDTO updatedContact)
     {
         Contact contactToUpdate = ModelMapper.ToContactDomainModel(updatedContact);
 
-        repository.UpdateContactInfo(contactToUpdate);
+        if (repository.UpdateContactInfo(contactToUpdate) != null)
+            return true;
+        else 
+            return false;
     }
 
-    internal void AddContactToGroup(ContactGroupDTO groupAddedTo, int contactId)
+    internal bool AddContactToGroup(ContactGroupDTO groupAddedTo, int contactId)
     {
         int groupId = groupAddedTo.Id;
-        repository.AddContactToGroup(contactId, groupId);
+        return repository.AddContactToGroup(contactId, groupId);
     }
 
-    internal void RemoveContactFromGroup(ContactGroupDTO contactGroup, int contactId)
+    internal bool RemoveContactFromGroup(ContactGroupDTO contactGroup, int contactId)
     {
-        int groupId = contactGroup.Id;
-        repository.RemoveContactFromGroup(contactId, groupId);
+        ContactGroup groupToRemoveFrom = repository.GetGroupByName(contactGroup.Name);
+        return repository.RemoveContactFromGroup(contactId, groupToRemoveFrom.ContactGroupId);
     }
 
     internal List<ContactDTO> FetchContactList()

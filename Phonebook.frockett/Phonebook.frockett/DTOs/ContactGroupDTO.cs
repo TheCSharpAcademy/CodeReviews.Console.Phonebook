@@ -1,5 +1,4 @@
-﻿
-namespace Phonebook.frockett.DTOs;
+﻿namespace Phonebook.frockett.DTOs;
 
 public class ContactGroupDTO
 {

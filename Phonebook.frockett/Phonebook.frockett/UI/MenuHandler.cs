@@ -1,21 +1,18 @@
 ﻿using Spectre.Console;
 using Phonebook.frockett.Service_Layer;
 using Phonebook.frockett.DTOs;
-using System.ComponentModel.DataAnnotations;
 
 namespace Phonebook.frockett.UI;
 
 public class MenuHandler
 {
     private readonly PhonebookService phonebookService;
-    private readonly InputValidator validator;
     private readonly TableEngine tableEngine;
     private readonly HandleUserInput userInput;
 
-    public MenuHandler(PhonebookService phonebookService, InputValidator inputValidator, TableEngine tableEngine, HandleUserInput userInput)
+    public MenuHandler(PhonebookService phonebookService, TableEngine tableEngine, HandleUserInput userInput)
     {
         this.phonebookService = phonebookService;
-        validator = inputValidator;
         this.tableEngine = tableEngine;
         this.userInput = userInput;
     }
@@ -29,7 +26,7 @@ public class MenuHandler
 
         string choice = AnsiConsole.Prompt(
                             new SelectionPrompt<string>()
-                            .Title("Which operation would you like to perform? Use [green]arrow[/] and [green]enter[/] keys to make a selection.")
+                            .Title("Welcome to your phonebook! Use [green]arrow[/] and [green]enter[/] keys to make a selection.")
                             .PageSize(10)
                             .MoreChoicesText("Keep scrolling for more options")
                             .AddChoices(menuOptions));
@@ -59,7 +56,7 @@ public class MenuHandler
 
         string choice = AnsiConsole.Prompt(
                             new SelectionPrompt<string>()
-                            .Title("Which operation would you like to perform? Use [green]arrow[/] and [green]enter[/] keys to make a selection.")
+                            .Title("What would you like to do?")
                             .PageSize(10)
                             .MoreChoicesText("Keep scrolling for more options")
                             .AddChoices(menuOptions));
@@ -86,10 +83,18 @@ public class MenuHandler
 
     private void HandleContactSubmenu(ContactDTO contact)
     {
-        // check if the email is set to an invalid property, which means it's the sneaky CANCEL button.
-        if (contact.Email == "0")
+        if (contact == null)
         {
-            ShowMainMenu();
+            AnsiConsole.MarkupLine("[green]Press enter to return to contacts menu...[/]");
+            Console.ReadLine();
+            HandleContactsMenu();
+            return;
+        }
+
+        // check if the email is set to an invalid property, which means it's the sneaky CANCEL button.
+        if (contact.Name != null && contact.Name == " ")
+        {
+            HandleContactsMenu();
             return;
         }
 
@@ -116,10 +121,10 @@ public class MenuHandler
                 HandleEditContact(contact);
                 break;
             case 2:
-                AddRemoveContactFromGroup(contact);
+                HandleAddOrRemoveFromGroup(contact);
                 break;
             case 3:
-                phonebookService.DeleteContact(contact);
+                HandleDeleteContact(contact);
                 break;
             case 4:
                 ShowMainMenu();
@@ -127,28 +132,70 @@ public class MenuHandler
         }
     }
 
-    private void AddRemoveContactFromGroup(ContactDTO contact)
+    private void HandleAddOrRemoveFromGroup(ContactDTO contact)
     {
-        //ContactDTO updatedContact = new();
-        ContactGroupDTO? groupSelection = new();
+        if (contact.ContactGroupName == null)
+            AddContactToGroup(contact);
+        else
+            RemoveContactFromGroup(contact);
+    }
 
-        if (contact.ContactGroupName != null)
+    private void HandleDeleteContact(ContactDTO contactToDelete)
+    {
+        if(phonebookService.DeleteContact(contactToDelete))
+            AnsiConsole.MarkupLine("[green]Contact deleted![/]");
+        else
+            AnsiConsole.MarkupLine("[red]An error occurred while deleting.[/]");
+        
+
+        PauseForStatusMessage();
+        ShowMainMenu();
+    }
+
+    private void RemoveContactFromGroup(ContactDTO contact)
+    {
+        ContactGroupDTO? group = new();
+
+        if (contact.ContactGroupName == null) // these checks are redundant
         {
-            if (AnsiConsole.Confirm("Remove from current group? "))
-            {
-                // TODO remove from group in better way
-                groupSelection.Name = contact.ContactGroupName;
-                phonebookService.RemoveContactFromGroup(groupSelection, contact.Id);
-            }
+            AnsiConsole.WriteLine($"{contact.Name} isn't in any groups.");
         }
         else
         {
-            if (AnsiConsole.Confirm("Add contact to group? "))
+            if (AnsiConsole.Confirm($"Are you sure you wish to remove {contact.Name} from the group {contact.ContactGroupName}?"))
             {
-                groupSelection = userInput.SelectGroup(phonebookService.FetchGroupList());
-                phonebookService.AddContactToGroup(groupSelection, contact.Id);
+                group.Name = contact.ContactGroupName;
+                bool isDeleted = phonebookService.RemoveContactFromGroup(group, contact.Id);
+
+                if (isDeleted) 
+                    AnsiConsole.MarkupLine($"[green]{contact.Name} removed from group: {group.Name}[/]");
+                else 
+                    AnsiConsole.MarkupLine("[red]Removal cancelled[/]");
             }
         }
+
+        PauseForStatusMessage();
+        ShowMainMenu();
+    }
+
+    private void AddContactToGroup(ContactDTO contact)
+    {
+        if (contact.ContactGroupName != null)
+        {
+            AnsiConsole.WriteLine($"{contact.Name} is already in group {contact.ContactGroupName}. Contacts can only be in one group at a time.");
+        }
+        else
+        {
+            ContactGroupDTO group = userInput.SelectGroup(phonebookService.FetchGroupList());
+            bool isAdded = phonebookService.AddContactToGroup(group, contact.Id);
+
+            if (isAdded)
+                AnsiConsole.MarkupLine($"[green]{contact.Name} added to group: {group.Name}[/]");
+            else
+                AnsiConsole.MarkupLine("[red]Addition cancelled[/]");
+        }
+
+        PauseForStatusMessage();
         ShowMainMenu();
     }
 
@@ -156,8 +203,12 @@ public class MenuHandler
     {
         ContactDTO updatedContact = userInput.GetEditedContact(oldContact);
 
-        phonebookService.UpdateContact(updatedContact);
+        if (phonebookService.UpdateContact(updatedContact))
+            AnsiConsole.MarkupLine($"[green]{oldContact.Name} has been updated[/]");
+        else
+            AnsiConsole.MarkupLine("[red]Failure to edit contact, try again.[/]");
 
+        PauseForStatusMessage();
         ShowMainMenu();
     }
 
@@ -167,8 +218,13 @@ public class MenuHandler
         string email = userInput.GetEmail();
         string phoneNumber = userInput.GetPhoneNumber();
 
-        phonebookService.AddContact(name, email, phoneNumber);
+        // Check if a success signal was returned from repository
+        if (phonebookService.AddContact(name, email, phoneNumber))
+            AnsiConsole.MarkupLine($"[green]{name} was added to contacts.[/]");
+        else
+            AnsiConsole.MarkupLine("[red]An error occurred, please try again[/]");
 
+        PauseForStatusMessage();
         ShowMainMenu();
     }
 
@@ -177,7 +233,7 @@ public class MenuHandler
         AnsiConsole.Clear();
 
         string[] menuOptions =
-                {"Add group", "Delete Group", "Edit Group", "Exit Program"};
+                {"Add group", "Delete Group", "Edit Group", "Return to Main Menu"};
 
         string choice = AnsiConsole.Prompt(
                             new SelectionPrompt<string>()
@@ -197,7 +253,7 @@ public class MenuHandler
                 HandleDeleteGroup();
                 break;
             case 3:
-                HandleEditGroup();
+                HandleEditGroup(userInput.SelectGroup(phonebookService.FetchGroupList()));
                 break;
             case 4:
                 ShowMainMenu();
@@ -205,9 +261,15 @@ public class MenuHandler
         }
     }
 
-    private void HandleEditGroup()
+    private void HandleEditGroup(ContactGroupDTO groupToEdit)
     {
-        ContactGroupDTO groupToEdit = userInput.SelectGroup(phonebookService.FetchGroupList());
+        // Check for exit selection
+        if (groupToEdit.Name != null && groupToEdit.Name == " ")
+        {
+            HandleGroupMenu();
+            return;
+        }
+
         string newName = userInput.GetName();
 
         while (phonebookService.CheckForGroupName(newName))
@@ -216,19 +278,38 @@ public class MenuHandler
             newName = userInput.GetName();
         }
 
-        phonebookService.UpdateGroupName(newName);
-        ShowMainMenu();
+        // Check if a success signal was returned from repository
+        if (phonebookService.UpdateGroupName(newName, groupToEdit))
+            AnsiConsole.MarkupLine($"[green]Group {groupToEdit.Name} changed to {newName}![/]");
+        else
+            AnsiConsole.MarkupLine($"[red]Operation failed. Try again.[/]");
+
+        PauseForStatusMessage();
+        HandleGroupMenu();
     }
 
     private void HandleDeleteGroup()
     {
         ContactGroupDTO groupToDelete = userInput.SelectGroup(phonebookService.FetchGroupList());
+
+        // Check for exit code
+        if (groupToDelete.Name != null && groupToDelete.Name == " ")
+        {
+            HandleGroupMenu();
+            return;
+        }
+
         bool deleteRelatedContacts;
+        deleteRelatedContacts = AnsiConsole.Confirm($"Also delete any contacts in {groupToDelete.Name}? ");
 
-        deleteRelatedContacts = AnsiConsole.Confirm($"Delete all contacts in {groupToDelete.Name}? ");
+        // Check if a success signal was returned from repository
+        if (phonebookService.DeleteGroup(groupToDelete, deleteRelatedContacts))
+            AnsiConsole.MarkupLine($"[green]Group {groupToDelete.Name} deleted successfully![/]");
+        else
+            AnsiConsole.MarkupLine($"[red]Operation failed. Try again.[/]");
 
-        phonebookService.DeleteGroup(groupToDelete, deleteRelatedContacts);
-        ShowMainMenu();
+        PauseForStatusMessage();
+        HandleGroupMenu();
     }
 
     private void HandleAddGroup()
@@ -240,7 +321,19 @@ public class MenuHandler
             AnsiConsole.MarkupLine("[red]Sorry, this group name is already taken.[red] Each group needs a unique name.");
             groupName = userInput.GetName();
         }
-        phonebookService.AddNewGroup(groupName);
-        ShowMainMenu();
+
+        // Check if a success signal was returned from repository
+        if (phonebookService.AddNewGroup(groupName))
+            AnsiConsole.MarkupLine($"[green]Group {groupName} added successfully![/]");
+        else
+            AnsiConsole.MarkupLine($"[red]Operation failed. Try again.[/]");
+
+        PauseForStatusMessage();
+        HandleGroupMenu();
+    }
+    private static void PauseForStatusMessage()
+    {
+        AnsiConsole.WriteLine("Press enter to continue...");
+        Console.ReadLine();
     }
 }

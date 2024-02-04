@@ -1,7 +1,5 @@
-﻿
-using Phonebook.frockett.DTOs;
+﻿using Phonebook.frockett.DTOs;
 using Spectre.Console;
-using System.ComponentModel.DataAnnotations;
 
 namespace Phonebook.frockett.UI;
 
@@ -61,8 +59,28 @@ public class HandleUserInput
             newPhoneNumber = AnsiConsole.Ask<string>($"{newPhoneNumber} is not a valid number. Use format 0123456789 or 012-345-6789. Enter number: ");
         }
 
-        return newPhoneNumber;
+        string formattedNumber = ReformatPhoneNumber(newPhoneNumber);
+
+        return formattedNumber;
     }
+
+    private string ReformatPhoneNumber(string phoneNumber)
+    {
+        // Remove all non-numeric characters
+        string digits = new String(phoneNumber.Where(char.IsDigit).ToArray());
+
+        // Check if we have exactly 10 digits, which is valid for US phone numbers
+        if (digits.Length == 10)
+        {
+            // Reformat to (555) 555-5555
+            return $"({digits.Substring(0, 3)}) {digits.Substring(3, 3)}-{digits.Substring(6)}";
+        }
+
+        // Return the original string if it doesn't match expected format
+        // Consider throwing an exception or handling this case as needed
+        return phoneNumber;
+    }
+
 
     public string GetEmail()
     {
@@ -90,33 +108,54 @@ public class HandleUserInput
     {
         AnsiConsole.Clear();
 
-        if (contacts == null) 
+        if (!contacts.Any()) 
         {
-            AnsiConsole.MarkupLine("No contacts in group. Add some!");
+            AnsiConsole.MarkupLine("No contacts found. Add some!");
             return null;
         }
 
+        ContactDTO titles = new ContactDTO
+        {
+            Name = "_NAME_".PadRight(20),
+            PhoneNumber = "_PHONE NUMBER_".PadRight(15),
+            Email = "_EMAIL_".PadRight(25),
+            ContactGroupName = "_GROUP_".PadRight(15)
+        };
+
         var selectOptions = new SelectionPrompt<ContactDTO>();
-        selectOptions.AddChoice(new ContactDTO { Email = "0" }); // Use what would otherwise be an invalid email to identify the "cancel" button
+        selectOptions.AddChoice(titles); // Hack-ish way to simulate a title
         selectOptions.AddChoices(contacts);
-        selectOptions.UseConverter(contact => (contact.Email == "0" ? "Cancel" : $"{contact.Name} - {contact.PhoneNumber} - {contact.Email}") // if email is 0 it's a cancel button
-                                                + (contact.ContactGroupName != null ? $" - {contact.ContactGroupName}" : "")); // if contact has group name, add it too
-        selectOptions.Title("Select the contact using the arrow and enter keys");
+        selectOptions.AddChoice(new ContactDTO { Name = " " }); // Use what would otherwise be an invalid email to identify the "cancel" button
+
+        selectOptions.UseConverter(contact =>
+            (contact.Name == " " ? "EXIT".PadRight(20) :
+            $"{contact.Name.PadRight(20)}") + (contact.ContactGroupName != null ? $" {contact.ContactGroupName.PadRight(15)}" : ""));
+
+        selectOptions.Title("Select [green]Contact[/]");
         selectOptions.MoreChoicesText("Keep scrolling for more");
 
         ContactDTO selectedContact = AnsiConsole.Prompt(selectOptions);
 
-        return selectedContact;
+        if (selectedContact == titles)
+        {
+            return SelectContact(contacts);
+        }
+        else
+        {
+            return selectedContact;
+        }
     }
 
     public ContactGroupDTO SelectGroup(List<ContactGroupDTO> contactGroups)
     {
         AnsiConsole.Clear();
         var selectOptions = new SelectionPrompt<ContactGroupDTO>();
-        selectOptions.AddChoice(new ContactGroupDTO { Name = " " }); // invalid group name is used to identfy the cancel button
+
         selectOptions.AddChoices(contactGroups);
-        selectOptions.UseConverter(group => (group.Name == " " ? "Cancel" : $"{group.Name}")); // if email is 0 it's a cancel button 
-        selectOptions.Title("Select the group using the arrow and enter keys for more options");
+        selectOptions.AddChoice(new ContactGroupDTO { Name = " " }); // invalid group name is used to identfy the cancel button
+
+        selectOptions.UseConverter(group => (group.Name == " " ? "EXIT" : $"{group.Name}")); // if email is 0 it's a cancel button 
+        selectOptions.Title("Select [green]Group[/]");
         selectOptions.MoreChoicesText("Keep scrolling for more");
 
         ContactGroupDTO selectedGroup = AnsiConsole.Prompt(selectOptions);

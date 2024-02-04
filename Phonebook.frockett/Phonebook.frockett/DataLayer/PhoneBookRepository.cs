@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Phonebook.frockett.Models;
-using System.Text.RegularExpressions;
 
 
 namespace Phonebook.frockett.DataLayer;
@@ -31,7 +30,7 @@ public class PhoneBookRepository
 
     public List<Contact> GetAllContacts()
     {
-        List<Contact> contacts = _context.Contacts.ToList();
+        List<Contact> contacts = _context.Contacts.Include(c => c.ContactGroup).OrderBy(c => c.Name).ToList(); 
         return contacts;
     }
 
@@ -42,7 +41,7 @@ public class PhoneBookRepository
         return contact;
     }
 
-    public void UpdateContactInfo(Contact contact)
+    public Contact? UpdateContactInfo(Contact contact)
     {
         var contactToUpdate = _context.Contacts.FirstOrDefault(c => c.ContactId == contact.ContactId);
         if (contact.PhoneNumber != null)
@@ -60,17 +59,20 @@ public class PhoneBookRepository
             contactToUpdate.Name = contact.Name;
             _context.SaveChanges();
         }
+        return contactToUpdate;
     }
 
-    public void RemoveContactById(Contact contact)
+    public bool RemoveContactById(Contact contact)
     {
-        var contactToDelete = _context.Contacts.FirstOrDefault(c => c.ContactId == contact.ContactId); // Maybe change this to search for name depending on if this works well
+        var contactToDelete = _context.Contacts.FirstOrDefault(c => c.ContactId == contact.ContactId);
 
         if (contactToDelete != null)
         {
             _context.Contacts.Remove(contactToDelete);
             _context.SaveChanges();
+            return true;
         }
+        else return false;
     }
     #endregion
 
@@ -94,7 +96,7 @@ public class PhoneBookRepository
         _context.ContactGroup.Add(newGroup);
         _context.SaveChanges();
 
-        return newGroup; // return it because I might want the newly generated ID
+        return newGroup;
     }
     
     public bool AddContactToGroup(int contactId, int groupId)
@@ -130,7 +132,12 @@ public class PhoneBookRepository
 
     public List<ContactGroup> GetAllGroups()
     {
-        List<ContactGroup> groupList = _context.ContactGroup.Include(g => g.Contacts).ToList();
+        List<ContactGroup> groupList = _context.ContactGroup.Include(g => g.Contacts).OrderBy(g => g.Name).ToList();
+
+        foreach (var group in groupList)
+        {
+            group.Contacts = group.Contacts.OrderBy(c => c.Name).ToList();
+        }
         return groupList;
     }
 
@@ -148,7 +155,6 @@ public class PhoneBookRepository
         {
             return false;
         }
-
         contactGroup.Name = newName;
         _context.SaveChanges();
 
@@ -168,26 +174,19 @@ public class PhoneBookRepository
 
         if (deleteContacts)
         {
-            // Option (a): Delete the group and its associated contacts
             _context.Contacts.RemoveRange(contactGroup.Contacts);
         }
         else
         {
-            // Option (b): Disassociate the contacts from the group without deleting them
             foreach (var contact in contactGroup.Contacts)
             {
                 contact.GroupId = null; // Or set to a default group if applicable
             }
         }
-
-        // Delete the group itself
         _context.ContactGroup.Remove(contactGroup);
-
-        // Save changes to the database
         _context.SaveChanges();
 
         return true;
     }
-
     #endregion
 }
