@@ -77,7 +77,10 @@ public class PhoneBookRepository
     #region "ContactGroup Methods"
     public ContactGroup? GetGroupWithContacts(int groupId)
     {
-        ContactGroup contactGroup = _context.ContactGroup.Include(g => g.Contacts).FirstOrDefault(g => g.ContactGroupId == groupId);
+        ContactGroup contactGroup = _context.ContactGroup
+            .Include(g => g.Contacts)
+            .FirstOrDefault(g => g.ContactGroupId == groupId);
+
         return contactGroup;
     }
 
@@ -127,7 +130,7 @@ public class PhoneBookRepository
 
     public List<ContactGroup> GetAllGroups()
     {
-        List<ContactGroup> groupList = _context.ContactGroup.ToList();
+        List<ContactGroup> groupList = _context.ContactGroup.Include(g => g.Contacts).ToList();
         return groupList;
     }
 

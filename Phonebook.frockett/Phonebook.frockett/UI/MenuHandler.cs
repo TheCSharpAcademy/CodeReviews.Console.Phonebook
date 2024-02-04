@@ -25,7 +25,7 @@ public class MenuHandler
         AnsiConsole.Clear();
 
         string[] menuOptions =
-                {"View Contacts", "Add/Delete Groups", "Exit Program"};
+                {"Contacts", "Add/Delete Groups", "Exit Program"};
 
         string choice = AnsiConsole.Prompt(
                             new SelectionPrompt<string>()
@@ -69,10 +69,11 @@ public class MenuHandler
         switch (menuSelection)
         {
             case 1:
-                // TODO print all contacts
+                HandleContactSubmenu(userInput.SelectContact(phonebookService.FetchContactList()));
                 break;
             case 2:
-                // TODO print groups, let user select group
+                ContactGroupDTO selectedGroup = userInput.SelectGroup(phonebookService.FetchGroupList());
+                HandleContactSubmenu(userInput.SelectContact(selectedGroup.Contacts));
                 break;
             case 3:
                 HandleAddContact();
@@ -85,14 +86,24 @@ public class MenuHandler
 
     private void HandleContactSubmenu(ContactDTO contact)
     {
+        // check if the email is set to an invalid property, which means it's the sneaky CANCEL button.
+        if (contact.Email == "0")
+        {
+            ShowMainMenu();
+            return;
+        }
+
         AnsiConsole.Clear();
+
+        tableEngine.DisplayContact(contact);
+        AnsiConsole.WriteLine();
 
         string[] menuOptions =
                 {"Edit Contact", "Add/Remove Contact from Group", "Delete Contact", "Return to Main Menu"};
 
         string choice = AnsiConsole.Prompt(
                             new SelectionPrompt<string>()
-                            .Title("Which operation would you like to perform? Use [green]arrow[/] and [green]enter[/] keys to make a selection.")
+                            .Title("What would you like to do?")
                             .PageSize(10)
                             .MoreChoicesText("Keep scrolling for more options")
                             .AddChoices(menuOptions));
@@ -116,48 +127,38 @@ public class MenuHandler
         }
     }
 
-    private void AddRemoveContactFromGroup(ContactDTO oldContact)
+    private void AddRemoveContactFromGroup(ContactDTO contact)
     {
-        ContactDTO updatedContact = new();
-        ContactGroupDTO groupSelection = new();
+        //ContactDTO updatedContact = new();
+        ContactGroupDTO? groupSelection = new();
 
-        if (oldContact.ContactGroupName != null)
+        if (contact.ContactGroupName != null)
         {
             if (AnsiConsole.Confirm("Remove from current group? "))
             {
-                updatedContact.ContactGroupName = null;
-            }
-            else
-            {
-                return;
+                // TODO remove from group in better way
+                groupSelection.Name = contact.ContactGroupName;
+                phonebookService.RemoveContactFromGroup(groupSelection, contact.Id);
             }
         }
         else
         {
             if (AnsiConsole.Confirm("Add contact to group? "))
             {
-                // TODO call service layer function that gets list of groups to display in group selection menu
-                //groupSelection = SelectGroup();
-            }
-            else
-            {
-                return;
+                groupSelection = userInput.SelectGroup(phonebookService.FetchGroupList());
+                phonebookService.AddContactToGroup(groupSelection, contact.Id);
             }
         }
-        updatedContact.ContactGroupName = groupSelection.Name;
-        updatedContact.Name = oldContact.Name;
-        updatedContact.PhoneNumber = oldContact.PhoneNumber;
-        updatedContact.Email = oldContact.Email;
-
-        // TODO call service layer update contact 
+        ShowMainMenu();
     }
 
     private void HandleEditContact(ContactDTO oldContact)
     {
         ContactDTO updatedContact = userInput.GetEditedContact(oldContact);
 
-        // TODO pass oldContact to service method to delete ?? (maybe this isn't a good idea since it isn't a true update)
-        // TODO pass updated contact to method to update
+        phonebookService.UpdateContact(updatedContact);
+
+        ShowMainMenu();
     }
 
     private void HandleAddContact()
@@ -166,7 +167,9 @@ public class MenuHandler
         string email = userInput.GetEmail();
         string phoneNumber = userInput.GetPhoneNumber();
 
-        // TODO pass to service layer method
+        phonebookService.AddContact(name, email, phoneNumber);
+
+        ShowMainMenu();
     }
 
     private void HandleGroupMenu()
@@ -204,25 +207,40 @@ public class MenuHandler
 
     private void HandleEditGroup()
     {
-        //ContactGroupDTO groupToEdit = userInput.SelectGroup();
+        ContactGroupDTO groupToEdit = userInput.SelectGroup(phonebookService.FetchGroupList());
         string newName = userInput.GetName();
 
-        // TODO Make sure the name isn't already in use by a group
+        while (phonebookService.CheckForGroupName(newName))
+        {
+            AnsiConsole.MarkupLine("[red]Sorry, this group name is already taken.[red] Each group needs a unique name.");
+            newName = userInput.GetName();
+        }
 
-        throw new NotImplementedException();
+        phonebookService.UpdateGroupName(newName);
+        ShowMainMenu();
     }
 
     private void HandleDeleteGroup()
     {
-        // TODO select group menu then send group to be deleted to service layer
-        throw new NotImplementedException();
+        ContactGroupDTO groupToDelete = userInput.SelectGroup(phonebookService.FetchGroupList());
+        bool deleteRelatedContacts;
+
+        deleteRelatedContacts = AnsiConsole.Confirm($"Delete all contacts in {groupToDelete.Name}? ");
+
+        phonebookService.DeleteGroup(groupToDelete, deleteRelatedContacts);
+        ShowMainMenu();
     }
 
     private void HandleAddGroup()
     {
         string groupName = userInput.GetName();
 
-        // TODO make sure name isn't already in use
-        // TODO pass to service layer method to create group
+        while (phonebookService.CheckForGroupName(groupName))
+        {
+            AnsiConsole.MarkupLine("[red]Sorry, this group name is already taken.[red] Each group needs a unique name.");
+            groupName = userInput.GetName();
+        }
+        phonebookService.AddNewGroup(groupName);
+        ShowMainMenu();
     }
 }

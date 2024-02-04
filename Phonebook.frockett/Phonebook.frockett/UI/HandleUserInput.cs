@@ -50,6 +50,7 @@ public class HandleUserInput
             updatedContact.ContactGroupName = oldContact.ContactGroupName;
         }
 
+        updatedContact.Id = oldContact.Id;
         return updatedContact;
     }
     public string GetPhoneNumber()
@@ -89,12 +90,18 @@ public class HandleUserInput
     {
         AnsiConsole.Clear();
 
+        if (contacts == null) 
+        {
+            AnsiConsole.MarkupLine("No contacts in group. Add some!");
+            return null;
+        }
+
         var selectOptions = new SelectionPrompt<ContactDTO>();
         selectOptions.AddChoice(new ContactDTO { Email = "0" }); // Use what would otherwise be an invalid email to identify the "cancel" button
         selectOptions.AddChoices(contacts);
         selectOptions.UseConverter(contact => (contact.Email == "0" ? "Cancel" : $"{contact.Name} - {contact.PhoneNumber} - {contact.Email}") // if email is 0 it's a cancel button
                                                 + (contact.ContactGroupName != null ? $" - {contact.ContactGroupName}" : "")); // if contact has group name, add it too
-        selectOptions.Title("Select the group using the arrow and enter keys");
+        selectOptions.Title("Select the contact using the arrow and enter keys");
         selectOptions.MoreChoicesText("Keep scrolling for more");
 
         ContactDTO selectedContact = AnsiConsole.Prompt(selectOptions);
@@ -108,7 +115,7 @@ public class HandleUserInput
         var selectOptions = new SelectionPrompt<ContactGroupDTO>();
         selectOptions.AddChoice(new ContactGroupDTO { Name = " " }); // invalid group name is used to identfy the cancel button
         selectOptions.AddChoices(contactGroups);
-        selectOptions.UseConverter(group => (group.Name == "0" ? "Cancel" : $"{group.Name}")); // if email is 0 it's a cancel button 
+        selectOptions.UseConverter(group => (group.Name == " " ? "Cancel" : $"{group.Name}")); // if email is 0 it's a cancel button 
         selectOptions.Title("Select the group using the arrow and enter keys for more options");
         selectOptions.MoreChoicesText("Keep scrolling for more");
 

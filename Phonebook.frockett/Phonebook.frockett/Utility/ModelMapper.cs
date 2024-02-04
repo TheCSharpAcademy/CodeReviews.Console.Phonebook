@@ -44,7 +44,7 @@ public class ModelMapper
         }
     }
 
-    public ContactDTO ToContactDto(Contact contact) 
+    public static ContactDTO ToContactDto(Contact contact) 
     {
         string? groupName = null;
         if (contact.ContactGroup != null)
@@ -58,39 +58,47 @@ public class ModelMapper
             Email = contact.Email,
             PhoneNumber = contact.PhoneNumber,
             ContactGroupName = groupName,
+            Id = contact.ContactId
         };
     }
 
-    public Contact ToContactDomainModel(ContactDTO contactDto)
+    public static Contact ToContactDomainModel(ContactDTO contactDto)
     {
         return new Contact()
         {
             Name = contactDto.Name,
             Email = contactDto.Email,
-            PhoneNumber = contactDto.PhoneNumber
+            PhoneNumber = contactDto.PhoneNumber,
+            ContactId = contactDto.Id
             //ContactGroup = contactDto.ContactGroupName
             // TODO get contact group by searching contact group name from service layer
         };
     }
 
-    public ContactGroupDTO ToGroupDto(ContactGroup contactGroup)
+    public static ContactGroupDTO ToGroupDto(ContactGroup contactGroup)
     {
         ContactGroupDTO contactGroupDTO = new ContactGroupDTO();
         contactGroupDTO.Name = contactGroup.Name;
+        contactGroupDTO.Id = contactGroup.ContactGroupId;
 
-        foreach(Contact contact in contactGroup.Contacts)
+        if (contactGroup.Contacts != null)
         {
-            ContactDTO contactToAdd = ToContactDto(contact);
-            contactGroupDTO.Contacts.Add(contactToAdd);
+            foreach (Contact contact in contactGroup.Contacts)
+            {
+                ContactDTO contactToAdd = ToContactDto(contact);
+                contactGroupDTO.Contacts.Add(contactToAdd);
+            }
         }
+
 
         return contactGroupDTO;
     }
 
-    public ContactGroup ToGroupDomainModel(ContactGroupDTO contactGroupDto)
+    public static ContactGroup ToGroupDomainModel(ContactGroupDTO contactGroupDto)
     {
         ContactGroup contactGroup = new ContactGroup();
         contactGroup.Name = contactGroupDto.Name;
+        contactGroup.ContactGroupId = contactGroupDto.Id;
 
         foreach(ContactDTO contact in contactGroupDto.Contacts)
         {
