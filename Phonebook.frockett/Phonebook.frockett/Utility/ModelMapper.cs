@@ -6,8 +6,8 @@ namespace Phonebook.frockett.Utility;
 public class ModelMapper
 {
     Dictionary<int,int> sequenceMap = new Dictionary<int,int>();
-    int contactSequenceIndex = 0;
-    int groupSequenceIndex = 0;
+    int contactSequenceIndex;
+    int groupSequenceIndex;
 
     public void BuildContactMap(List<Contact> contacts)
     {
