@@ -3,17 +3,17 @@ namespace Phonebook.frockett.UI;
 
 public class InputValidator
 {
-    public bool IsValidName()
+    public bool IsValidName(string name)
     {
         throw new NotImplementedException();
     }
 
-    public bool IsValidEmail()
+    public bool IsValidEmail(string email)
     {
         throw new NotImplementedException();
     }
 
-    public bool IsValidPhoneNumber()
+    public bool IsValidPhoneNumber(string newPhoneNumber)
     {
         throw new NotImplementedException();
     }

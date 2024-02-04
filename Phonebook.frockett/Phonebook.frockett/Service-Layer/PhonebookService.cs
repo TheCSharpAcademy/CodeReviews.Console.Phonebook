@@ -1,5 +1,6 @@
 ﻿
 using Phonebook.frockett.DataLayer;
+using Phonebook.frockett.DTOs;
 
 namespace Phonebook.frockett.Service_Layer;
 
@@ -12,4 +13,8 @@ public class PhonebookService
         this.phoneBookRepository = phoneBookRepository;
     }
 
+    public void DeleteContact(ContactDTO contact)
+    {
+        throw new NotImplementedException();
+    }
 }

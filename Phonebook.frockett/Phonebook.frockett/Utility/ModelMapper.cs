@@ -46,12 +46,18 @@ public class ModelMapper
 
     public ContactDTO ToContactDto(Contact contact) 
     {
+        string? groupName = null;
+        if (contact.ContactGroup != null)
+        {
+            groupName = contact.ContactGroup.Name;
+        }
+
         return new ContactDTO()
         {
             Name = contact.Name,
             Email = contact.Email,
             PhoneNumber = contact.PhoneNumber,
-            ContactGroupName = contact.ContactGroup.Name
+            ContactGroupName = groupName,
         };
     }
 

@@ -13,9 +13,10 @@ internal class Program
 
         var phonebookService = new PhonebookService(phonebookRepository);
 
+        var userInput = new HandleUserInput();
         var inputValidator = new InputValidator();
         var tableEngine = new TableEngine();
-        var menuHandler = new MenuHandler(phonebookService, inputValidator, tableEngine);
+        var menuHandler = new MenuHandler(phonebookService, inputValidator, tableEngine, userInput);
 
         menuHandler.ShowMainMenu();
     }
