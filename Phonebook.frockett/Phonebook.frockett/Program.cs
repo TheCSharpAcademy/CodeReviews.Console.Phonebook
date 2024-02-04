@@ -13,8 +13,9 @@ internal class Program
 
         var phonebookService = new PhonebookService(phonebookRepository);
 
-        var userInput = new HandleUserInput();
+        
         var inputValidator = new InputValidator();
+        var userInput = new HandleUserInput(inputValidator);
         var tableEngine = new TableEngine();
         var menuHandler = new MenuHandler(phonebookService, inputValidator, tableEngine, userInput);
 

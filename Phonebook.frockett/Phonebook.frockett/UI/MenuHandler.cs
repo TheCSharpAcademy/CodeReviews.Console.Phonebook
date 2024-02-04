@@ -102,10 +102,10 @@ public class MenuHandler
         switch (menuSelection)
         {
             case 1:
-                EditContact(contact);
+                HandleEditContact(contact);
                 break;
             case 2:
-                AddRemoveGroup(contact);
+                AddRemoveContactFromGroup(contact);
                 break;
             case 3:
                 phonebookService.DeleteContact(contact);
@@ -116,7 +116,7 @@ public class MenuHandler
         }
     }
 
-    private void AddRemoveGroup(ContactDTO oldContact)
+    private void AddRemoveContactFromGroup(ContactDTO oldContact)
     {
         ContactDTO updatedContact = new();
         ContactGroupDTO groupSelection = new();
@@ -136,6 +136,7 @@ public class MenuHandler
         {
             if (AnsiConsole.Confirm("Add contact to group? "))
             {
+                // TODO call service layer function that gets list of groups to display in group selection menu
                 //groupSelection = SelectGroup();
             }
             else
@@ -143,93 +144,29 @@ public class MenuHandler
                 return;
             }
         }
-
         updatedContact.ContactGroupName = groupSelection.Name;
         updatedContact.Name = oldContact.Name;
         updatedContact.PhoneNumber = oldContact.PhoneNumber;
         updatedContact.Email = oldContact.Email;
+
+        // TODO call service layer update contact 
     }
 
-    private void EditContact(ContactDTO oldContact)
+    private void HandleEditContact(ContactDTO oldContact)
     {
-        ContactDTO updatedContact = new();
+        ContactDTO updatedContact = userInput.GetEditedContact(oldContact);
 
-        if (AnsiConsole.Confirm("Replace name? ")) 
-        {
-            updatedContact.Name = GetName();
-        }
-        else
-        {
-            updatedContact.Name = oldContact.Name;
-        }
-
-        if (AnsiConsole.Confirm("Edit email? "))
-        {
-            updatedContact.Email = GetEmail();
-        }
-        else
-        {
-            updatedContact.Email = oldContact.Email;
-        }
-
-        if (AnsiConsole.Confirm("Edit phone number? "))
-        {
-            updatedContact.PhoneNumber = GetPhoneNumber();
-        }
-        else
-        {
-            updatedContact.PhoneNumber = oldContact.PhoneNumber;
-        }
-
-        if (oldContact.ContactGroupName != null)
-        {
-            updatedContact.ContactGroupName = oldContact.ContactGroupName;
-        }
-
-        // todo pass oldContact to service method to delete ?? (maybe this isn't a good idea since it isn't a true update)
+        // TODO pass oldContact to service method to delete ?? (maybe this isn't a good idea since it isn't a true update)
         // TODO pass updated contact to method to update
     }
 
     private void HandleAddContact()
     {
-        string name = GetName();
-        string email = GetEmail();
-        string phoneNumber = GetPhoneNumber();
+        string name = userInput.GetName();
+        string email = userInput.GetEmail();
+        string phoneNumber = userInput.GetPhoneNumber();
 
         // TODO pass to service layer method
-    }
-
-    private string GetPhoneNumber()
-    {
-        string newPhoneNumber = AnsiConsole.Ask<string>("Enter the contact's phone number (Format 0123456789 or 012-345-6789): ");
-        while (!validator.IsValidPhoneNumber(newPhoneNumber))
-        {
-            newPhoneNumber = AnsiConsole.Ask<string>($"{newPhoneNumber} is not a valid number. Use format 0123456789 or 012-345-6789. Enter number: ");
-        }
-
-        return newPhoneNumber;
-    }
-
-    private string GetEmail()
-    {
-        string newEmail = AnsiConsole.Ask<string>("Enter the contact's email: ");
-        while (!validator.IsValidEmail(newEmail))
-        {
-            newEmail = AnsiConsole.Ask<string>($"{newEmail} is not a valid email. Use the full address, ex. user@domain.com. Enter email: ");
-        }
-
-        return newEmail;
-    }
-
-    private string GetName()
-    {
-        string newName = AnsiConsole.Ask<string>("Enter the contact's name: ");
-        while (!validator.IsValidName(newName))
-        {
-            newName = AnsiConsole.Ask<string>($"{newName} is not a valid name. Name can't be null or empty. Enter a valid name: ");
-        }
-
-        return newName;
     }
 
     private void HandleGroupMenu()
@@ -251,50 +188,41 @@ public class MenuHandler
         switch (menuSelection)
         {
             case 1:
-                //HandleAddGroup();
+                HandleAddGroup();
                 break;
             case 2:
-                //HandleDeleteGroup();
+                HandleDeleteGroup();
                 break;
             case 3:
-                //HandleEditGroup();
+                HandleEditGroup();
                 break;
             case 4:
-                Environment.Exit(0);
+                ShowMainMenu();
                 break;
         }
     }
 
-
-    private ContactDTO SelectContact(List<ContactDTO> contacts)
+    private void HandleEditGroup()
     {
-        AnsiConsole.Clear();
+        //ContactGroupDTO groupToEdit = userInput.SelectGroup();
+        string newName = userInput.GetName();
 
-        var selectOptions = new SelectionPrompt<ContactDTO>();
-        selectOptions.AddChoice(new ContactDTO { Email = "0" }); // Use what would otherwise be an invalid email to identify the "cancel" button
-        selectOptions.AddChoices(contacts);
-        selectOptions.UseConverter(contact => (contact.Email == "0" ? "Cancel" : $"{contact.Name} - {contact.PhoneNumber} - {contact.Email}") // if email is 0 it's a cancel button
-                                                + (contact.ContactGroupName != null ? $" - {contact.ContactGroupName}" : "")); // if contact has group name, add it too
-        selectOptions.Title("Select the group using the arrow and enter keys");
-        selectOptions.MoreChoicesText("Keep scrolling for more");
+        // TODO Make sure the name isn't already in use by a group
 
-        ContactDTO selectedContact = AnsiConsole.Prompt(selectOptions);
-
-        return selectedContact;
+        throw new NotImplementedException();
     }
 
-    private ContactGroupDTO SelectGroup(List<ContactGroupDTO> contactGroups)
+    private void HandleDeleteGroup()
     {
-        AnsiConsole.Clear();
-        var selectOptions = new SelectionPrompt<ContactGroupDTO>();
-        selectOptions.AddChoice(new ContactGroupDTO { Name = " " }); // invalid group name is used to identfy the cancel button
-        selectOptions.AddChoices(contactGroups);
-        selectOptions.UseConverter(group => (group.Name == "0" ? "Cancel" : $"{group.Name}")); // if email is 0 it's a cancel button 
-        selectOptions.Title("Select the group using the arrow and enter keys for more options");
-        selectOptions.MoreChoicesText("Keep scrolling for more");
+        // TODO select group menu then send group to be deleted to service layer
+        throw new NotImplementedException();
+    }
 
-        ContactGroupDTO selectedGroup = AnsiConsole.Prompt(selectOptions);
+    private void HandleAddGroup()
+    {
+        string groupName = userInput.GetName();
 
-        return selectedGroup;
+        // TODO make sure name isn't already in use
+        // TODO pass to service layer method to create group
     }
 }
