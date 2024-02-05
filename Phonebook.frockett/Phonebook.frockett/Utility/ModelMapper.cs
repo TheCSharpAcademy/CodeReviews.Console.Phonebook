@@ -5,45 +5,6 @@ namespace Phonebook.frockett.Utility;
 
 public class ModelMapper
 {
-    Dictionary<int,int> sequenceMap = new Dictionary<int,int>();
-    int contactSequenceIndex;
-    int groupSequenceIndex;
-
-    public void BuildContactMap(List<Contact> contacts)
-    {
-        foreach (Contact contact in contacts)
-        {
-            sequenceMap.Add(contactSequenceIndex, contact.ContactId); 
-            contactSequenceIndex++;
-        }
-    }
-
-    public void BuildGroupMap(List<ContactGroup> contactGroups)
-    {
-        foreach (ContactGroup contactGroup in contactGroups)
-        {
-            sequenceMap.Add(groupSequenceIndex, contactGroup.ContactGroupId); 
-            groupSequenceIndex++;
-        }
-    }
-
-    public int GetIdFromMap(int sequenceIndex)
-    {
-        int id;
-
-        if (sequenceMap.ContainsKey(sequenceIndex))
-        {
-            id = sequenceMap[sequenceIndex];
-            sequenceMap.Clear();
-            return id;
-        }
-        else
-        {
-            sequenceMap.Clear();
-            return -1;
-        }
-    }
-
     public static ContactDTO ToContactDto(Contact contact) 
     {
         string? groupName = null;
