@@ -49,16 +49,19 @@ public class PhoneBookRepository
             contactToUpdate.PhoneNumber = contact.PhoneNumber;
             _context.SaveChanges();
         }
-        else if (contact.Email != null)
+        
+        if (contact.Email != null)
         {
             contactToUpdate.Email = contact.Email;
             _context.SaveChanges();
         }
-        else if (contact.Name != null)
+        
+        if (contact.Name != null)
         {
             contactToUpdate.Name = contact.Name;
             _context.SaveChanges();
         }
+
         return contactToUpdate;
     }
 
