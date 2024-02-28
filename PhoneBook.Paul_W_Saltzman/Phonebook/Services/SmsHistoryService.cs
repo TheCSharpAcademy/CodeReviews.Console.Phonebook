@@ -94,7 +94,7 @@ internal class SmsHistoryService
         List<int> ids = new List<int>();
         foreach (SmsHistory text in smsHistory)
         {
-            ids.Add(text.SMSHistoryId);
+            ids.Add(text.SmsHistoryId);
         }
         return ids;
     }
@@ -120,7 +120,7 @@ internal class SmsHistoryService
             {
                 string truncatedText = $"{text.Body}".Substring(0, Math.Min(15, $"{text.Body}".Length));
 
-                table.AddRow($@"{text.SMSHistoryId}",
+                table.AddRow($@"{text.SmsHistoryId}",
                                     $@"{text.ContactName}",
                                     $@"{text.ToNumber}",
                                     $@"{truncatedText}",

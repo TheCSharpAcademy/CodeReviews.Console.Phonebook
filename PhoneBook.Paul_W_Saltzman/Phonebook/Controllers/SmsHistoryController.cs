@@ -16,7 +16,7 @@ internal class SmsHistoryController
         using var db = new PhonebookContext();
 
         var singleSms = db.SmsHistory
-                           .FirstOrDefault(eh => eh.SMSHistoryId == id);
+                           .FirstOrDefault(eh => eh.SmsHistoryId == id);
 
         return singleSms;
     }
