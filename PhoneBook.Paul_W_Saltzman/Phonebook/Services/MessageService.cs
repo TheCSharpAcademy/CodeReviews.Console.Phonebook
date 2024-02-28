@@ -1,9 +1,8 @@
 ﻿using Phonebook.Controllers;
 using Phonebook.Models;
 using Spectre.Console;
-using System.Configuration;
-using System.Net;
 using System.Net.Mail;
+using System.Net;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using static Phonebook.Models.Enums;
@@ -34,11 +33,11 @@ internal class MessageService
                 return;
             }
             Phone phoneToText = PhoneService.GetPhoneOptionInput(contact);
-            SMSBuilder(phoneToText, contact);
+            SmsBuilder(phoneToText, contact);
         }
     }
 
-    private static void SMSBuilder(Phone phoneToText, Contact contact)
+    private static void SmsBuilder(Phone phoneToText, Contact contact)
     {
         string smsBody = AnsiConsole.Prompt(
         new TextPrompt<string>("SMS Message:")
@@ -57,7 +56,7 @@ internal class MessageService
         bool inMenu = true;
         while (inMenu)
         {
-            ViewSMS(phoneToText, contact, smsBody);
+            ViewSms(phoneToText, contact, smsBody);
             var option = AnsiConsole.Prompt(
                 new SelectionPrompt<SendMenu>()
                 .Title("What would you like to do?")
@@ -130,7 +129,7 @@ internal class MessageService
     {
         string name = $@"{contact.FirstName} {contact.LastName}";
 
-        SMSHistory sentSms = new SMSHistory();
+        SmsHistory sentSms = new SmsHistory();
         sentSms.MessageSid = "not sent";
         sentSms.ContactName = name;
         sentSms.ToNumber = phoneToText.ToString();
@@ -144,7 +143,7 @@ internal class MessageService
     {
         string name = $@"{contact.FirstName} {contact.LastName}";
 
-        SMSHistory sentSms = new SMSHistory();
+        SmsHistory sentSms = new SmsHistory();
         sentSms.MessageSid = message.Sid;
         sentSms.ContactName = name;
         sentSms.ToNumber = message.To;
@@ -156,22 +155,21 @@ internal class MessageService
 
     private static void EmailBuilder(Email emailToEmail, Contact contact)
     {
-        string fromMail = ConfigurationManager.AppSettings.Get("fromMail");
-        string fromPassword = ConfigurationManager.AppSettings.Get("fromPassword");
+        Settings settings = SettingsController.GetSettings();
 
         MailMessage emailMessage = new MailMessage();
-        emailMessage.From = new MailAddress(fromMail);
+        emailMessage.From = new MailAddress(settings.FromMail);
         emailMessage.To.Add(new MailAddress(emailToEmail.EmailAddress));
         emailMessage.Subject = AnsiConsole.Ask<string>("Subject:");
         string body = AnsiConsole.Ask<string>("Email Message Body:");
-        emailMessage.Body = $@"<html><body> {body} <body></html>";
+        emailMessage.Body = $@"<html><body> {body} </body></html>";
         emailMessage.IsBodyHtml = true;
 
 
         bool inMenu = true;
         while (inMenu)
         {
-            ViewEmail(emailMessage, body);
+            ViewEmail(emailMessage);
             var option = AnsiConsole.Prompt(
                 new SelectionPrompt<SendMenu>()
                 .Title("What would you like to do?")
@@ -191,7 +189,7 @@ internal class MessageService
                     emailMessage = EditEmail(emailMessage);
                     break;
                 case SendMenu.Discard:
-                    return;
+                    inMenu = false;
                     break;
             }
         }
@@ -219,11 +217,9 @@ internal class MessageService
             : emailMessage.Body;
 
         emailMessage.Body = EmailServices.RemoveHtmlTags(emailMessage.Body);
-        string body = emailMessage.Body;
-        emailMessage.Body = $@"<html><body> {emailMessage.Body} <body></html>";
+        emailMessage.Body = $@"<html><body> {emailMessage.Body} </body></html>";
 
         return emailMessage;
-
     }
 
     private static void EmailSave(MailMessage emailMessage, Contact contact)
@@ -233,7 +229,7 @@ internal class MessageService
         emailHistory.ToEmail = emailMessage.To.ToString();
         emailHistory.SentTS = DateTime.Now;
         emailHistory.Subject = emailMessage.Subject;
-        emailHistory.EmailBody = emailMessage.Body;
+        emailHistory.EmailBody = EmailServices.RemoveHtmlTags(emailMessage.Body);
 
         EmailHistoryController.AddEmailHistory(emailHistory);
 
@@ -272,7 +268,7 @@ internal class MessageService
         }
     }
 
-    private static void ViewSMS(Phone phoneToText, Contact contact, string smsBody)
+    private static void ViewSms(Phone phoneToText, Contact contact, string smsBody)
     {
         Console.Clear();
 
@@ -286,8 +282,9 @@ internal class MessageService
 
         AnsiConsole.Write(table);
     }
-    private static void ViewEmail(MailMessage emailMessage, string body)
+    private static void ViewEmail(MailMessage emailMessage)
     {
+        emailMessage.Body = EmailServices.RemoveHtmlTags(emailMessage.Body);
         Console.Clear();
 
 
@@ -295,7 +292,7 @@ internal class MessageService
             .AddColumn($@"Email")
             .AddRow(new Panel($@"To: {emailMessage.To}"))
             .AddRow(new Panel($@"Subject: {emailMessage.Subject}"))
-            .AddRow(new Panel($@"Body: {body}"))
+            .AddRow(new Panel($@"Body: {emailMessage.Body}"))
             .Width(60)
             .HideHeaders();
 

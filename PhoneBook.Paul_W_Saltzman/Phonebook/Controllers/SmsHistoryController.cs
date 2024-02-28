@@ -4,30 +4,30 @@ namespace Phonebook.Controllers;
 
 internal class SmsHistoryController
 {
-    internal static void AddSmsHistory(SMSHistory newSmsHistory)
+    internal static void AddSmsHistory(SmsHistory newSmsHistory)
     {
         using var db = new PhonebookContext();
         db.Add(newSmsHistory);
         db.SaveChanges();
     }
 
-    internal static SMSHistory GetSingleSmsById(int id)
+    internal static SmsHistory GetSingleSmsById(int id)
     {
         using var db = new PhonebookContext();
 
-        var singleSms = db.SMSHistory
+        var singleSms = db.SmsHistory
                            .FirstOrDefault(eh => eh.SMSHistoryId == id);
 
         return singleSms;
     }
 
-    internal static List<SMSHistory> GetSmsHistory()
+    internal static List<SmsHistory> GetSmsHistory()
     {
         try 
         { 
             using var db = new PhonebookContext();
 
-            var smsHistory = db.SMSHistory.ToList();
+            var smsHistory = db.SmsHistory.ToList();
             return smsHistory;
         }
         catch (Exception ex)

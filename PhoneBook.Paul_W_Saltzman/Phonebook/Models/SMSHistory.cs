@@ -2,7 +2,7 @@
 
 namespace Phonebook.Models;
 
-internal class SMSHistory
+internal class SmsHistory
 {
     [Key]
     public int SMSHistoryId { get; set; }

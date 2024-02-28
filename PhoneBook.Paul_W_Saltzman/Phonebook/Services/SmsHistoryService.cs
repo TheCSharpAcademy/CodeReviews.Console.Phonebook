@@ -32,7 +32,7 @@ internal class SmsHistoryService
                 {
                     case SmsHistoryMenu.ViewSingleText:
                         int id = PickTextHistory();
-                        SMSHistory smsToView = SmsHistoryController.GetSingleSmsById(id);
+                        SmsHistory smsToView = SmsHistoryController.GetSingleSmsById(id);
                         ShowSingleSmsHistory(smsToView);
                         Console.WriteLine("Press any key to continue");
                         Console.ReadKey();
@@ -45,7 +45,7 @@ internal class SmsHistoryService
         }
     }
 
-    private static void ShowSingleSmsHistory(SMSHistory smsToView)
+    private static void ShowSingleSmsHistory(SmsHistory smsToView)
     {
         Console.Clear();
 
@@ -92,16 +92,16 @@ internal class SmsHistoryService
     {
         var smsHistory = SmsHistoryController.GetSmsHistory();
         List<int> ids = new List<int>();
-        foreach (SMSHistory text in smsHistory)
+        foreach (SmsHistory text in smsHistory)
         {
             ids.Add(text.SMSHistoryId);
         }
         return ids;
     }
 
-    private static List<SMSHistory> ShowSmsHistoryTable()
+    private static List<SmsHistory> ShowSmsHistoryTable()
     {
-        List<SMSHistory> smsHistory = SmsHistoryController.GetSmsHistory();
+        List<SmsHistory> smsHistory = SmsHistoryController.GetSmsHistory();
 
         if (smsHistory == null)
         {
@@ -116,7 +116,7 @@ internal class SmsHistoryService
             table.AddColumns("ID", "Contact", "To Number","Message", "Sent");
 
 
-            foreach (SMSHistory text in smsHistory)
+            foreach (SmsHistory text in smsHistory)
             {
                 string truncatedText = $"{text.Body}".Substring(0, Math.Min(15, $"{text.Body}".Length));
 

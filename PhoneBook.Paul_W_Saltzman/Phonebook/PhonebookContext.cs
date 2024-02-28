@@ -9,7 +9,7 @@ internal class PhonebookContext: DbContext
     public DbSet<Email> Emails { get; set; }
     public DbSet<Phone> PhoneNumbers { get; set; }
     public DbSet<EmailHistory> EmailHistory { get; set; }
-    public DbSet<SMSHistory> SMSHistory { get; set; }
+    public DbSet<SmsHistory> SmsHistory { get; set; }
     public DbSet<Settings> Settings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
