@@ -8,7 +8,7 @@ namespace PhoneBook_CRUD
     {
         public static void MainMenu()
         {
-            
+
             bool isRunning = true;
 
             while (isRunning)

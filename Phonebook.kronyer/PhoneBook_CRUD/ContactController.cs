@@ -1,11 +1,5 @@
 ﻿using Spectre.Console;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace PhoneBook_CRUD
 {
@@ -46,7 +40,7 @@ namespace PhoneBook_CRUD
                 Console.BackgroundColor = Color.Black;
                 Console.Clear();
 
-                UserInterface.MainMenu(); 
+                UserInterface.MainMenu();
             }
 
             if (!string.IsNullOrEmpty(newContact.PhoneNumber) && !new PhoneAttribute().IsValid(newContact.PhoneNumber))

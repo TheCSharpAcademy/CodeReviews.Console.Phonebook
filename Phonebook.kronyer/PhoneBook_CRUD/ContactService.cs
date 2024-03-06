@@ -1,7 +1,4 @@
 ﻿using Spectre.Console;
-using System.Net;
-using System.Net.Mail;
-using System.Reflection;
 
 namespace PhoneBook_CRUD
 {
