@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PhoneBook_CRUD
 {
-    //controller é so contato com a db
     internal class ContactController
     {
         internal static void AddContact(string name, string email, string phoneNumber)
@@ -27,9 +26,9 @@ namespace PhoneBook_CRUD
                 Console.BackgroundColor = Color.Black;
                 Console.Clear();
 
-
                 UserInterface.MainMenu();
             }
+
             if (!string.IsNullOrEmpty(newContact.Email) && !new EmailAddressAttribute().IsValid(newContact.Email))
             {
                 Console.ForegroundColor = ConsoleColor.Black;
@@ -64,7 +63,6 @@ namespace PhoneBook_CRUD
         internal static void DeleteContact(Contacts contact)
         {
             using var db = new ContactsContext();
-            // if doido aqui para are you sure?
 
             db.Remove(contact);
             db.SaveChanges();
@@ -72,7 +70,6 @@ namespace PhoneBook_CRUD
 
         internal static Contacts SearchContactById(int id)
         {
-
             using var db = new ContactsContext();
             var contact = db.Contacts.FirstOrDefault(x => x.Id == id);
 
@@ -103,18 +100,20 @@ Phone: {contact.PhoneNumber}");
             Console.Clear();
         }
 
-        internal static void UpdateContact(string name, string email, string phoneNumber)
+        internal static void UpdateContact(Contacts contact, string name, string email, string phoneNumber)
         {
+            using var db = new ContactsContext();
+            var existingContact = contact;
             Console.Clear();
-            var newContact = new Contacts { Name = name, Email = email, PhoneNumber = phoneNumber };
 
-            if (string.IsNullOrWhiteSpace(newContact.Name))
+
+            if (string.IsNullOrWhiteSpace(existingContact.Name))
             {
-                Console.WriteLine("O nome é obrigatório.");
+                Console.WriteLine("Name is required...");
                 return;
             }
 
-            if (!string.IsNullOrEmpty(newContact.Email) && !new EmailAddressAttribute().IsValid(newContact.Email) && !string.IsNullOrEmpty(newContact.PhoneNumber) && !new PhoneAttribute().IsValid(newContact.PhoneNumber))
+            if (!string.IsNullOrEmpty(email) && !new EmailAddressAttribute().IsValid(email) && !string.IsNullOrEmpty(phoneNumber) && !new PhoneAttribute().IsValid(phoneNumber))
             {
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = Color.White;
@@ -124,10 +123,10 @@ Phone: {contact.PhoneNumber}");
                 Console.BackgroundColor = Color.Black;
                 Console.Clear();
 
-
                 UserInterface.MainMenu();
             }
-            if (!string.IsNullOrEmpty(newContact.Email) && !new EmailAddressAttribute().IsValid(newContact.Email))
+
+            if (!string.IsNullOrEmpty(email) && !new EmailAddressAttribute().IsValid(email))
             {
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = Color.White;
@@ -140,7 +139,7 @@ Phone: {contact.PhoneNumber}");
                 UserInterface.MainMenu();
             }
 
-            if (!string.IsNullOrEmpty(newContact.PhoneNumber) && !new PhoneAttribute().IsValid(newContact.PhoneNumber))
+            if (!string.IsNullOrEmpty(phoneNumber) && !new PhoneAttribute().IsValid(phoneNumber))
             {
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = Color.White;
@@ -153,9 +152,11 @@ Phone: {contact.PhoneNumber}");
                 UserInterface.MainMenu();
             }
 
+            existingContact.PhoneNumber = phoneNumber;
+            existingContact.Email = email;
+            existingContact.Name = name;
 
-            using var db = new ContactsContext();
-            db.Update(newContact);
+            db.Update(existingContact);
             db.SaveChanges();
         }
     }

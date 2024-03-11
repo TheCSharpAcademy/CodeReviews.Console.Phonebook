@@ -6,8 +6,6 @@ namespace PhoneBook_CRUD
     {
         public DbSet<Contacts> Contacts { get; set; }
 
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlite($"Data Source = contacts.db");
-
     }
 }

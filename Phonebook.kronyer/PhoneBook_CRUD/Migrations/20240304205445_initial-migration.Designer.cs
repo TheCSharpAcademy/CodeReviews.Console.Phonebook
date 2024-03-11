@@ -11,7 +11,7 @@ namespace PhoneBook_CRUD.Migrations
 {
     [DbContext(typeof(ContactsContext))]
     [Migration("20240304205445_initial-migration")]
-    partial class InitialMigration
+    partial class initialmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
