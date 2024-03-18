@@ -30,10 +30,16 @@ This project is a simple phonebook application that allows you to manage your co
 
 ## Examples
 - Main Menu  
-- Manage Contacts    
+![image](https://github.com/Dejmenek/CodeReviews.Console.Phonebook/assets/83865666/d4694f26-4c45-497d-ae6c-cef7c3f4e6a6)
+- Manage Contacts  
+![image](https://github.com/Dejmenek/CodeReviews.Console.Phonebook/assets/83865666/146e4c22-9a9c-4c07-b42a-6eda71d93a0d)
 - Manage Categories  
-- View Contacts 
+![image](https://github.com/Dejmenek/CodeReviews.Console.Phonebook/assets/83865666/a230f519-9853-4e34-96fa-e06110eda950)
+- View Contacts  
+![image](https://github.com/Dejmenek/CodeReviews.Console.Phonebook/assets/83865666/3e52b12c-a9f4-4034-a43d-856039c06054)
 - View Contacts by Category  
+![image](https://github.com/Dejmenek/CodeReviews.Console.Phonebook/assets/83865666/fa4e654a-17a3-44b6-a86d-533218c4210c)
+
 
 ## Instalation and Setup
 1. Clone or download this project repository.
@@ -61,14 +67,14 @@ This project is a simple phonebook application that allows you to manage your co
 ## Challenges
 - [x] Create a functionality that allows users to add the contact's e-mail address and send an e-mail message from the app.
 - [x] Expand the app by creating categories of contacts (i.e. Family, Friends, Work, etc).
-- [] What if you want to send not only e-mails but SMS?
+- [ ] What if you want to send not only e-mails but SMS?
 
 ## Things Learned
 While working on this project, I've spent some time to learn about Entity Framework Core and LINQ
-(I learned some syntax and practised with exercises on filtering, grouping, joining and projecting data).
-For validating phone numbers I've used [libphonenumber-csharp](https://github.com/twcclegg/libphonenumber-csharp) library, because there is so many things to consider when validating phone numbers. 
+(I learned some syntax and practised with exercises on filtering, grouping, joining and projecting data).  
+For validating phone numbers I've used [libphonenumber-csharp](https://github.com/twcclegg/libphonenumber-csharp) library, because there is so many things to consider when validating phone numbers.
 There is no need to reinvent the wheel. Whereas for sending emails I've used Gmail's SMTP server.
 
 ## Used Resources
-- [Entity Framework Core Tutorial](https://www.youtube.com/watch?v=SryQxUeChMc&list=PLdo4fOcmZ0oX7uTkjYwvCJDG2qhcSzwZ6)
+- [Entity Framework Core Tutorial](https://www.youtube.com/watch?v=SryQxUeChMc&list=PLdo4fOcmZ0oX7uTkjYwvCJDG2qhcSzwZ6) used to learn how to setup Entity Framework Core and use CRUD operations with it
 - [LINQ Tutorial](https://www.tutorialsteacher.com/linq) used to learn syntax and practise with exercises
