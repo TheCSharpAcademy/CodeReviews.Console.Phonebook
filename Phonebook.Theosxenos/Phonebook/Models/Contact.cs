@@ -1,5 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Phonebook.Models;
 
+[Index(nameof(Name), nameof(Email), nameof(PhoneNumber), IsUnique = true)]
 public class Contact
 {
     public int Id { get; set; }

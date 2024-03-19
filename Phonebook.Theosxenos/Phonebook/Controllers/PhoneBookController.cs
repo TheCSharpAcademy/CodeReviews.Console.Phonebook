@@ -50,14 +50,13 @@ public class PhoneBookController
 
             var contact = view.ShowMenu(contacts);
 
-            var contactName = view.GetContactName(contact.Name);
-            var email = view.GetContactEmail(contact.Email);
-            var phoneNumber = view.GetPhoneNumber(contact.PhoneNumber);
+            contact.Name = view.GetContactName(contact.Name);
+            contact.Email = view.GetContactEmail(contact.Email);
+            contact.PhoneNumber = view.GetPhoneNumber(contact.PhoneNumber);
 
             try
             {
-                repository.UpdateContact(new Contact
-                    { Id = contact.Id, Name = contactName, Email = email, PhoneNumber = phoneNumber });
+                repository.UpdateContact(contact);
                 retry = false;
             }
             catch (ArgumentException e)

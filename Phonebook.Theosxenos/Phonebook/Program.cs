@@ -15,8 +15,10 @@ var mainMenu = new Dictionary<string, Action>
     ["Exit"] = () => runApp = false
 };
 
-using PhoneBookContext db = new();
-db.Database.EnsureCreated();
+using (PhoneBookContext db = new())
+{
+    db.Database.EnsureCreated();
+}
 
 AnsiConsole.Write(new FigletText("Phone Book").Color(Color.Yellow2));
 while (runApp)
