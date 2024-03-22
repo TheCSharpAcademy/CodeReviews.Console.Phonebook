@@ -24,12 +24,13 @@ public class UserInteractionService
             );
     }
 
-    public string GetCategory(List<CategoryDTO> categories)
+    public Category GetCategory(List<Category> categories)
     {
         return AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
+                new SelectionPrompt<Category>()
                     .Title("Select contact's category")
-                    .AddChoices(categories.Select(c => c.Name))
+                    .UseConverter(category => $"{category.Name}")
+                    .AddChoices(categories)
             );
     }
 
@@ -93,14 +94,14 @@ public class UserInteractionService
         return AnsiConsole.Confirm(title);
     }
 
-    public string GetContact(List<ContactDTO> contacts)
+    public Contact GetContact(List<Contact> contacts)
     {
-        string chosenContact = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
+        return AnsiConsole.Prompt(
+                new SelectionPrompt<Contact>()
                     .Title("Select your contact")
-                    .AddChoices(contacts.Select(c => $"{c.Name} {c.PhoneNumber}"))
+                    .UseConverter(contact => $"{contact.Name} {contact.PhoneNumber}")
+                    .AddChoices(contacts)
             );
-        return chosenContact.Split(' ')[1];
     }
 
     public MenuOptions GetMenuOption()

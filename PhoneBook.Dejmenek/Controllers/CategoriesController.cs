@@ -67,8 +67,7 @@ public class CategoriesController
             return null;
         }
 
-        string contactName = _userInteractionService.GetCategory(Mapper.ToCategoryDTOs(categories));
-        Category chosenCategory = categories.Single(c => c.Name == contactName);
+        Category chosenCategory = _userInteractionService.GetCategory(categories);
 
         return chosenCategory;
     }

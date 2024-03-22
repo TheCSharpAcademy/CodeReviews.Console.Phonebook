@@ -40,8 +40,8 @@ public class ContactsController
             }
             else
             {
-                string? categoryName = _userInteractionService.GetCategory(Mapper.ToCategoryDTOs(categories));
-                categoryId = categories.Single(c => c.Name == categoryName).Id;
+                Category chosenCategory = _userInteractionService.GetCategory(categories);
+                categoryId = chosenCategory.Id;
             }
         }
 
@@ -92,8 +92,7 @@ public class ContactsController
             }
             else
             {
-                string categoryName = _userInteractionService.GetCategory(Mapper.ToCategoryDTOs(categories));
-                Category chosenCategory = categories.Single(c => c.Name == categoryName);
+                Category chosenCategory = _userInteractionService.GetCategory(categories);
 
                 contactToUpdate.CategoryId = chosenCategory.Id;
             }
@@ -141,10 +140,9 @@ public class ContactsController
             return [];
         }
 
-        string categoryName = _userInteractionService.GetCategory(Mapper.ToCategoryDTOs(categories));
-        int categoryId = categories.Single(cat => cat.Name == categoryName).Id;
+        Category chosenCategory = _userInteractionService.GetCategory(categories);
 
-        var contacts = _contactsRepository.GetContactsByCategory(categoryId);
+        var contacts = _contactsRepository.GetContactsByCategory(chosenCategory.Id);
 
         if (contacts.Count == 0)
         {
@@ -163,8 +161,7 @@ public class ContactsController
             return null;
         }
 
-        string contactPhoneNumber = _userInteractionService.GetContact(Mapper.ToContactDTOs(contacts));
-        Contact chosenContact = contacts.Single(c => c.PhoneNumber == contactPhoneNumber);
+        Contact chosenContact = _userInteractionService.GetContact(contacts);
 
         return chosenContact;
     }
