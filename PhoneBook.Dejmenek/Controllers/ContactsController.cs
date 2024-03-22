@@ -70,9 +70,9 @@ public class ContactsController
 
     public void UpdateContact()
     {
-        Contact contactToUpdate = GetContact();
+        Contact? contactToUpdate = GetContact();
 
-        if (ContactNotExist(contactToUpdate))
+        if (contactToUpdate is null)
         {
             AnsiConsole.MarkupLine("There are currently no contacts available. Please create some contacts before updating a contact.");
             return;
@@ -121,9 +121,9 @@ public class ContactsController
 
     public void DeleteContact()
     {
-        Contact contactToDelete = GetContact();
+        Contact? contactToDelete = GetContact();
 
-        if (ContactNotExist(contactToDelete))
+        if (contactToDelete is null)
         {
             AnsiConsole.MarkupLine("There are currently no contacts available. Please create some contacts before deleting a contact.");
             return;
@@ -154,13 +154,13 @@ public class ContactsController
         return Mapper.ToContactDTOs(contacts);
     }
 
-    public Contact GetContact()
+    public Contact? GetContact()
     {
         List<Contact> contacts = _contactsRepository.GetAllContacts();
 
         if (contacts.Count == 0)
         {
-            return new Contact { Id = 0, Name = "No Contact Found" };
+            return null;
         }
 
         string contactPhoneNumber = _userInteractionService.GetContact(Mapper.ToContactDTOs(contacts));
@@ -183,25 +183,20 @@ public class ContactsController
 
     public void SendEmail()
     {
-        Contact contact = GetContact();
+        Contact? contact = GetContact();
 
-        if (contact.Email is not null)
+        if (contact is null)
+        {
+            AnsiConsole.MarkupLine("There are currently no contacts available. Please create some contacts before sending an email to one of them.");
+        }
+        else if (contact.Email is not null)
         {
             _sendEmailService.Setup();
             _sendEmailService.SendEmail(contact.Email);
-        }
-        else if (ContactNotExist(contact))
-        {
-            AnsiConsole.MarkupLine("There are currently no contacts available. Please create some contacts before sending an email to one of them.");
         }
         else
         {
             AnsiConsole.MarkupLine("Chosen contact doesn't have setted email");
         }
-    }
-
-    public bool ContactNotExist(Contact contact)
-    {
-        return contact.Id == 0 && contact.Name == "No Contact Found";
     }
 }

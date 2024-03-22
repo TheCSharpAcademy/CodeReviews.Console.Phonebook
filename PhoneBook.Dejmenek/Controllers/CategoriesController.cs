@@ -37,9 +37,9 @@ public class CategoriesController
 
     public void UpdateCategory()
     {
-        Category categoryToUpdate = GetCategory();
+        Category? categoryToUpdate = GetCategory();
 
-        if (CategoryNotExist(categoryToUpdate))
+        if (categoryToUpdate is null)
         {
             AnsiConsole.MarkupLine("There are currently no categories available. Please create some categories before updating a category.");
             return;
@@ -58,13 +58,13 @@ public class CategoriesController
         _categoriesRepository.UpdateCategory(categoryToUpdate);
     }
 
-    public Category GetCategory()
+    public Category? GetCategory()
     {
         List<Category> categories = _categoriesRepository.GetCategories();
 
         if (categories.Count == 0)
         {
-            return new Category { Id = 0, Name = "No Category Found" };
+            return null;
         }
 
         string contactName = _userInteractionService.GetCategory(Mapper.ToCategoryDTOs(categories));
@@ -75,9 +75,9 @@ public class CategoriesController
 
     public void DeleteCategory()
     {
-        Category categoryToDelete = GetCategory();
+        Category? categoryToDelete = GetCategory();
 
-        if (CategoryNotExist(categoryToDelete))
+        if (categoryToDelete is null)
         {
             AnsiConsole.MarkupLine("There are currently no categories available. Please create some categories before deleting a category.");
             return;
@@ -96,10 +96,5 @@ public class CategoriesController
         }
 
         return Mapper.ToCategoryDTOs(categories);
-    }
-
-    public bool CategoryNotExist(Category category)
-    {
-        return category.Id == 0 && category.Name == "No Category Found";
     }
 }
