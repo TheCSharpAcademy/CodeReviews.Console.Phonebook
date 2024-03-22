@@ -21,11 +21,12 @@ public static class Validation
         }
     }
 
-    public static ValidationResult IsValidPhoneNumber(string userPhoneNumber)
+    public static ValidationResult IsValidPhoneNumber(string userPhoneNumber, string region)
     {
         try
         {
-            var phoneNumber = phoneNumberUtil.Parse(userPhoneNumber, null);
+            var phoneNumber = phoneNumberUtil.Parse(userPhoneNumber, region);
+
             if (!phoneNumberUtil.IsValidNumber(phoneNumber))
             {
                 return ValidationResult.Error("Provided phone number is not valid.");

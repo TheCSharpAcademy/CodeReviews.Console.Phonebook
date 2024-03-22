@@ -6,6 +6,28 @@ namespace PhoneBook.Dejmenek.Services;
 
 public class UserInteractionService
 {
+    static string[] countryList = {
+        "AC", "AD", "AE", "AF", "US", "AG", "AI", "AS", "BB", "BM", "BS", "CA",
+        "DM", "DO", "GD", "GU", "JM", "KN", "KY", "LC", "MP", "MS", "PR", "SX",
+        "TC", "TT", "VC", "VG", "VI", "AL", "AM", "AO", "AR", "AT", "AU", "CC",
+        "CX", "AW", "FI", "AX", "AZ", "BA", "BD", "BE", "BF", "BG", "BH", "BI", "BJ",
+        "GP", "BL", "MF", "BN", "BO", "CW", "BQ", "BR", "BT", "BW", "BY", "BZ", "CD",
+        "CF", "CG", "CH", "CI", "CK", "CL", "CM", "CN", "CO", "CR", "CU", "CV", "CY",
+        "CZ", "DE", "DJ", "DK", "DZ", "EC", "EE", "EG", "MA", "EH", "ER", "ES", "ET",
+        "FJ", "FK", "FM", "FO", "FR", "GA", "GB", "GG", "IM", "JE", "GE", "GF", "GH",
+        "GI", "GL", "GM", "GN", "GQ", "GR", "GT", "GW", "GY", "HK", "HN", "HR", "HT",
+        "HU", "ID", "IE", "IL", "IN", "IO", "IQ", "IR", "IS", "IT", "VA", "JO", "JP",
+        "KE", "KG", "KH", "KI", "KM", "KP", "KR", "KW", "RU", "KZ", "LA", "LB", "LI",
+        "LK", "LR", "LS", "LT", "LU", "LV", "LY", "MC", "MD", "ME", "MG", "MH", "MK",
+        "ML", "MM", "MN", "MO", "MQ", "MR", "MT", "MU", "MV", "MW", "MX", "MY", "MZ",
+        "NA", "NC", "NE", "NF", "NG", "NI", "NL", "NO", "SJ", "NP", "NR", "NU", "NZ",
+        "OM", "PA", "PE", "PF", "PG", "PH", "PK", "PL", "PM", "PS", "PT", "PW", "PY",
+        "QA", "RE", "YT", "RO", "RS", "RW", "SA", "SB", "SC", "SD", "SE", "SG", "SH",
+        "TA", "SI", "SK", "SL", "SM", "SN", "SO", "SR", "SS", "ST", "SV", "SY", "SZ",
+        "TD", "TG", "TH", "TJ", "TK", "TL", "TM", "TN", "TO", "TR", "TV", "TW", "TZ",
+        "UA", "UG", "UY", "UZ", "VE", "VN", "VU", "WF", "WS", "XK", "YE", "ZA", "ZM", "ZW"
+    };
+
     public string GetContactName()
     {
         return AnsiConsole.Prompt(
@@ -42,10 +64,20 @@ public class UserInteractionService
 
     public string GetPhoneNumber()
     {
+        string chosenCountry = GetCountry();
         return AnsiConsole.Prompt(
-                        new TextPrompt<string>("Enter phone number with country code for example +48 111 111 111")
-                            .Validate(Validation.IsValidPhoneNumber)
+                        new TextPrompt<string>("Enter a phone number with country code, including area code (e.g., +1 (212) 555 1212 for USA, +44 (20) 7946 0123 for UK): ")
+                            .Validate((phoneNumber) => Validation.IsValidPhoneNumber(phoneNumber, chosenCountry))
                     );
+    }
+
+    public string GetCountry()
+    {
+        return AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("Select country code")
+                .AddChoices(countryList)
+        );
     }
 
     public string GetEmail()
