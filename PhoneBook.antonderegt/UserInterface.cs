@@ -4,14 +4,13 @@ namespace PhoneBook;
 
 public class UserInterface
 {
-    public static void MainMenu()
+    public static async Task MainMenu()
     {
         AnsiConsole.Clear();
         bool keepRunning = true;
 
         while (keepRunning)
         {
-
             MenuOption option = AnsiConsole.Prompt(
                 new SelectionPrompt<MenuOption>()
                     .Title("What do you want to [blue]do[/]?")
@@ -26,16 +25,16 @@ public class UserInterface
             switch (option)
             {
                 case MenuOption.AddContact:
-                    AddContact();
+                    await AddContactAsync();
                     break;
                 case MenuOption.ViewContacts:
-                    ViewContacts();
+                    await ViewContactsAsync();
                     break;
                 case MenuOption.UpdateContact:
-                    UpdateContact();
+                    await UpdateContactAsync();
                     break;
                 case MenuOption.RemoveContact:
-                    RemoveContact();
+                    await RemoveContactAsync();
                     break;
                 case MenuOption.Quit:
                     Environment.Exit(0);
@@ -46,7 +45,7 @@ public class UserInterface
         }
     }
 
-    public static void AddContact()
+    public static async Task AddContactAsync()
     {
         string name = GetName();
         string email = GetEmail();
@@ -54,7 +53,7 @@ public class UserInterface
 
         Contact contact = new() { Name = name, Email = email, PhoneNumber = phoneNumber };
 
-        DataAccess.AddContact(contact);
+        await DataAccess.AddContactAsync(contact);
 
         AnsiConsole.Markup("[green]Contact added. [/] Press enter to return to menu...");
         Console.ReadLine();
@@ -82,10 +81,10 @@ public class UserInterface
 
     public static string GetPhoneNumber()
     {
-        AnsiConsole.MarkupLine("Format: + followed by 9 digits.");
+        AnsiConsole.MarkupLine("Format: + <country code> <number>.");
         string phoneNumber = AnsiConsole.Ask<string>("What is the [blue]phone number[/]?");
 
-        while (!Validate.IsValidPhoneNumber(phoneNumber))
+        while (!Validate.IsValidPhoneNumber(phoneNumber.Trim()))
         {
             AnsiConsole.MarkupLine("[red]Invalid phone number.[/] Try again...");
             phoneNumber = AnsiConsole.Ask<string>("What is the [blue]phone number[/]?");
@@ -94,9 +93,9 @@ public class UserInterface
         return phoneNumber.Trim();
     }
 
-    public static void ViewContacts()
+    public static async Task ViewContactsAsync()
     {
-        IEnumerable<Contact> contacts = DataAccess.GetContacts();
+        IEnumerable<Contact> contacts = await DataAccess.GetContactsAsync();
 
         Table table = new()
         {
@@ -119,17 +118,16 @@ public class UserInterface
         AnsiConsole.Clear();
     }
 
-    public static void UpdateContact()
+    public static async Task UpdateContactAsync(Contact? contact = null)
     {
-        IEnumerable<Contact> contacts = DataAccess.GetContacts();
-        string[] contactNames = contacts.Select(contact => contact.Name).ToArray();
-
-        string contactName = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("Which contact do you want to [blue]update[/]?")
-                    .AddChoices(contactNames));
-
-        Contact contact = contacts.Where(contact => contact.Name == contactName).First();
+        if (contact == null)
+        {
+            contact = await GetContactAsync();
+            if (contact == null)
+            {
+                return;
+            }
+        }
 
         UpdateMenuOption option = AnsiConsole.Prompt(
             new SelectionPrompt<UpdateMenuOption>()
@@ -138,7 +136,7 @@ public class UserInterface
                     UpdateMenuOption.Name,
                     UpdateMenuOption.Email,
                     UpdateMenuOption.PhoneNumber,
-                    UpdateMenuOption.Quit
+                    UpdateMenuOption.DoneUpdating
         ));
 
         switch (option)
@@ -152,20 +150,57 @@ public class UserInterface
             case UpdateMenuOption.PhoneNumber:
                 contact.PhoneNumber = GetPhoneNumber();
                 break;
-            case UpdateMenuOption.Quit:
+            case UpdateMenuOption.DoneUpdating:
                 return;
         }
 
-        DataAccess.UpdateContact(contact);
+        await DataAccess.UpdateContactAsync(contact);
 
-        AnsiConsole.Markup("[green]Contact udpated.[/] Press enter to return to menu...");
-        Console.ReadLine();
+
+        if (AnsiConsole.Confirm("[green]Contact udpated.[/] Do you want to update another property?"))
+        {
+            AnsiConsole.Clear();
+            await UpdateContactAsync(contact);
+            return;
+        }
+
         AnsiConsole.Clear();
     }
 
-    public static void RemoveContact()
+    public static async Task<Contact?> GetContactAsync()
     {
-        IEnumerable<Contact> contacts = DataAccess.GetContacts();
+        IEnumerable<Contact> contacts = await DataAccess.GetContactsAsync();
+
+        if (!contacts.Any())
+        {
+            AnsiConsole.MarkupLine("[red]You don't have contacts yet.[/] Press enter to return to menu...");
+            Console.ReadLine();
+            AnsiConsole.Clear();
+            return null;
+        }
+
+        string[] contactNames = contacts.Select(contact => contact.Name).ToArray();
+
+        string contactName = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Which contact do you want to [blue]update[/]?")
+                    .AddChoices(contactNames));
+
+        return contacts.Where(contact => contact.Name == contactName).First();
+    }
+
+    public static async Task RemoveContactAsync()
+    {
+        IEnumerable<Contact> contacts = await DataAccess.GetContactsAsync();
+
+        if (!contacts.Any())
+        {
+            AnsiConsole.MarkupLine("[red]You don't have contacts yet.[/] Press enter to return to menu...");
+            Console.ReadLine();
+            AnsiConsole.Clear();
+            return;
+        }
+
         string[] contactNames = contacts.Select(contact => contact.Name).ToArray();
 
         string contactName = AnsiConsole.Prompt(
@@ -180,7 +215,7 @@ public class UserInterface
         }
 
         Contact contact = contacts.Where(contact => contact.Name == contactName).First();
-        DataAccess.RemoveContact(contact);
+        await DataAccess.RemoveContactAsync(contact);
 
         AnsiConsole.Clear();
     }

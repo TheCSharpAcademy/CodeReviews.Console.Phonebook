@@ -1,31 +1,33 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace PhoneBook;
 
 public class DataAccess
 {
-    public static void AddContact(Contact contact)
+    public static async Task AddContactAsync(Contact contact)
     {
         using var context = new PhoneBookContext();
         context.Add(contact);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public static IEnumerable<Contact> GetContacts()
+    public static async Task<IEnumerable<Contact>> GetContactsAsync()
     {
         using var context = new PhoneBookContext();
-        return [.. context.Contacts];
+        return await context.Contacts.ToListAsync();
     }
 
-    public static void UpdateContact(Contact contact)
+    public static async Task UpdateContactAsync(Contact contact)
     {
         using var context = new PhoneBookContext();
         context.Contacts.Update(contact);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public static void RemoveContact(Contact contact)
+    public static async Task RemoveContactAsync(Contact contact)
     {
         using var context = new PhoneBookContext();
         context.Contacts.Remove(contact);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 }

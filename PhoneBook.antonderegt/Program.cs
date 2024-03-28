@@ -1,3 +1,3 @@
 ﻿using PhoneBook;
 
-UserInterface.MainMenu();
+await UserInterface.MainMenu();

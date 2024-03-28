@@ -14,5 +14,5 @@ public enum UpdateMenuOption
     Name,
     Email,
     PhoneNumber,
-    Quit
+    DoneUpdating
 }

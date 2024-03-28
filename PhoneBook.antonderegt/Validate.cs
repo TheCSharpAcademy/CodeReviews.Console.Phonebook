@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+using PhoneNumbers;
 
 namespace PhoneBook;
 
@@ -25,6 +25,19 @@ public class Validate
 
     public static bool IsValidPhoneNumber(string number)
     {
-        return Regex.Match(number, @"^(\+[0-9]{9})$").Success;
+        bool isValid;
+
+        try
+        {
+            PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.GetInstance();
+            PhoneNumber phoneNumber = phoneNumberUtil.Parse(number, null);
+            isValid = phoneNumberUtil.IsValidNumber(phoneNumber);
+        }
+        catch
+        {
+            isValid = false;
+        }
+
+        return isValid;
     }
 }
