@@ -1,2 +1,6 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using phonebook.Fennikko;
+
+var context = new ContactContext();
+var verifyDatabase = context.Database.CanConnect();
+
+if (verifyDatabase  == false) context.Database.EnsureCreated();
