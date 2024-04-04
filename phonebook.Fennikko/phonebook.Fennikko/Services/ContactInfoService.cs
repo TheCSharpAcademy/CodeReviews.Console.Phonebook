@@ -11,8 +11,8 @@ public class ContactInfoService
         var contact = new ContactInfo
         {
             ContactName = AnsiConsole.Ask<string>("Contact's name: "),
-            ContactPhone = AnsiConsole.Ask<string>("Contact's Phone number: "),
-            ContactEmail = AnsiConsole.Ask<string>("Contact's Phone  number: "),
+            ContactPhone = AnsiConsole.Ask<string>("Contact's phone number: "),
+            ContactEmail = AnsiConsole.Ask<string>("Contact's email address: "),
             CategoryId = CategoryService.GetCategoryOptionInput().CategoryId
         };
         ContactInfoController.AddContact(contact);

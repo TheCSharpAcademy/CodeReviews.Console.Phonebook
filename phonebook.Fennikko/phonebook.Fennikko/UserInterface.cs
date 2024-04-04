@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using phonebook.Fennikko.Models;
+﻿using phonebook.Fennikko.Models;
 using phonebook.Fennikko.Services;
 using Spectre.Console;
 
@@ -82,7 +81,45 @@ public class UserInterface
 
     private static void CategoryMenu()
     {
-        throw new NotImplementedException();
+        var categoryMenuRunning = true;
+
+        do
+        {
+            AnsiConsole.Clear();
+            var options = AnsiConsole.Prompt(
+                new SelectionPrompt<Enums.CategoryMenu>()
+                    .Title("What would you like to do?")
+                    .AddChoices(
+                        Enums.CategoryMenu.AddCategory,
+                        Enums.CategoryMenu.DeleteCategory,
+                        Enums.CategoryMenu.UpdateCategory,
+                        Enums.CategoryMenu.ViewCategory,
+                        Enums.CategoryMenu.ViewAllCategories,
+                        Enums.CategoryMenu.GoBack));
+
+            switch (options)
+            {
+                case Enums.CategoryMenu.AddCategory:
+                    CategoryService.InsertCategory();
+                    break;
+                case Enums.CategoryMenu.DeleteCategory:
+                    CategoryService.DeleteCategory();
+                    break;
+                case Enums.CategoryMenu.UpdateCategory:
+                    CategoryService.UpdateCategory();
+                    break;
+                case Enums.CategoryMenu.ViewCategory:
+                    CategoryService.GetCategory();
+                    break;
+                case Enums.CategoryMenu.ViewAllCategories:
+                    CategoryService.GetCategories();
+                    break;
+                case Enums.CategoryMenu.GoBack:
+                    categoryMenuRunning = false;
+                    MainMenu();
+                    break;
+            }
+        } while (categoryMenuRunning);
     }
 
     public static void ShowContactTable(List<ContactInfo> contacts)
@@ -117,6 +154,8 @@ public class UserInterface
         var panel = new Panel($"""
                                Id: {contact.ContactId}
                                Category: {contact.Category.Name}
+                               Phone Number: {contact.ContactPhone}
+                               Email: {contact.ContactEmail}
                                """)
         {
             Header = new PanelHeader($"{contact.ContactName}"),
@@ -124,9 +163,45 @@ public class UserInterface
         };
 
         AnsiConsole.Write(panel);
+        AnsiConsole.Write("Press any key to continue");
+        Console.ReadKey();
+        AnsiConsole.Clear();
+    }
+
+    public static void ShowCategoryTable(List<Category> categories)
+    {
+        var table = new Table();
+        table.AddColumn("Id");
+        table.AddColumn("Name");
+
+        foreach (var category in categories)
+        {
+            table.AddRow(
+                category.CategoryId.ToString(),
+                category.Name
+            );
+        }
+
+        AnsiConsole.Write(table);
 
         AnsiConsole.Write("Press any key to continue");
         Console.ReadKey();
         AnsiConsole.Clear();
+    }
+
+    public static void ShowCategory(Category category)
+    {
+        var panel = new Panel($"""
+                               Id: {category.CategoryId}
+                               Contacts: {category.Contacts.Count}
+                               """)
+        {
+            Header = new PanelHeader($"{category.Name}"),
+            Padding = new Padding(2, 2, 2, 2)
+        };
+
+        AnsiConsole.Write(panel);
+
+        ShowContactTable(category.Contacts);
     }
 }

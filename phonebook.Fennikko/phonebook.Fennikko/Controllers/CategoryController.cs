@@ -22,7 +22,7 @@ public class CategoryController
     public static void UpdateCategory(Category category)
     {
         using var db = new ContactContext();
-        db.Categories.Add(category);
+        db.Update(category);
         db.SaveChanges();
     }
 
