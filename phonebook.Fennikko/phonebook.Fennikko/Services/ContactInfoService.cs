@@ -1,5 +1,6 @@
 ﻿using phonebook.Fennikko.Controllers;
 using phonebook.Fennikko.Models;
+using PhoneNumbers;
 using Spectre.Console;
 
 namespace phonebook.Fennikko.Services;
@@ -11,7 +12,7 @@ public class ContactInfoService
         var contact = new ContactInfo
         {
             ContactName = AnsiConsole.Ask<string>("Contact's name: "),
-            ContactPhone = AnsiConsole.Ask<string>("Contact's phone number: "),
+            ContactPhone = GetPhoneNumber(),
             ContactEmail = AnsiConsole.Ask<string>("Contact's email address: "),
             CategoryId = CategoryService.GetCategoryOptionInput().CategoryId
         };
@@ -32,7 +33,7 @@ public class ContactInfoService
             : contact.ContactName;
 
         contact.ContactPhone = AnsiConsole.Confirm("Update phone number?")
-            ? AnsiConsole.Ask<string>("Contact's new phone number: ")
+            ? GetPhoneNumber()
             : contact.ContactPhone;
 
         contact.ContactEmail = AnsiConsole.Confirm("Update email?")
@@ -76,5 +77,32 @@ public class ContactInfoService
         var contact = ContactInfoController.GetContactById(id);
 
         return contact;
+    }
+
+    public static string GetPhoneNumber()
+    {
+        
+        var formattedPhoneNumber = "";
+
+        do
+        {
+            var phoneNumberUtil = PhoneNumberUtil.GetInstance();
+            var rawPhoneNumber = Validator.GetPhoneNumberInput();
+            try
+            {
+                var phoneNumber = phoneNumberUtil.Parse(rawPhoneNumber, null);
+                formattedPhoneNumber = phoneNumberUtil.Format(phoneNumber, PhoneNumberFormat.E164);
+                break;
+            }
+            catch (NumberParseException e)
+            {
+                var errorMessage = Convert.ToString(e.Message);
+                AnsiConsole.MarkupLine($"[red]{errorMessage}[/] Press any key to continue: ");
+                Console.ReadKey();
+            }
+        } while (true);
+        
+
+        return formattedPhoneNumber;
     }
 }
