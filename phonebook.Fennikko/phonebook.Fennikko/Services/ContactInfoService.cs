@@ -1,4 +1,5 @@
-﻿using phonebook.Fennikko.Controllers;
+﻿using System.Net.Mail;
+using phonebook.Fennikko.Controllers;
 using phonebook.Fennikko.Models;
 using PhoneNumbers;
 using Spectre.Console;
@@ -12,8 +13,8 @@ public class ContactInfoService
         var contact = new ContactInfo
         {
             ContactName = AnsiConsole.Ask<string>("Contact's name: "),
-            ContactPhone = GetPhoneNumber(),
-            ContactEmail = AnsiConsole.Ask<string>("Contact's email address: "),
+            ContactPhone = GetContactPhoneNumber(),
+            ContactEmail = GetContactEmail(),
             CategoryId = CategoryService.GetCategoryOptionInput().CategoryId
         };
         ContactInfoController.AddContact(contact);
@@ -33,11 +34,11 @@ public class ContactInfoService
             : contact.ContactName;
 
         contact.ContactPhone = AnsiConsole.Confirm("Update phone number?")
-            ? GetPhoneNumber()
+            ? GetContactPhoneNumber()
             : contact.ContactPhone;
 
         contact.ContactEmail = AnsiConsole.Confirm("Update email?")
-            ? AnsiConsole.Ask<string>("Contact's new email: ")
+            ? GetContactEmail()
             : contact.ContactEmail;
 
         contact.Category = AnsiConsole.Confirm("Update category?")
@@ -79,11 +80,10 @@ public class ContactInfoService
         return contact;
     }
 
-    public static string GetPhoneNumber()
+    public static string GetContactPhoneNumber()
     {
-        
-        var formattedPhoneNumber = "";
 
+        string? formattedPhoneNumber;
         do
         {
             var phoneNumberUtil = PhoneNumberUtil.GetInstance();
@@ -97,12 +97,36 @@ public class ContactInfoService
             catch (NumberParseException e)
             {
                 var errorMessage = Convert.ToString(e.Message);
-                AnsiConsole.MarkupLine($"[red]{errorMessage}[/] Press any key to continue: ");
+                AnsiConsole.MarkupLine($"[red]{errorMessage}[/] Press any key to continue.");
                 Console.ReadKey();
             }
         } while (true);
         
 
         return formattedPhoneNumber;
+    }
+
+    public static string GetContactEmail()
+    {
+        string? validatedEmail;
+        do
+        {
+            var contactEmail = Validator.GetEmailInput();
+
+            try
+            {
+                validatedEmail = new MailAddress(contactEmail).ToString();
+                break;
+            }
+            catch (FormatException e)
+            {
+                var errorMessage = Convert.ToString(e.Message);
+                AnsiConsole.MarkupLine($"[red]{errorMessage}[/] Press any key to continue.");
+                Console.ReadKey();
+            }
+
+        } while (true);
+
+        return validatedEmail;
     }
 }
