@@ -41,13 +41,21 @@ public class CategoryService
         var category = GetCategoryOptionInput();
         UserInterface.ShowCategory(category);
     }
+
     public static Category GetCategoryOptionInput()
     {
         var categories = CategoryController.GetCategories();
         var categoriesArray = categories.Select(c => c.Name).ToArray();
+        if (categoriesArray.Length == 0)
+        {
+            AnsiConsole.Write("No categories available. Press any key to return to the Category Menu");
+            Console.ReadKey();
+            UserInterface.CategoryMenu();
+        }
         var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
             .Title("Choose a category")
             .AddChoices(categoriesArray));
+
         var category = categories.Single(c => c.Name == option);
 
         return category;

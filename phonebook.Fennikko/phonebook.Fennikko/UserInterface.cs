@@ -36,7 +36,7 @@ public class UserInterface
         } while (isAppRunning);
     }
 
-    private static void ContactMenu()
+    public static void ContactMenu()
     {
         var contactMenuRunning = true;
         do
@@ -79,7 +79,7 @@ public class UserInterface
         } while (contactMenuRunning);
     }
 
-    private static void CategoryMenu()
+    public static void CategoryMenu()
     {
         var categoryMenuRunning = true;
 

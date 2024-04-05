@@ -64,11 +64,11 @@ public class ContactInfoService
     {
         var contacts = ContactInfoController.GetContacts();
         var contactsArray = contacts.Select(c => c.ContactName).ToArray();
-        if (!contactsArray.Any())
+        if (contactsArray.Length == 0)
         {
             AnsiConsole.Write("No contacts found, press any key to return to the main menu.");
             Console.ReadKey();
-            UserInterface.MainMenu();
+            UserInterface.ContactMenu();
         }
 
         var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
