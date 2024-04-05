@@ -134,15 +134,15 @@ public class UserInterface
 
         foreach (var contact in contacts)
         {
-            var category = contact.Category != null ? contact.Category.Name : "None";
 
             table.AddRow(
                 contact.ContactId.ToString(),
                 contact.ContactName,
                 contact.ContactPhone,
                 contact.ContactEmail,
-                category
+                contact.Category?.Name ?? "None"
             );
+
         }
 
         AnsiConsole.Write(table);
@@ -154,7 +154,7 @@ public class UserInterface
 
     public static void ShowContact(ContactInfo contact)
     {
-        var category = contact.Category != null ? contact.Category.Name : "None";
+        var category = contact.Category?.Name ?? "None";
 
         var panel = new Panel($"""
                                Id: {contact.ContactId}

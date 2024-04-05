@@ -37,7 +37,7 @@ public class Validator
 
         while (string.IsNullOrWhiteSpace(emailInput))
         {
-            AnsiConsole.Write("Cannot be empty, please try again. Press any key to continue");
+            AnsiConsole.WriteLine("Cannot be empty, please try again. Press any key to continue");
             Console.ReadKey();
             emailInput = AnsiConsole.Prompt(
                 new TextPrompt<string>("Contact's email address [green](Example janedoe@gmail.com)[/]: ")

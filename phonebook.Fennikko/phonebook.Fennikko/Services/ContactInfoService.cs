@@ -15,8 +15,17 @@ public class ContactInfoService
             ContactName = AnsiConsole.Ask<string>("Contact's name: "),
             ContactPhone = GetContactPhoneNumber(),
             ContactEmail = GetContactEmail(),
-            CategoryId = CategoryService.GetCategoryOptionInput().CategoryId
+            CategoryId = AnsiConsole.Confirm("Add category to user?")
+            ? CategoryService.GetCategoryOptionInput()?.CategoryId
+            : null
         };
+
+        if (contact.CategoryId == null)
+        {
+            AnsiConsole.Write("No categories available, creating contact with no category. Press any key to continue");
+            Console.ReadKey();
+        }
+
         ContactInfoController.AddContact(contact);
     }
 
@@ -41,9 +50,9 @@ public class ContactInfoService
             ? GetContactEmail()
             : contact.ContactEmail;
 
-        contact.Category = AnsiConsole.Confirm("Update category?")
+        contact.Category = (AnsiConsole.Confirm("Update category?")
             ? CategoryService.GetCategoryOptionInput()
-            : contact.Category;
+            : contact.Category)!;
 
         ContactInfoController.UpdateContact(contact);
     }
@@ -66,7 +75,7 @@ public class ContactInfoService
         var contactsArray = contacts.Select(c => c.ContactName).ToArray();
         if (contactsArray.Length == 0)
         {
-            AnsiConsole.Write("No contacts found, press any key to return to the main menu.");
+            AnsiConsole.Write("No contacts found, press any key to return to the contact menu.");
             Console.ReadKey();
             UserInterface.ContactMenu();
         }
@@ -82,7 +91,6 @@ public class ContactInfoService
 
     public static string GetContactPhoneNumber()
     {
-
         string? formattedPhoneNumber;
         do
         {
@@ -101,7 +109,7 @@ public class ContactInfoService
                 Console.ReadKey();
             }
         } while (true);
-        
+
 
         return formattedPhoneNumber;
     }
@@ -124,7 +132,6 @@ public class ContactInfoService
                 AnsiConsole.MarkupLine($"[red]{errorMessage}[/] Press any key to continue.");
                 Console.ReadKey();
             }
-
         } while (true);
 
         return validatedEmail;
