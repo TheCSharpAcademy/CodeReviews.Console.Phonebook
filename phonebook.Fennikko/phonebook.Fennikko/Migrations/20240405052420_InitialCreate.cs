@@ -41,8 +41,7 @@ namespace phonebook.Fennikko.Migrations
                         name: "FK_Contacts_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "CategoryId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CategoryId");
                 });
 
             migrationBuilder.CreateIndex(

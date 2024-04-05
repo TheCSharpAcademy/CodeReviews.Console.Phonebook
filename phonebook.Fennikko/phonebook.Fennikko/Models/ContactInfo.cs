@@ -10,7 +10,7 @@ public class ContactInfo
 
     public string ContactPhone { get; set; }
 
-    public int CategoryId { get; set; }
+    public int? CategoryId { get; set; }
 
     public Category Category { get; set; }
 }

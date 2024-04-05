@@ -20,6 +20,7 @@ public class ContactContext : DbContext
         modelBuilder.Entity<ContactInfo>()
             .HasOne(c => c.Category)
             .WithMany(c => c.Contacts)
-            .HasForeignKey(c => c.CategoryId);
+            .HasForeignKey(c => c.CategoryId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

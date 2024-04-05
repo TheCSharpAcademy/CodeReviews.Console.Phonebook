@@ -124,6 +124,7 @@ public class UserInterface
 
     public static void ShowContactTable(List<ContactInfo> contacts)
     {
+
         var table = new Table();
         table.AddColumn("Id");
         table.AddColumn("Name");
@@ -133,12 +134,14 @@ public class UserInterface
 
         foreach (var contact in contacts)
         {
+            var category = contact.Category != null ? contact.Category.Name : "None";
+
             table.AddRow(
                 contact.ContactId.ToString(),
                 contact.ContactName,
                 contact.ContactPhone,
                 contact.ContactEmail,
-                contact.Category.Name
+                category
             );
         }
 
@@ -151,9 +154,11 @@ public class UserInterface
 
     public static void ShowContact(ContactInfo contact)
     {
+        var category = contact.Category != null ? contact.Category.Name : "None";
+
         var panel = new Panel($"""
                                Id: {contact.ContactId}
-                               Category: {contact.Category.Name}
+                               Category: {category}
                                Phone Number: {contact.ContactPhone}
                                Email: {contact.ContactEmail}
                                """)

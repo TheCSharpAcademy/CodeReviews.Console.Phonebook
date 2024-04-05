@@ -11,7 +11,7 @@ using phonebook.Fennikko;
 namespace phonebook.Fennikko.Migrations
 {
     [DbContext(typeof(ContactContext))]
-    [Migration("20240401160354_Initial-Create")]
+    [Migration("20240405052420_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -76,7 +76,7 @@ namespace phonebook.Fennikko.Migrations
                     b.HasOne("phonebook.Fennikko.Models.Category", "Category")
                         .WithMany("Contacts")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Category");
