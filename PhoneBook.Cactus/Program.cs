@@ -40,7 +40,8 @@ public static class Application
                     ContactController.UpdateContact();
                     break;
                 case MenuOptions.ViewContact:
-                    ContactController.GetContactById();
+                    Contact contact = ContactService.GetContactOptionInput();
+                    UserInterface.ShowContact(contact);
                     break;
                 case MenuOptions.ViewAllContact:
                     var contacts = ContactController.GetContacts();

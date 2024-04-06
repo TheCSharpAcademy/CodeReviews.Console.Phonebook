@@ -25,9 +25,10 @@ public class ContactController
         throw new NotImplementedException();
     }
 
-    public static void GetContactById()
+    public static Contact? GetContactById(int id)
     {
-        throw new NotImplementedException();
+        using var db = new ContactContext();
+        return db.Contacts.SingleOrDefault(c => c.Id == id);
     }
 
     public static List<Contact> GetContacts()
