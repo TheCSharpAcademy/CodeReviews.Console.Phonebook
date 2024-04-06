@@ -31,7 +31,7 @@ public static class Application
             switch (option)
             {
                 case MenuOptions.AddContact:
-                    ContactController.AddContact();
+                    ContactService.InsertContact();
                     break;
                 case MenuOptions.DeleteContact:
                     ContactService.DeleteContact();
@@ -40,12 +40,10 @@ public static class Application
                     ContactController.UpdateContact();
                     break;
                 case MenuOptions.ViewContact:
-                    Contact contact = ContactService.GetContactOptionInput();
-                    UserInterface.ShowContact(contact);
+                    ContactService.ShowSpecificContact();
                     break;
                 case MenuOptions.ViewAllContact:
-                    var contacts = ContactController.GetContacts();
-                    UserInterface.ShowContacts(contacts);
+                    ContactService.ShowAllContacts();
                     break;
                 case MenuOptions.Quit:
                     isAppRunning = false;

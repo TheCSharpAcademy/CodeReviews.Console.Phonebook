@@ -32,6 +32,11 @@ public class UserInterface
 
         AnsiConsole.Write(panel);
 
+        BackToMainMenuPrompt();
+    }
+
+    public static void BackToMainMenuPrompt()
+    {
         Console.WriteLine("Press any key to go back to Main Menu");
         Console.ReadLine();
         Console.Clear();
