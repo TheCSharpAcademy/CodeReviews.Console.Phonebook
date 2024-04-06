@@ -1,6 +1,4 @@
-﻿using Spectre.Console;
-
-namespace PhoneBook.Cactus;
+﻿namespace PhoneBook.Cactus;
 public class ContactController
 {
     public static void AddContact(Contact contact)
@@ -29,9 +27,11 @@ public class ContactController
         return db.Contacts.ToList();
     }
 
-    public static void UpdateContact()
+    public static void UpdateContact(Contact contact)
     {
-        throw new NotImplementedException();
+        using var db = new ContactContext();
+        db.Update(contact);
+        db.SaveChanges();
     }
 }
 

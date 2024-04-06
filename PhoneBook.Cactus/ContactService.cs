@@ -38,6 +38,22 @@ public class ContactService
         UserInterface.ShowContact(contact);
     }
 
+    public static void UpdateContact()
+    {
+        var contact = GetContactOptionInput();
+
+        contact.Name = AnsiConsole.Confirm("Update name?") ? contact.Name : AnsiConsole.Ask<string>("Product's new name:");
+        contact.Email = AnsiConsole.Confirm("Update email?") ? contact.Name : AnsiConsole.Ask<string>("Product's new email (format xxx@yyy.zzz):");
+        while (!ContactUtil.IsValidEmail(contact.Email))
+        {
+            Console.WriteLine("Please input a valid email.");
+            contact.Email = AnsiConsole.Ask<string>("Person's email (format xxx@yyy.zzz):");
+        }
+        contact.PhoneNumber = AnsiConsole.Confirm("Update phone number?") ? contact.Name : AnsiConsole.Ask<string>("Product's new phone number:");
+
+        ContactController.UpdateContact(contact);
+    }
+
     public static Contact GetContactOptionInput()
     {
         var contacts = ContactController.GetContacts();
