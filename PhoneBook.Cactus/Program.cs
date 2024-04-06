@@ -25,7 +25,8 @@ public static class Application
                 MenuOptions.DeleteContact,
                 MenuOptions.UpdateContact,
                 MenuOptions.ViewAllContact,
-                MenuOptions.ViewContact));
+                MenuOptions.ViewContact,
+                MenuOptions.Quit));
 
             switch (option)
             {
@@ -43,6 +44,9 @@ public static class Application
                     break;
                 case MenuOptions.ViewAllContact:
                     ContactController.GetContacts();
+                    break;
+                case MenuOptions.Quit:
+                    isAppRunning = false;
                     break;
             }
         }

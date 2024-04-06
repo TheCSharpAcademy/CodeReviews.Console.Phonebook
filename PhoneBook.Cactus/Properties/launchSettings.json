@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PhoneBook.Cactus": {
+      "commandName": "Project",
+      "workingDirectory": "E:\\csharp\\CodeReviews.Console.Phonebook\\PhoneBook.Cactus\\"
+    }
+  }
+}
