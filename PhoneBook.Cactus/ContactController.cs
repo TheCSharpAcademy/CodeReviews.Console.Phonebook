@@ -30,9 +30,10 @@ public class ContactController
         throw new NotImplementedException();
     }
 
-    public static void GetContacts()
+    public static List<Contact> GetContacts()
     {
-        throw new NotImplementedException();
+        using var db = new ContactContext();
+        return db.Contacts.ToList();
     }
 
     public static void UpdateContact()

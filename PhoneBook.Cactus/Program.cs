@@ -43,7 +43,8 @@ public static class Application
                     ContactController.GetContactById();
                     break;
                 case MenuOptions.ViewAllContact:
-                    ContactController.GetContacts();
+                    var contacts = ContactController.GetContacts();
+                    UserInterface.ShowContacts(contacts);
                     break;
                 case MenuOptions.Quit:
                     isAppRunning = false;
