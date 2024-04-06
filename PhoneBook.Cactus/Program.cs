@@ -34,7 +34,7 @@ public static class Application
                     ContactController.AddContact();
                     break;
                 case MenuOptions.DeleteContact:
-                    ContactController.DeleteContact();
+                    ContactService.DeleteContact();
                     break;
                 case MenuOptions.UpdateContact:
                     ContactController.UpdateContact();

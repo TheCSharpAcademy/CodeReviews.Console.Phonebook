@@ -20,9 +20,13 @@ public class ContactController
         db.SaveChanges();
     }
 
-    public static void DeleteContact()
+    public static void DeleteContact(Contact contact)
     {
-        throw new NotImplementedException();
+        using var db = new ContactContext();
+
+        db.Remove(contact);
+
+        db.SaveChanges();
     }
 
     public static Contact? GetContactById(int id)

@@ -4,6 +4,12 @@ namespace PhoneBook.Cactus;
 
 public class ContactService
 {
+    public static void DeleteContact()
+    {
+        var contact = GetContactOptionInput();
+        ContactController.DeleteContact(contact);
+    }
+
     public static Contact GetContactOptionInput()
     {
         var contacts = ContactController.GetContacts();
