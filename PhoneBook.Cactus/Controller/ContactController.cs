@@ -1,4 +1,7 @@
-﻿namespace PhoneBook.Cactus;
+﻿using PhoneBook.Cactus.DataModel;
+using PhoneBook.Cactus.DB;
+
+namespace PhoneBook.Cactus.Controller;
 public class ContactController
 {
     public static void AddContact(Contact contact)

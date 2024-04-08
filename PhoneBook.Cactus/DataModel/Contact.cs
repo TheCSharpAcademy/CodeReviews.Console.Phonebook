@@ -1,4 +1,4 @@
-﻿namespace PhoneBook.Cactus;
+﻿namespace PhoneBook.Cactus.DataModel;
 
 public class Contact
 {

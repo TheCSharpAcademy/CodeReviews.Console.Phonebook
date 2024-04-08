@@ -1,6 +1,10 @@
-﻿using Spectre.Console;
+﻿using PhoneBook.Cactus.Controller;
+using PhoneBook.Cactus.DataModel;
+using PhoneBook.Cactus.UI;
+using PhoneBook.Cactus.Util;
+using Spectre.Console;
 
-namespace PhoneBook.Cactus;
+namespace PhoneBook.Cactus.Service;
 
 public class ContactService
 {
@@ -42,14 +46,14 @@ public class ContactService
     {
         var contact = GetContactOptionInput();
 
-        contact.Name = AnsiConsole.Confirm("Update name?") ? contact.Name : AnsiConsole.Ask<string>("Product's new name:");
-        contact.Email = AnsiConsole.Confirm("Update email?") ? contact.Name : AnsiConsole.Ask<string>("Product's new email (format xxx@yyy.zzz):");
+        contact.Name = AnsiConsole.Confirm("Update name?") ? AnsiConsole.Ask<string>("Product's new name:") : contact.Name;
+        contact.Email = AnsiConsole.Confirm("Update email?") ? AnsiConsole.Ask<string>("Product's new email (format xxx@yyy.zzz):") : contact.Email;
         while (!ContactUtil.IsValidEmail(contact.Email))
         {
             Console.WriteLine("Please input a valid email.");
             contact.Email = AnsiConsole.Ask<string>("Person's email (format xxx@yyy.zzz):");
         }
-        contact.PhoneNumber = AnsiConsole.Confirm("Update phone number?") ? contact.Name : AnsiConsole.Ask<string>("Product's new phone number:");
+        contact.PhoneNumber = AnsiConsole.Confirm("Update phone number?") ? AnsiConsole.Ask<string>("Product's new phone number:") : contact.PhoneNumber;
 
         ContactController.UpdateContact(contact);
     }

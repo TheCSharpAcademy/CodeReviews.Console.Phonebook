@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PhoneBook.Cactus.DataModel;
 
-namespace PhoneBook.Cactus;
+namespace PhoneBook.Cactus.DB;
 
 public class ContactContext : DbContext
 {

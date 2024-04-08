@@ -1,6 +1,7 @@
-﻿using Spectre.Console;
+﻿using PhoneBook.Cactus.DataModel;
+using Spectre.Console;
 
-namespace PhoneBook.Cactus;
+namespace PhoneBook.Cactus.UI;
 
 public class UserInterface
 {
