@@ -1,4 +1,5 @@
 ﻿using System.Net.Mail;
+using System.Text.RegularExpressions;
 using phonebook.Fennikko.Controllers;
 using phonebook.Fennikko.Models;
 using PhoneNumbers;
@@ -8,6 +9,8 @@ namespace phonebook.Fennikko.Services;
 
 public class ContactInfoService
 {
+    private static readonly Regex validEmail = new Regex("[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+(?:\\.[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?", RegexOptions.IgnoreCase);
+
     public static void InsertContact()
     {
         var contact = new ContactInfo
@@ -116,24 +119,21 @@ public class ContactInfoService
 
     public static string GetContactEmail()
     {
-        string? validatedEmail;
         do
         {
             var contactEmail = Validator.GetEmailInput();
 
-            try
+            if (validEmail.IsMatch(contactEmail))
             {
-                validatedEmail = new MailAddress(contactEmail).ToString();
-                break;
+                return contactEmail;
             }
-            catch (FormatException e)
+            else
             {
-                var errorMessage = Convert.ToString(e.Message);
-                AnsiConsole.MarkupLine($"[red]{errorMessage}[/] Press any key to continue.");
+                AnsiConsole.MarkupLine("[red] Invalid email format.[/] Press any key to continue.");
                 Console.ReadKey();
             }
+
         } while (true);
 
-        return validatedEmail;
     }
 }
