@@ -66,6 +66,8 @@ public class ContactService
         }
 
         ContactController.UpdateContact(contact);
+
+        UserInterface.BackToMainMenuPrompt();
     }
 
     public static Contact GetContactOptionInput()
