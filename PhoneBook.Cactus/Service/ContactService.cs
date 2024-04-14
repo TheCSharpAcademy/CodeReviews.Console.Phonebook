@@ -17,7 +17,12 @@ public class ContactService
             Console.WriteLine("Please input a valid email.");
             email = AnsiConsole.Ask<string>("Person's email (format xxx@yyy.zzz):");
         }
-        var phoneNumber = AnsiConsole.Ask<string>("Person's phone number:");
+        var phoneNumber = AnsiConsole.Ask<string>("Person's phone number (format 123-456-7899):");
+        while (!ContactUtil.IsValidPhoneNumber(phoneNumber))
+        {
+            Console.WriteLine("Please input a valid phone number.");
+            phoneNumber = AnsiConsole.Ask<string>("Person's phone number (format 123-456-7899):");
+        }
 
         ContactController.AddContact(new Contact { Name = name, Email = email, PhoneNumber = phoneNumber });
 
@@ -46,14 +51,19 @@ public class ContactService
     {
         var contact = GetContactOptionInput();
 
-        contact.Name = AnsiConsole.Confirm("Update name?") ? AnsiConsole.Ask<string>("Product's new name:") : contact.Name;
-        contact.Email = AnsiConsole.Confirm("Update email?") ? AnsiConsole.Ask<string>("Product's new email (format xxx@yyy.zzz):") : contact.Email;
+        contact.Name = AnsiConsole.Confirm("Update name?") ? AnsiConsole.Ask<string>("Person's new name:") : contact.Name;
+        contact.Email = AnsiConsole.Confirm("Update email?") ? AnsiConsole.Ask<string>("Person's new email (format xxx@yyy.zzz):") : contact.Email;
         while (!ContactUtil.IsValidEmail(contact.Email))
         {
             Console.WriteLine("Please input a valid email.");
             contact.Email = AnsiConsole.Ask<string>("Person's email (format xxx@yyy.zzz):");
         }
-        contact.PhoneNumber = AnsiConsole.Confirm("Update phone number?") ? AnsiConsole.Ask<string>("Product's new phone number:") : contact.PhoneNumber;
+        contact.PhoneNumber = AnsiConsole.Confirm("Update phone number?") ? AnsiConsole.Ask<string>("Person's new phone number (format 123-456-7899):") : contact.PhoneNumber;
+        while (!ContactUtil.IsValidPhoneNumber(contact.PhoneNumber))
+        {
+            Console.WriteLine("Please input a valid phone number.");
+            contact.PhoneNumber = AnsiConsole.Ask<string>("Person's new phone number (format 123-456-7899):");
+        }
 
         ContactController.UpdateContact(contact);
     }

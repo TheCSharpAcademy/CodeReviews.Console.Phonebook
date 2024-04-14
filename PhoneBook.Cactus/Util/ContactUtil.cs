@@ -1,24 +1,21 @@
-﻿namespace PhoneBook.Cactus.Util;
+﻿using System.Text.RegularExpressions;
+
+namespace PhoneBook.Cactus.Util;
 
 public class ContactUtil
 {
     public static bool IsValidEmail(string email)
     {
-        var trimmedEmail = email.Trim();
+        string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+        Regex regex = new Regex(pattern);
+        return regex.IsMatch(email);
+    }
 
-        if (trimmedEmail.EndsWith("."))
-        {
-            return false;
-        }
-        try
-        {
-            var addr = new System.Net.Mail.MailAddress(email);
-            return addr.Address == trimmedEmail;
-        }
-        catch
-        {
-            return false;
-        }
+    public static bool IsValidPhoneNumber(string phoneNumber)
+    {
+        string pattern = @"^\d{3}-\d{3}-\d{4}$";
+        Regex regex = new Regex(pattern);
+        return regex.IsMatch(phoneNumber);
     }
 }
 
