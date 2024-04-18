@@ -1,3 +1,0 @@
-﻿using Phonebook;
-
-MainMenu.ShowMenu();

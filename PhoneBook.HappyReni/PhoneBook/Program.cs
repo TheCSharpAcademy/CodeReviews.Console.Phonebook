@@ -1,3 +1,0 @@
-﻿using PhoneBook;
-
-new Manager();

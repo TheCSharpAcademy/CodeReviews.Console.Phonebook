@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "PlayingSpectre": {
-      "commandName": "Project",
-      "workingDirectory": "D:\\.NET FOLDER\\C#Academy\\EntityFrameWorkCRUD_CoffeeStore"
-    }
-  }
-}
