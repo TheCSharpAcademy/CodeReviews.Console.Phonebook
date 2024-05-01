@@ -20,6 +20,5 @@ internal class ContactContext : DbContext
     //// Neither Does this
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
     //.UseSqlServer(ConfigurationManager.ConnectionStrings["DataConnection"].ConnectionString);
-    
 
 }
