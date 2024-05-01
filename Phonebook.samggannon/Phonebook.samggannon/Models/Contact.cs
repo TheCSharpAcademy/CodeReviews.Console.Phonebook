@@ -1,5 +1,5 @@
 ﻿namespace Phonebook.samggannon.Models;
 
-internal class Contacts
+internal class Contact
 {
 }
