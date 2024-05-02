@@ -19,6 +19,7 @@ internal static class UserInterface
                 .AddChoices(
                     MenuOptions.AddContact,
                     MenuOptions.ViewAllContacts,
+                    MenuOptions.DeleteContact,
                     MenuOptions.Quit));
 
             switch (option)
@@ -72,5 +73,23 @@ internal static class UserInterface
 
         Console.WriteLine("Press a key to continue");
         Console.ReadLine();
+    }
+
+    internal static void ConfirmContact(Contact contact)
+    {
+        var table = new Table();
+        table.AddColumn("Id");
+        table.AddColumn("Name");
+        table.AddColumn("Email Address");
+        table.AddColumn("Phone Number");
+
+        table.AddRow(
+            contact.ContactId.ToString(),
+            contact.Name,
+            contact.Email,
+            contact.PhoneNumber
+            );
+
+        AnsiConsole.Write(table);
     }
 }

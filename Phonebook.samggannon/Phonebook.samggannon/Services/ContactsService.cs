@@ -52,15 +52,57 @@ internal class ContactsService
         UserInterface.ShowContactsTable(contacts);
     }
 
-    internal static void DeleteContact()
-    {
-        ViewAllContacts();
-        Console.WriteLine("");
-
-    }
-
     internal static void UpdateContact()
     {
         throw new NotImplementedException();
     }
+
+    #region Delete
+
+    internal static void DeleteContact()
+    {
+        ViewAllContacts();
+        string input = AnsiConsole.Ask<string>("Select the id of the contact you wish to delete");
+
+        if (int.TryParse(input, out int contactId))
+        {
+            Contact contact = GetContactOrPrompt(contactId);
+            if (contact != null)
+            {
+                if (UserConfirmsDeletion(contact))
+                {
+                    ContactsController.DeleteContact(contact);
+                    return;
+                }
+            }
+        }
+        else
+        {
+            AnsiConsole.WriteLine("You have entered an invalid input. Please try again. Press a key to continue");
+            Console.ReadLine();
+            Console.Clear();
+            DeleteContact();
+        }
+    }
+
+    private static Contact GetContactOrPrompt(int contactId)
+    {
+        Contact contact = ContactsController.GetContactById(contactId);
+        if (contact == null)
+        {
+            AnsiConsole.WriteLine("Contact not found. Press a key to continue");
+            Console.ReadLine();
+            Console.Clear();
+            DeleteContact();
+        }
+        return contact;
+    }
+
+    private static bool UserConfirmsDeletion(Contact contact)
+    {
+        UserInterface.ConfirmContact(contact);
+        return AnsiConsole.Confirm("Are you sure?");
+    }
+
+    #endregion
 }
