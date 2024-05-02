@@ -11,6 +11,7 @@ internal static class UserInterface
         var isAppRunning = true;
         while (isAppRunning)
         {
+            Console.Clear();
             var option = AnsiConsole.Prompt(
                 new SelectionPrompt<MenuOptions>()
                 .Title("What would you like to do?")
@@ -23,7 +24,21 @@ internal static class UserInterface
                 case MenuOptions.AddContact:
                     ContactsService.AddContact();
                     break;
+                case MenuOptions.ViewAllContacts:
+                    ContactsService.ViewAllContacts();
+                    break;
+                case MenuOptions.ViewContact:
+                    ContactsService.ViewContact();
+                    break;
+                case MenuOptions.UpdateContact:
+                    ContactsService.UpdateContact();
+                    break;
+                case MenuOptions.DeleteContact:
+                    ContactsService.DeleteContact();
+                    break;
                 case MenuOptions.Quit:
+                    isAppRunning = false;
+                    Environment.Exit(0);
                     break;
                 default:
                     isAppRunning = false;

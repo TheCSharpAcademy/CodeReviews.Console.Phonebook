@@ -11,6 +11,10 @@ namespace Phonebook.samggannon
         internal enum MenuOptions
         {
             AddContact,
+            ViewAllContacts,
+            ViewContact,
+            UpdateContact,
+            DeleteContact,
             Quit
         }
     }
