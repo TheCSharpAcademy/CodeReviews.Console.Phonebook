@@ -50,9 +50,10 @@ internal static class UserInterface
         }
     }
 
-    internal static void ShowContactsTable(List<ContactDto> contacts)
+    internal static void ShowContactsTable(List<Contact> contacts)
     {
         var table = new Table();
+        table.AddColumn("Id");
         table.AddColumn("Name");
         table.AddColumn("Email Address");
         table.AddColumn("Phone Number");
@@ -60,6 +61,7 @@ internal static class UserInterface
         foreach (var contact in contacts)
         {
             table.AddRow(
+                contact.ContactId.ToString(),
                 contact.Name,
                 contact.Email,
                 contact.PhoneNumber
@@ -68,8 +70,7 @@ internal static class UserInterface
 
         AnsiConsole.Write(table);
 
-        Console.WriteLine("Press any key to continue");
+        Console.WriteLine("Press a key to continue");
         Console.ReadLine();
-        Console.Clear();
     }
 }
