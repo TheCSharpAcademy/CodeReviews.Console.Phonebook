@@ -12,7 +12,6 @@ namespace Phonebook.samggannon
         {
             AddContact,
             ViewAllContacts,
-            ViewContact,
             UpdateContact,
             DeleteContact,
             Quit

@@ -41,11 +41,6 @@ internal class ContactsService
         return email;
     }
 
-    internal static void ViewContact()
-    {
-        
-    }
-
     internal static void ViewAllContacts()
     {
         List<Contact> contacts = ContactsController.GetAllContacts();

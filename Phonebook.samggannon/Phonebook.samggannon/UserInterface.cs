@@ -30,9 +30,6 @@ internal static class UserInterface
                 case MenuOptions.ViewAllContacts:
                     ContactsService.ViewAllContacts();
                     break;
-                case MenuOptions.ViewContact:
-                    ContactsService.ViewContact();
-                    break;
                 case MenuOptions.UpdateContact:
                     ContactsService.UpdateContact();
                     break;
