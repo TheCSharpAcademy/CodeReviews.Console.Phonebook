@@ -30,6 +30,8 @@ internal static class UserInterface
                     break;
                 case MenuOptions.ViewAllContacts:
                     ContactsService.ViewAllContacts();
+                    Console.WriteLine("Press [enter] to continue");
+                    Console.ReadLine();
                     break;
                 case MenuOptions.UpdateContact:
                     ContactsService.UpdateContact();
@@ -68,9 +70,6 @@ internal static class UserInterface
         }
 
         AnsiConsole.Write(table);
-
-        Console.WriteLine("Press a key to continue");
-        Console.ReadLine();
     }
 
     internal static void ConfirmContact(Contact contact)
