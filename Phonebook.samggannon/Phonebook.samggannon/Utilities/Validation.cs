@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Phonebook.samggannon.Utilities
 {
-    internal static class EmailValidator
+    internal static class Validation
     {
         public static bool IsEmailValid(string email)
         {
@@ -16,10 +16,7 @@ namespace Phonebook.samggannon.Utilities
 
             return email.Contains("@");
         }
-    }
 
-    internal static class PhoneNumberValidator
-    {
         public static bool IsPhoneNumberValid(string phoneNumber)
         {
             if (!string.IsNullOrEmpty(phoneNumber))

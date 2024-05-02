@@ -21,6 +21,7 @@ internal static class UserInterface
                     MenuOptions.ViewAllContacts,
                     MenuOptions.UpdateContact,
                     MenuOptions.DeleteContact,
+                    MenuOptions.DeveloperDisclaimer,
                     MenuOptions.Quit));
 
             switch (option)
@@ -39,6 +40,9 @@ internal static class UserInterface
                 case MenuOptions.DeleteContact:
                     ContactsService.DeleteContact();
                     break;
+                case MenuOptions.DeveloperDisclaimer:
+                    ShowDevelopersDisclaimerNote();
+                    break;
                 case MenuOptions.Quit:
                     isAppRunning = false;
                     Environment.Exit(0);
@@ -49,6 +53,18 @@ internal static class UserInterface
             }
 
         }
+    }
+
+    private static void ShowDevelopersDisclaimerNote()
+    {
+        Console.Clear();
+        AnsiConsole.MarkupLine("[bold]Developer's Disclaimer Note:[/]");
+        Console.WriteLine("When adding or updating contacts, a test email will be sent to a directory path:");
+        Console.WriteLine("User Profile -> Developement -> Console.Phonebook.TestEmails");
+        Console.WriteLine("This is a very basic and simple email client designed to simulate sending emails in a production environment using FluentMail");
+        Console.WriteLine("It doesn't have basic security features, and it doesn't require certificates, specific ports, or sending emails through a server.");
+        Console.WriteLine("Press [enter] to return to the main menu.");
+        Console.ReadLine();
     }
 
     internal static void ShowContactsTable(List<Contact> contacts)

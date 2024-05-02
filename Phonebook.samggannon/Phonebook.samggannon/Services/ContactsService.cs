@@ -12,8 +12,8 @@ internal class ContactsService
     {
         var contact = new Contact();
         contact.Name = AnsiConsole.Ask<string>("Enter a name for your contact *Required: ").Trim();
-        contact.Email = GetEmailInformation();
         contact.PhoneNumber = GetPhoneNumber();
+        contact.Email = GetEmailInformation(contact);
 
         ContactsController.AddContact(contact);
     }
@@ -22,7 +22,7 @@ internal class ContactsService
     {
         string contactsPhoneNumber = "";
         string rawPhoneNumber = AnsiConsole.Ask<string>("Enter a phone number for your contact *Required: ").Trim();
-        bool isValidPhoneNumber = PhoneNumberValidator.IsPhoneNumberValid(rawPhoneNumber);
+        bool isValidPhoneNumber = Validation.IsPhoneNumberValid(rawPhoneNumber);
 
         while(!isValidPhoneNumber)
         {
@@ -31,7 +31,7 @@ internal class ContactsService
             AnsiConsole.WriteLine("");
 
             rawPhoneNumber = AnsiConsole.Ask<string>("Enter a phone number for your contact *Required: ").Trim();
-            isValidPhoneNumber = PhoneNumberValidator.IsPhoneNumberValid(rawPhoneNumber);
+            isValidPhoneNumber = Validation.IsPhoneNumberValid(rawPhoneNumber);
         }
 
         contactsPhoneNumber = rawPhoneNumber;
@@ -39,7 +39,7 @@ internal class ContactsService
         return contactsPhoneNumber;
     }
 
-    private static string GetEmailInformation()
+    private static string GetEmailInformation(Contact contact)
     {
         string email = "";
         bool isValidEmail;
@@ -48,7 +48,7 @@ internal class ContactsService
         if (emailIsProvided)
         {
             email = AnsiConsole.Ask<string>("Contacts Email");
-            isValidEmail = EmailValidator.IsEmailValid(email);
+            isValidEmail = Validation.IsEmailValid(email);
             
             while(!isValidEmail)
             {
@@ -56,8 +56,11 @@ internal class ContactsService
                 AnsiConsole.WriteLine("email must be formatted like: MyEmailAddress@something[.com, .net, edu, biz, etc...]");
 
                 email = AnsiConsole.Ask<string>("Contacts Email");
-                isValidEmail = EmailValidator.IsEmailValid(email);
+                isValidEmail = Validation.IsEmailValid(email);
             }
+
+            EmailSender sender = new EmailSender();
+            sender.SendMail(contact.Email, contact.Name);
         }
 
         return email;
@@ -106,13 +109,13 @@ internal class ContactsService
             ? AnsiConsole.Ask<string>("Contact's new name?")
             : contact.Name;
 
-        contact.Email = AnsiConsole.Confirm("Update Email?")
-            ? contact.Email = GetEmailInformation()
-            : contact.Email;
-
         contact.PhoneNumber = AnsiConsole.Confirm("Update phone number?")
             ? contact.PhoneNumber = GetPhoneNumber()
             : contact.PhoneNumber;
+
+        contact.Email = AnsiConsole.Confirm("Update Email?")
+            ? contact.Email = GetEmailInformation(contact)
+            : contact.Email;
 
         ContactsController.UpdateContact(contact);
     }

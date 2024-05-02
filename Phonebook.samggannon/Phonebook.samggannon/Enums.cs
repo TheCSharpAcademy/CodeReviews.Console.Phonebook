@@ -8,6 +8,7 @@ internal class Enums
         ViewAllContacts,
         UpdateContact,
         DeleteContact,
+        DeveloperDisclaimer,
         Quit
     }
 }
