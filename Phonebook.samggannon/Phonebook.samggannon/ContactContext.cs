@@ -13,12 +13,4 @@ internal class ContactContext : DbContext
         optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["DataConnection"].ConnectionString);
     }
 
-    //// This also doesn't work
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
-    //    optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["DataConnection"].ConnectionString);
-
-    //// Neither Does this
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
-    //.UseSqlServer(ConfigurationManager.ConnectionStrings["DataConnection"].ConnectionString);
-
 }
