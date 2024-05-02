@@ -1,28 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿namespace Phonebook.samggannon.Utilities;
 
-namespace Phonebook.samggannon.Utilities
+internal static class Validation
 {
-    internal static class Validation
+    public static bool IsEmailValid(string email)
     {
-        public static bool IsEmailValid(string email)
-        {
-            if (string.IsNullOrEmpty(email))
-                return false;
+        if (string.IsNullOrEmpty(email))
+            return false;
 
-            return email.Contains("@");
-        }
+        return email.Contains("@");
+    }
 
-        public static bool IsPhoneNumberValid(string phoneNumber)
-        {
-            if (!string.IsNullOrEmpty(phoneNumber))
-                return false;
+    public static bool IsPhoneNumberValid(string phoneNumber)
+    {
+        if (!string.IsNullOrEmpty(phoneNumber))
+            return false;
 
-            return phoneNumber.Length == 10 && phoneNumber.All(char.IsDigit);
-        }
+        return phoneNumber.Length == 10 && phoneNumber.All(char.IsDigit);
     }
 }

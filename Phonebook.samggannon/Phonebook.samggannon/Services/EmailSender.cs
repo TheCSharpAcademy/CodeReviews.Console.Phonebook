@@ -16,7 +16,7 @@ public class EmailSender
 
     public EmailSender()
     {
-        _emailPDL = PDL();
+        _emailPDL = Pdl();
     }
 
     public async Task SendMail(string emailAddress, string name)
@@ -42,11 +42,11 @@ public class EmailSender
         }
         catch(Exception ex)
         {
-            string msg = ex.Message;
+            Console.WriteLine(ex.Message);
         }
     }
 
-    private static string PDL()
+    private static string Pdl()
     {
         string userProfile = Environment.GetEnvironmentVariable("USERPROFILE");
         string logDirectory = Path.Combine(userProfile, "Development", "Console.Phonebook.TestEmails");
