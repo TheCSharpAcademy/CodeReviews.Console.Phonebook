@@ -49,7 +49,46 @@ internal class ContactsService
 
     internal static void UpdateContact()
     {
-        throw new NotImplementedException();
+        ViewAllContacts();
+        string input = AnsiConsole.Ask<string>("Select the id of the contact you wish to update");
+
+        if (int.TryParse(input, out int contactId))
+        {
+            Contact contact = GetContactOrPrompt(contactId);
+            if (contact != null)
+            {
+                UpdateContactDetails(contact);
+            }
+            else
+            {
+                Console.Clear();
+                UpdateContact();
+            }
+        }
+        else
+        {
+            AnsiConsole.WriteLine("You have entered an invalid input. Please try again. Press a key to continue");
+            Console.ReadLine();
+            Console.Clear();
+            UpdateContact();
+        }
+    }
+
+    private static void UpdateContactDetails(Contact contact)
+    {
+        contact.Name = AnsiConsole.Confirm("Update name?")
+            ? AnsiConsole.Ask<string>("Contact's new name?")
+            : contact.Name;
+
+        contact.Email = AnsiConsole.Confirm("Update Email?")
+            ? contact.Email = GetEmailInformation()
+            : contact.Email;
+
+        contact.PhoneNumber = AnsiConsole.Confirm("Update phone number?")
+            ? AnsiConsole.Ask<string>("Update phone number?")
+            : contact.PhoneNumber;
+
+        ContactsController.UpdateContact(contact);
     }
 
     #region Delete
@@ -70,6 +109,11 @@ internal class ContactsService
                     return;
                 }
             }
+            else
+            {
+                Console.Clear();
+                DeleteContact();
+            }
         }
         else
         {
@@ -88,7 +132,7 @@ internal class ContactsService
             AnsiConsole.WriteLine("Contact not found. Press a key to continue");
             Console.ReadLine();
             Console.Clear();
-            DeleteContact();
+            return contact;
         }
         return contact;
     }

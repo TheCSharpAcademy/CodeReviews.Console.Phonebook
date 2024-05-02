@@ -29,4 +29,11 @@ internal class ContactsController
         using var db = new ContactContext();
         return (db.Contacts.FirstOrDefault(x => x.ContactId == contactId));
     }
+
+    internal static void UpdateContact(Contact contact)
+    {
+        using var db = new ContactContext();
+        db.Update(contact);
+        db.SaveChanges();
+    }
 }

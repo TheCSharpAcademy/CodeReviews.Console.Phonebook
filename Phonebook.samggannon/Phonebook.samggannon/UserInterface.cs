@@ -19,6 +19,7 @@ internal static class UserInterface
                 .AddChoices(
                     MenuOptions.AddContact,
                     MenuOptions.ViewAllContacts,
+                    MenuOptions.UpdateContact,
                     MenuOptions.DeleteContact,
                     MenuOptions.Quit));
 
