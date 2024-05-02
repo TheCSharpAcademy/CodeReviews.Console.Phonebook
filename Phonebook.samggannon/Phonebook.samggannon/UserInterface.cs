@@ -1,6 +1,7 @@
 ﻿using Spectre.Console;
 using Phonebook.samggannon.Services;
 using static Phonebook.samggannon.Enums;
+using Phonebook.samggannon.Models;
 
 namespace Phonebook.samggannon;
 
@@ -17,6 +18,7 @@ internal static class UserInterface
                 .Title("What would you like to do?")
                 .AddChoices(
                     MenuOptions.AddContact,
+                    MenuOptions.ViewAllContacts,
                     MenuOptions.Quit));
 
             switch (option)
@@ -46,5 +48,28 @@ internal static class UserInterface
             }
 
         }
+    }
+
+    internal static void ShowContactsTable(List<ContactDto> contacts)
+    {
+        var table = new Table();
+        table.AddColumn("Name");
+        table.AddColumn("Email Address");
+        table.AddColumn("Phone Number");
+
+        foreach (var contact in contacts)
+        {
+            table.AddRow(
+                contact.Name,
+                contact.Email,
+                contact.PhoneNumber
+                );
+        }
+
+        AnsiConsole.Write(table);
+
+        Console.WriteLine("Press any key to continue");
+        Console.ReadLine();
+        Console.Clear();
     }
 }

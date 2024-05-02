@@ -10,4 +10,10 @@ internal class ContactsController
         db.Contacts.Add(contact);
         db.SaveChanges();
     }
+
+    internal static List<Contact> GetAllContacts()
+    {
+        using var db = new ContactContext();
+        return db.Contacts.ToList();
+    }
 }

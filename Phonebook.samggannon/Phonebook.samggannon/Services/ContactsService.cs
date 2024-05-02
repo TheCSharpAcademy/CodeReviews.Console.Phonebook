@@ -48,7 +48,22 @@ internal class ContactsService
 
     internal static void ViewAllContacts()
     {
+        List<Contact> contacts = ContactsController.GetAllContacts();
+        List<ContactDto> showContacts = new List<ContactDto>();
+
+        foreach(var contact in contacts)
+        {
+            ContactDto contactDto = new ContactDto
+            {
+                Name = contact.Name,
+                Email = contact.Email,
+                PhoneNumber = contact.PhoneNumber
+            };
+
+            showContacts.Add(contactDto);
+        }
         
+        UserInterface.ShowContactsTable(showContacts);
     }
 
     internal static void DeleteContact()
