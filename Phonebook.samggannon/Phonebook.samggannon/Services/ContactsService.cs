@@ -7,14 +7,36 @@ namespace Phonebook.samggannon.Services;
 
 internal class ContactsService
 {
+    #region Insert
     internal static void AddContact()
     {
         var contact = new Contact();
         contact.Name = AnsiConsole.Ask<string>("Enter a name for your contact *Required: ").Trim();
         contact.Email = GetEmailInformation();
-        contact.PhoneNumber = AnsiConsole.Ask<string>("Enter a phone number for your contact *Required: ").Trim();
+        contact.PhoneNumber = GetPhoneNumber();
 
         ContactsController.AddContact(contact);
+    }
+
+    private static string? GetPhoneNumber()
+    {
+        string contactsPhoneNumber = "";
+        string rawPhoneNumber = AnsiConsole.Ask<string>("Enter a phone number for your contact *Required: ").Trim();
+        bool isValidPhoneNumber = PhoneNumberValidator.IsPhoneNumberValid(rawPhoneNumber);
+
+        while(!isValidPhoneNumber)
+        {
+            AnsiConsole.WriteLine("Invalid phone number. Please provide country and area code.");
+            AnsiConsole.WriteLine("Phone number must be at least 10 digits");
+            AnsiConsole.WriteLine("");
+
+            rawPhoneNumber = AnsiConsole.Ask<string>("Enter a phone number for your contact *Required: ").Trim();
+            isValidPhoneNumber = PhoneNumberValidator.IsPhoneNumberValid(rawPhoneNumber);
+        }
+
+        contactsPhoneNumber = rawPhoneNumber;
+
+        return contactsPhoneNumber;
     }
 
     private static string GetEmailInformation()
@@ -40,13 +62,17 @@ internal class ContactsService
 
         return email;
     }
+    #endregion
 
+    #region Read
     internal static void ViewAllContacts()
     {
         List<Contact> contacts = ContactsController.GetAllContacts();
         UserInterface.ShowContactsTable(contacts);
     }
+    #endregion
 
+    #region Update
     internal static void UpdateContact()
     {
         ViewAllContacts();
@@ -85,14 +111,14 @@ internal class ContactsService
             : contact.Email;
 
         contact.PhoneNumber = AnsiConsole.Confirm("Update phone number?")
-            ? AnsiConsole.Ask<string>("Update phone number?")
+            ? contact.PhoneNumber = GetPhoneNumber()
             : contact.PhoneNumber;
 
         ContactsController.UpdateContact(contact);
     }
+    #endregion
 
     #region Delete
-
     internal static void DeleteContact()
     {
         ViewAllContacts();
@@ -142,6 +168,5 @@ internal class ContactsService
         UserInterface.ConfirmContact(contact);
         return AnsiConsole.Confirm("Are you sure?");
     }
-
     #endregion
 }

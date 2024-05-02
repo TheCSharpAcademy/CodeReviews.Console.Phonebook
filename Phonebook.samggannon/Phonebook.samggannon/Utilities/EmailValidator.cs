@@ -17,4 +17,15 @@ namespace Phonebook.samggannon.Utilities
             return email.Contains("@");
         }
     }
+
+    internal static class PhoneNumberValidator
+    {
+        public static bool IsPhoneNumberValid(string phoneNumber)
+        {
+            if (!string.IsNullOrEmpty(phoneNumber))
+                return false;
+
+            return phoneNumber.Length == 10 && phoneNumber.All(char.IsDigit);
+        }
+    }
 }

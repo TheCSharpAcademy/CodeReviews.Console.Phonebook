@@ -1,4 +1,6 @@
-﻿namespace Phonebook.samggannon.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Phonebook.samggannon.Models;
 
 internal class Contact
 {
