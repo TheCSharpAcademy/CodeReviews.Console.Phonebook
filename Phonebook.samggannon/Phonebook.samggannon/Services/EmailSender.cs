@@ -6,6 +6,12 @@ namespace Phonebook.samggannon.Services;
 
 public class EmailSender
 {
+    /// <summary>
+    /// This program serves as a demonstration of fundamental skills in programmatically sending emails utilizing SMTP protocols. 
+    /// As a means of achieving this functionality without disclosing credentials, FluentEmail library was utilized.
+    /// </summary>
+
+
     private string _emailPDL;
 
     public EmailSender()
