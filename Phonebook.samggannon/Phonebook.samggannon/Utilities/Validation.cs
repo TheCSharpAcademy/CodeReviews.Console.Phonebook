@@ -1,21 +1,23 @@
-﻿using Phonebook.samggannon.Services;
-using Phonebook.samggannon.Models;
+﻿using Phonebook.samggannon.Models;
+using Phonebook.samggannon.Services;
 using System.Globalization;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 
 namespace Phonebook.samggannon.Utilities;
 
 internal static class Validation
 {
-    public static bool IsEmailValid(string email)
+    public static bool IsEmailValid(string emailAddress)
     {
-        if (string.IsNullOrEmpty(email))
+
+        if (string.IsNullOrEmpty(emailAddress))
             return false;
 
         try
         {
             // Normalize the domain
-            email = Regex.Replace(email, @"(@)(.+)$", DomainMapper,
+            emailAddress = Regex.Replace(emailAddress, @"(@)(.+)$", DomainMapper,
                                   RegexOptions.None, TimeSpan.FromMilliseconds(200));
 
             // Examines the domain part of the email and normalizes it.
@@ -41,7 +43,7 @@ internal static class Validation
 
         try
         {
-            return Regex.IsMatch(email,
+            return Regex.IsMatch(emailAddress,
                 @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
                 RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
         }
@@ -50,7 +52,7 @@ internal static class Validation
             return false;
         }
     }
-       
+
 
     public static bool IsPhoneNumberValid(string phoneNumber)
     {

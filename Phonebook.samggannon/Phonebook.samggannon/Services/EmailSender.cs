@@ -11,7 +11,6 @@ public class EmailSender
     /// As a means of achieving this functionality without disclosing credentials, FluentEmail library was utilized.
     /// </summary>
 
-    private string Address { get; set; }
     private string _emailPDL;
 
     public EmailSender()
