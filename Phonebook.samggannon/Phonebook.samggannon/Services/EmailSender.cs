@@ -11,7 +11,7 @@ public class EmailSender
     /// As a means of achieving this functionality without disclosing credentials, FluentEmail library was utilized.
     /// </summary>
 
-
+    private string Address { get; set; }
     private string _emailPDL;
 
     public EmailSender()
@@ -49,7 +49,7 @@ public class EmailSender
     private static string Pdl()
     {
         string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        string logDirectory = Path.Combine(userProfile, "Development", "Console.Phonebook.TestEmails");
+        string logDirectory = Path.Combine(userProfile, "Development", "Logs", "Console.Phonebook.TestEmails");
 
         if (!Directory.Exists(logDirectory))
         {
