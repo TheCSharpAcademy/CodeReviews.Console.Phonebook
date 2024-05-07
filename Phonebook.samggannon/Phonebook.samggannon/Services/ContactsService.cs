@@ -16,6 +16,7 @@ internal class ContactsService
         contact.Email = GetEmailInformation(contact);
 
         ContactsController.AddContact(contact);
+        Validation.SendEmailIfProvided(contact);
     }
 
     private static string? GetPhoneNumber()
@@ -58,9 +59,6 @@ internal class ContactsService
                 email = AnsiConsole.Ask<string>("Contacts Email");
                 isValidEmail = Validation.IsEmailValid(email);
             }
-
-            EmailSender sender = new EmailSender();
-            sender.SendMail(contact.Email, contact.Name);
         }
 
         return email;
@@ -118,6 +116,7 @@ internal class ContactsService
             : contact.Email;
 
         ContactsController.UpdateContact(contact);
+        Validation.SendEmailIfProvided(contact);
     }
     #endregion
 
