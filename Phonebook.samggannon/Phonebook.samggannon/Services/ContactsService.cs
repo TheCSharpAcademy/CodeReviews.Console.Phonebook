@@ -26,7 +26,7 @@ internal class ContactsService
 
         while(!isValidPhoneNumber)
         {
-            AnsiConsole.WriteLine("Invalid phone number. Please provide country and area code.");
+            AnsiConsole.WriteLine("Invalid phone number. Please provide (1) + country and area code.");
             AnsiConsole.WriteLine("Phone number must be at least 10 digits");
             AnsiConsole.WriteLine("");
 
