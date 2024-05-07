@@ -61,6 +61,7 @@ internal static class UserInterface
         AnsiConsole.MarkupLine("[bold]Developer's Disclaimer Note:[/]");
         Console.WriteLine("When adding or updating contacts, a test email will be sent to a directory path:");
         Console.WriteLine("User Profile -> Developement -> Console.Phonebook.TestEmails");
+        Console.WriteLine("For brevivty, when accessing the test email, select [Open With] -> Notepad");
         Console.WriteLine("This is a very basic and simple email client designed to simulate sending emails in a production environment using FluentMail");
         Console.WriteLine("It doesn't have basic security features, and it doesn't require certificates, specific ports, or sending emails through a server.");
         Console.WriteLine("Press [enter] to return to the main menu.");

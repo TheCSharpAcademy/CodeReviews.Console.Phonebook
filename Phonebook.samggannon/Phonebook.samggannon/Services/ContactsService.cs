@@ -86,18 +86,12 @@ internal class ContactsService
             {
                 UpdateContactDetails(contact);
             }
-            else
-            {
-                Console.Clear();
-                UpdateContact();
-            }
         }
         else
         {
-            AnsiConsole.WriteLine("You have entered an invalid input. Please try again. Press a key to continue");
+            AnsiConsole.WriteLine("You have entered an invalid input. Press a [enter] to continue");
             Console.ReadLine();
             Console.Clear();
-            UpdateContact();
         }
     }
 
@@ -157,11 +151,12 @@ internal class ContactsService
         Contact contact = ContactsController.GetContactById(contactId);
         if (contact == null)
         {
-            AnsiConsole.WriteLine("Contact not found. Press a key to continue");
+            AnsiConsole.WriteLine("Contact not found. Press [enter] to continue");
             Console.ReadLine();
             Console.Clear();
             return contact;
         }
+
         return contact;
     }
 

@@ -48,7 +48,7 @@ public class EmailSender
 
     private static string Pdl()
     {
-        string userProfile = Environment.GetEnvironmentVariable("USERPROFILE");
+        string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         string logDirectory = Path.Combine(userProfile, "Development", "Console.Phonebook.TestEmails");
 
         if (!Directory.Exists(logDirectory))
