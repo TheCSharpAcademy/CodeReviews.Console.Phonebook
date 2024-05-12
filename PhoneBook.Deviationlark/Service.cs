@@ -50,7 +50,6 @@ internal static class Service
     }
     internal static void InsertContact()
     {
-        var contacts = Controller.Read();
         var contact = new Contact();
         contact.Name = AnsiConsole.Ask<string>("Contact's name: ");
         contact.PhoneNumber = AnsiConsole.Ask<string>("Contact's phone number(format: +###########):");
