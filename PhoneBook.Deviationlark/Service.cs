@@ -50,7 +50,6 @@ internal static class Service
     }
     internal static void InsertContact()
     {
-        var contacts = Controller.Read();
         var contact = new Contact();
         Console.WriteLine("Enter 0 to go back to main menu");
         contact.Name = AnsiConsole.Ask<string>("Contact's name: ");
