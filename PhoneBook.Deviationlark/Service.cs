@@ -52,7 +52,10 @@ internal static class Service
     {
         var contacts = Controller.Read();
         var contact = new Contact();
+        Console.WriteLine("Enter 0 to go back to main menu");
         contact.Name = AnsiConsole.Ask<string>("Contact's name: ");
+        if (contact.Name == "0") return;
+        Console.Clear();
         contact.PhoneNumber = AnsiConsole.Ask<string>("Contact's phone number(format: +###########):");
         while (!Validation.ValidateNumber(contact.PhoneNumber))
         {
@@ -77,7 +80,17 @@ internal static class Service
     internal static void DeleteContact()
     {
         var contact = GetContactInput();
-        Controller.Delete(contact);
+        var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
+        .Title($"Are you sure you want to delete {contact.Name} from contacts?")
+        .AddChoices("Yes", "No"));
+        if (option == "Yes")
+        {
+            Controller.Delete(contact);
+            Console.WriteLine($"{contact.Name} deleted. Press enter to go back to main menu.");
+            Console.ReadLine();
+        }
+        else if (option == "No")
+            UserInterface.MainMenu();
     }
     internal static void UpdateContact()
     {
@@ -186,6 +199,8 @@ internal static class Service
     }
     internal static void SendSMS()
     {
+        var contacts = Controller.Read();
+        var numbers = contacts.Select(x => x.PhoneNumber).ToArray();
         Console.WriteLine("WARNING! You can only send SMS if you have a Twilio account created.");
         Console.WriteLine("Do you have a twilio account? (yes/no)");
         var option = Console.ReadLine();
@@ -196,7 +211,9 @@ internal static class Service
             TwilioClient.Init(accountSid, authToken);
 
             string fromPhoneNumber = AnsiConsole.Ask<string>("Your Twilio Phone Number: ");
-            string toPhoneNumber = AnsiConsole.Ask<string>("SMS Recipient Phone Number: ");
+            string toPhoneNumber = AnsiConsole.Prompt(new SelectionPrompt<string>()
+            .Title("SMS Recipient Phone Number: ")
+            .AddChoices(numbers));
             string messageBody = AnsiConsole.Ask<string>("Message: ");
 
             try

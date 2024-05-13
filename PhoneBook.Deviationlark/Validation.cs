@@ -9,10 +9,22 @@ internal static class Validation
     private static readonly PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.GetInstance();
     internal static bool ValidateNumber(string phoneNumber)
     {
-        var number = phoneNumberUtil.Parse(phoneNumber, null);
         bool valid = false;
-        if (phoneNumberUtil.IsValidNumber(number)) valid = true;
+        try
+        {
+            var number = phoneNumberUtil.Parse(phoneNumber, null);
+            if (phoneNumberUtil.IsValidNumber(number)) valid = true;
+            return valid;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            Console.WriteLine("Press Enter to try again.");
+            Console.ReadLine();
+            Service.InsertContact();
+        }
         return valid;
+
     }
     internal static bool ValidateEmail(string email)
     {
