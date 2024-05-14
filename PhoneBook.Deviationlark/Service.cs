@@ -58,8 +58,7 @@ internal static class Service
         contact.PhoneNumber = AnsiConsole.Ask<string>("Contact's phone number(format: +###########):");
         while (!Validation.ValidateNumber(contact.PhoneNumber))
         {
-            Console.WriteLine("Invalid Format. Use the following format (+###########)");
-            contact.PhoneNumber = AnsiConsole.Ask<string>("Contact's phone number:");
+            contact.PhoneNumber = AnsiConsole.Ask<string>("Contact's phone number(format: +###########):");
         }
         contact.Email = AnsiConsole.Ask<string>("Contact's email: ");
         while (!Validation.ValidateEmail(contact.Email))

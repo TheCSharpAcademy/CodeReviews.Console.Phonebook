@@ -21,7 +21,6 @@ internal static class Validation
             Console.WriteLine(ex.Message);
             Console.WriteLine("Press Enter to try again.");
             Console.ReadLine();
-            Service.InsertContact();
         }
         return valid;
 
