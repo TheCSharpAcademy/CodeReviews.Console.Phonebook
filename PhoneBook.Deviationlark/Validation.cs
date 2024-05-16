@@ -58,7 +58,7 @@ internal static class Validation
             if (isNum == false) 
             {
                 Console.WriteLine("That's not a number! Try again.");
-                return isNum = true;
+                return true;
             }
             if (int.Parse(userInput) == contact.Id)
             {
@@ -66,7 +66,7 @@ internal static class Validation
                 break;
             }
             else 
-                return isNull = true;
+                return true;
         }
         if (isNull) Console.WriteLine("Invalid Id. Try again.");
         return isNull;
