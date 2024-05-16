@@ -44,9 +44,31 @@ internal static class Validation
         return isNumber;
     }
 
-    internal static bool ValidateString(string name)
+    internal static bool ValidateString(string userInput, List<Contact> contacts)
     {
-        var isNull = string.IsNullOrEmpty(name);
+        var isNull = string.IsNullOrEmpty(userInput);
+        if (isNull)
+        {
+            Console.WriteLine("Invalid Id! Try again.");
+            return isNull;
+        }
+        foreach (var contact in contacts)
+        {
+            var isNum = int.TryParse(userInput, out _);
+            if (isNum == false) 
+            {
+                Console.WriteLine("That's not a number! Try again.");
+                return isNum = true;
+            }
+            if (int.Parse(userInput) == contact.Id)
+            {
+                isNull = false;
+                break;
+            }
+            else 
+                return isNull = true;
+        }
+        if (isNull) Console.WriteLine("Invalid Id. Try again.");
         return isNull;
     }
 }

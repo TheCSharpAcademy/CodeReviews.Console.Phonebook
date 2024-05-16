@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Mail;
+using Microsoft.IdentityModel.Tokens;
 using Spectre.Console;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
@@ -27,7 +28,7 @@ internal static class Service
                 Console.ReadLine();
                 UserInterface.MainMenu();
             }
-            UserInterface.ShowContacts(contacts);
+            UserInterface.ShowContacts(contacts, 0);
         }
         else if (option == Contacts.FilterByCategory)
         {
@@ -45,7 +46,7 @@ internal static class Service
             }
             var filteredContacts = contacts.Where(p => p.Category == category).ToList();
 
-            UserInterface.ShowContacts(filteredContacts);
+            UserInterface.ShowContacts(filteredContacts, 0);
         }
     }
     internal static void InsertContact()
@@ -114,6 +115,7 @@ internal static class Service
     internal static Contact GetContactInput()
     {
         var contacts = Controller.Read();
+        int id;
 
         var contactArray = contacts.Select(p => p.Name).ToArray();
         if (contactArray.Length == 0)
@@ -127,8 +129,24 @@ internal static class Service
         var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
         .Title("Choose Contact")
         .AddChoices(contactArray));
+        var multiContacts = contacts.Where(p => p.Name == option).ToList();
+        if (multiContacts.Count() > 1)
+        {
+            do
+            {
+                Console.WriteLine("There are multiple contacts with the same name.");
+                Console.WriteLine("Enter the id of the contact you want to choose: ");
+                UserInterface.ShowContacts(multiContacts, 1);
+                option = Console.ReadLine();
+                Console.Clear();
+            } while (Validation.ValidateString(option, multiContacts));
 
-        var id = contacts.Single(p => p.Name == option).Id;
+            id = multiContacts.Single(p => p.Id == int.Parse(option)).Id;
+        }
+        else
+        {
+            id = contacts.Single(p => p.Name == option).Id;
+        }
         var contact = Controller.GetContact(id);
 
         return contact;

@@ -48,7 +48,7 @@ internal static class UserInterface
         return isAppRunning;
     }
 
-    internal static void ShowContacts(List<Contact> contacts)
+    internal static void ShowContacts(List<Contact> contacts, int num)
     {
         var table = new Table();
         table.AddColumn("Id");
@@ -62,9 +62,11 @@ internal static class UserInterface
             table.AddRow(contact.Id.ToString(), contact.Name, contact.PhoneNumber, contact.Email, contact.Category);
         }
         AnsiConsole.Write(table);
-
-        Console.WriteLine("Press enter to go to main menu.");
-        Console.ReadLine();
-        Console.Clear();
+        if (num == 0)
+        {
+            Console.WriteLine("Press enter to go to main menu.");
+            Console.ReadLine();
+            Console.Clear();
+        }
     }
 }
