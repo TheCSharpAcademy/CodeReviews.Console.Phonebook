@@ -55,7 +55,7 @@ internal static class Validation
         foreach (var contact in contacts)
         {
             var isNum = int.TryParse(userInput, out _);
-            if (isNum == false) 
+            if (isNum == false)
             {
                 Console.WriteLine("That's not a number! Try again.");
                 return true;
@@ -65,10 +65,12 @@ internal static class Validation
                 isNull = false;
                 break;
             }
-            else 
+            else
+            {
+                Console.WriteLine("Invalid Id. Try again.");
                 return true;
+            }
         }
-        if (isNull) Console.WriteLine("Invalid Id. Try again.");
         return isNull;
     }
 }
