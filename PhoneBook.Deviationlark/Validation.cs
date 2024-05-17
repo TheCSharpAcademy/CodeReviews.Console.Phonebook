@@ -65,7 +65,9 @@ internal static class Validation
                 isNull = false;
                 break;
             }
-            else
+        }
+        if (isNull)
+        {
             {
                 Console.WriteLine("Invalid Id. Try again.");
                 return true;
