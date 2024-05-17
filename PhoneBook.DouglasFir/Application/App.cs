@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Spectre.Console;
+﻿using Spectre.Console;
 using PhoneBook.DouglasFir.Services;
 
 namespace PhoneBook.DouglasFir.Application;
