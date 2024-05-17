@@ -12,7 +12,7 @@ public class App
     {
         _running = true;
 
-        //// Setup database
+        // Setup database
         //_dbContext = new DatabaseContext();
         //DatabaseInitializer dbInitializer = new DatabaseInitializer(_dbContext);
         //dbInitializer.Initialize();
@@ -30,7 +30,7 @@ public class App
         {
             AnsiConsole.Clear();
             DisplayMainScreenBanner();
-            PromptForSessionAction();
+            PromptForPageAction();
         }
     }
 
@@ -43,7 +43,7 @@ public class App
         Utilities.PrintNewLines(2);
     }
 
-    private void PromptForSessionAction()
+    private void PromptForPageAction()
     {
         var selectedOption = AnsiConsole.Prompt(
             new SelectionPrompt<string>()

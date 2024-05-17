@@ -2,9 +2,9 @@
 {
     Exit,
     ViewContacts,
-    AddNewContanct,
+    AddNewContact,
     ManageContacts,
     ManageContactGroups,
-    SencMessageToContact,
+    SendMessageToContact,
     SeedDatabase
 }
