@@ -65,6 +65,8 @@ internal static class Validation
                 isNull = false;
                 break;
             }
+            else
+                isNull = true;
         }
         if (isNull)
         {
