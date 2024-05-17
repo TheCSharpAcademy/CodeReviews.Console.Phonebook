@@ -7,7 +7,8 @@ namespace PhoneBook.DouglasFir.Application;
 public class App
 {
     private bool _running;
-    
+    private readonly InputHandler _inputHandler;
+
     public App()
     {
         _running = true;
@@ -17,8 +18,8 @@ public class App
         //DatabaseInitializer dbInitializer = new DatabaseInitializer(_dbContext);
         //dbInitializer.Initialize();
 
-        //// Initialize services
-        //_inputHandler = new InputHandler();
+        // Initialize services
+        _inputHandler = new InputHandler();
         //_codingGoalDAO = new CodingGoalDao(_dbContext);
         //_codingSessionDAO = new CodingSessionDao(_dbContext, _codingGoalDAO);
         //_dbSeeder = new DatabaseSeeder(_codingSessionDAO, _codingGoalDAO, _inputHandler);
@@ -37,7 +38,7 @@ public class App
     private void DisplayMainScreenBanner()
     {
         AnsiConsole.Write(
-            new FigletText("Coding Tracker")
+            new FigletText("Robodex")
                 .LeftJustified()
                 .Color(Color.SeaGreen1_1));
         Utilities.PrintNewLines(2);
@@ -59,31 +60,32 @@ public class App
     {
         switch (Enum.Parse<MainMenuOption>(option.Replace(" ", "")))
         {
-            //case MainMenuOption.StartNewSession:
-            //    AppStopwatchManager _appStopwatchManager = new AppStopwatchManager(_codingSessionDAO, _inputHandler);
-            //    _appStopwatchManager.Run();
-            //    break;
-            //case MainMenuOption.LogManualSession:
-            //    AppNewLogManager _appNewLogManager = new AppNewLogManager(_codingSessionDAO, _inputHandler);
-            //    _appNewLogManager.Run();
-            //    break;
-            //case MainMenuOption.ViewAndEditPreviousSessions:
-            //    AppSessionManager _appSessionManager = new AppSessionManager(_codingSessionDAO, _inputHandler);
-            //    _appSessionManager.Run();
-            //    break;
-            //case MainMenuOption.ViewAndEditGoals:
-            //    AppGoalManager _appGoalManager = new AppGoalManager(_codingGoalDAO, _inputHandler);
-            //    _appGoalManager.Run();
-            //    break;
-            //case MainMenuOption.ViewReports:
-            //    AppReportManager _appReportManager = new AppReportManager(_codingSessionDAO, _inputHandler);
-            //    _appReportManager.Run();
-            //    break;
-            //case MainMenuOption.SeedDatabase:
-            //    _dbSeeder.SeedDatabase();
-            //    break;
             case MainMenuOption.Exit:
                 CloseSession();
+                break;
+            case MainMenuOption.ViewContacts:
+                Utilities.DisplayWarningMessage("This feature is not yet implemented.");
+                _inputHandler.PauseForContinueInput();
+                break;
+            case MainMenuOption.AddNewContanct:
+                Utilities.DisplayWarningMessage("This feature is not yet implemented.");
+                _inputHandler.PauseForContinueInput();
+                break;
+            case MainMenuOption.ManageContacts:
+                Utilities.DisplayWarningMessage("This feature is not yet implemented.");
+                _inputHandler.PauseForContinueInput();
+                break;
+            case MainMenuOption.ManageContactGroups:
+                Utilities.DisplayWarningMessage("This feature is not yet implemented.");
+                _inputHandler.PauseForContinueInput();
+                break;
+            case MainMenuOption.SencMessageToContact:
+                Utilities.DisplayWarningMessage("This feature is not yet implemented.");
+                _inputHandler.PauseForContinueInput();
+                break;
+            case MainMenuOption.SeedDatabase:
+                Utilities.DisplayWarningMessage("This feature is not yet implemented.");
+                _inputHandler.PauseForContinueInput();
                 break;
         }
     }
