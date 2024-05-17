@@ -1,10 +1,10 @@
 ﻿public enum MainMenuOption
 {
-    StartNewSession,
-    LogManualSession,
-    ViewAndEditPreviousSessions,
-    ViewAndEditGoals,
-    ViewReports,
-    SeedDatabase,
-    Exit
+    Exit,
+    ViewContacts,
+    AddNewContanct,
+    ManageContacts,
+    ManageContactGroups,
+    SencMessageToContact,
+    SeedDatabase
 }
