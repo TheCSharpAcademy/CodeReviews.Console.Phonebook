@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Spectre.Console;
-using PhoneBook.DouglasFir.Utilities;
+using PhoneBook.DouglasFir.Services;
 
 namespace PhoneBook.DouglasFir.Application;
 
@@ -40,8 +40,7 @@ public class App
             new FigletText("Coding Tracker")
                 .LeftJustified()
                 .Color(Color.SeaGreen1_1));
-
-        Utilities.Utilities.PrintNewLines(2);
+        Utilities.PrintNewLines(2);
     }
 
     private void PromptForSessionAction()
@@ -51,7 +50,7 @@ public class App
                 .Title("Select an option:")
                 .PageSize(10)
                 .AddChoices(Enum.GetNames(typeof(MainMenuOption))
-                .Select(Utilities.Utilities.SplitCamelCase)));
+                .Select(Utilities.SplitCamelCase)));
 
         ExecuteSelectedOption(selectedOption);
     }
@@ -93,6 +92,6 @@ public class App
     {
         _running = false;
         AnsiConsole.Markup("[teal]Goodbye![/]");
-        Utilities.Utilities.PrintNewLines(2);
+        Utilities.PrintNewLines(2);
     }
 }

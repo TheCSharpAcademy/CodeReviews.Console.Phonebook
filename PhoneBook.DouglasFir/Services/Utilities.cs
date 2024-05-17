@@ -1,7 +1,7 @@
 ﻿using Spectre.Console;
 using System.Text.RegularExpressions;
 
-namespace PhoneBook.DouglasFir.Utilities;
+namespace PhoneBook.DouglasFir.Services;
 
 public static class Utilities
 {
