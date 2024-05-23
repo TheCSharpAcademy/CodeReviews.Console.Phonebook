@@ -3,8 +3,5 @@
     Exit,
     ViewContacts,
     AddNewContact,
-    ManageContacts,
-    ManageContactGroups,
-    SendMessageToContact,
-    SeedDatabase
+    ManageContacts
 }

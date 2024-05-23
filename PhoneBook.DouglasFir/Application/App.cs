@@ -1,12 +1,12 @@
-﻿using Spectre.Console;
-using PhoneBook.DouglasFir.Services;
+﻿using PhoneBook.DouglasFir.Services;
+using Spectre.Console;
 
 namespace PhoneBook.DouglasFir.Application;
 
 public class App
 {
     private bool _running;
-    private readonly InputHandler _inputHandler;
+    private readonly UserInput _inputHandler;
 
     public App()
     {
@@ -18,7 +18,7 @@ public class App
         //dbInitializer.Initialize();
 
         // Initialize services
-        _inputHandler = new InputHandler();
+        _inputHandler = new UserInput();
         //_codingGoalDAO = new CodingGoalDao(_dbContext);
         //_codingSessionDAO = new CodingSessionDao(_dbContext, _codingGoalDAO);
         //_dbSeeder = new DatabaseSeeder(_codingSessionDAO, _codingGoalDAO, _inputHandler);
@@ -30,7 +30,7 @@ public class App
         {
             AnsiConsole.Clear();
             DisplayMainScreenBanner();
-            PromptForPageAction();
+            PromptForMenuOption();
         }
     }
 
@@ -43,7 +43,7 @@ public class App
         Utilities.PrintNewLines(2);
     }
 
-    private void PromptForPageAction()
+    private void PromptForMenuOption()
     {
         var selectedOption = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
@@ -63,26 +63,17 @@ public class App
                 CloseSession();
                 break;
             case MainMenuOption.ViewContacts:
+                // TODO: Implement this feature
                 Utilities.DisplayWarningMessage("This feature is not yet implemented.");
                 _inputHandler.PauseForContinueInput();
                 break;
-            case MainMenuOption.AddNewContanct:
+            case MainMenuOption.AddNewContact:
+                // TODO: Finish Implement this feature
                 Utilities.DisplayWarningMessage("This feature is not yet implemented.");
                 _inputHandler.PauseForContinueInput();
                 break;
             case MainMenuOption.ManageContacts:
-                Utilities.DisplayWarningMessage("This feature is not yet implemented.");
-                _inputHandler.PauseForContinueInput();
-                break;
-            case MainMenuOption.ManageContactGroups:
-                Utilities.DisplayWarningMessage("This feature is not yet implemented.");
-                _inputHandler.PauseForContinueInput();
-                break;
-            case MainMenuOption.SencMessageToContact:
-                Utilities.DisplayWarningMessage("This feature is not yet implemented.");
-                _inputHandler.PauseForContinueInput();
-                break;
-            case MainMenuOption.SeedDatabase:
+                // TODO: Implement this feature
                 Utilities.DisplayWarningMessage("This feature is not yet implemented.");
                 _inputHandler.PauseForContinueInput();
                 break;

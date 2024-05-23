@@ -2,7 +2,7 @@
 
 namespace PhoneBook.DouglasFir.Services;
 
-public class InputHandler
+public class UserInput
 {
     public void PauseForContinueInput()
     {
