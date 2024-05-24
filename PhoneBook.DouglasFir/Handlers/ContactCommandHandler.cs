@@ -1,7 +1,6 @@
 ﻿using PhoneBook.DouglasFir.Models;
 using PhoneBook.DouglasFir.Services;
 using PhoneBook.DouglasFir.Utilities;
-using Spectre.Console;
 using System.Text.RegularExpressions;
 
 namespace PhoneBook.DouglasFir.Handlers;
@@ -39,12 +38,12 @@ public class ContactCommandHandler
         TableVisualizationEngine.ShowContactsTableWithId(_contactService.GetAllContacts());
 
         var id = UserInput.PromptForInteger("Enter the ID of the contact you want to update:");
-        
+
         try
         {
             var contact = _contactService.GetContactById(id);
-            contact.Name = UserInput.PromptForNonEmptyString("Enter name:");
-            contact.PhoneNumber = UserInput.PromptForNonEmptyString("Enter phone number:");
+            contact!.Name = UserInput.PromptForNonEmptyString("Enter name:");
+            contact!.PhoneNumber = UserInput.PromptForNonEmptyString("Enter phone number:");
 
             _contactService.UpdateContact(contact);
         }
