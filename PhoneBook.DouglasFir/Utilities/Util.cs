@@ -1,9 +1,9 @@
 ﻿using Spectre.Console;
 using System.Text.RegularExpressions;
 
-namespace PhoneBook.DouglasFir.Services;
+namespace PhoneBook.DouglasFir.Utilities;
 
-public static class Utilities
+public static class Util
 {
     public static string SplitCamelCase(string input)
     {

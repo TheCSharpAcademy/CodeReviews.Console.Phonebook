@@ -3,5 +3,6 @@
     Exit,
     ViewContacts,
     AddNewContact,
-    ManageContacts
+    UpdateContact,
+    DeleteContact,
 }

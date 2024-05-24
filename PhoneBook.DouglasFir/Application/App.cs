@@ -1,4 +1,7 @@
-﻿using PhoneBook.DouglasFir.Services;
+﻿using PhoneBook.DouglasFir.Data;
+using PhoneBook.DouglasFir.Handlers;
+using PhoneBook.DouglasFir.Services;
+using PhoneBook.DouglasFir.Utilities;
 using Spectre.Console;
 
 namespace PhoneBook.DouglasFir.Application;
@@ -6,22 +9,16 @@ namespace PhoneBook.DouglasFir.Application;
 public class App
 {
     private bool _running;
-    private readonly UserInput _inputHandler;
+    private ContactCommandHandler _contactCommandHandler;
+    private ContactService _contactService;
+    private PhoneBookContext _context;
 
     public App()
     {
         _running = true;
-
-        // Setup database
-        //_dbContext = new DatabaseContext();
-        //DatabaseInitializer dbInitializer = new DatabaseInitializer(_dbContext);
-        //dbInitializer.Initialize();
-
-        // Initialize services
-        _inputHandler = new UserInput();
-        //_codingGoalDAO = new CodingGoalDao(_dbContext);
-        //_codingSessionDAO = new CodingSessionDao(_dbContext, _codingGoalDAO);
-        //_dbSeeder = new DatabaseSeeder(_codingSessionDAO, _codingGoalDAO, _inputHandler);
+        _context = new PhoneBookContext();
+        _contactService = new ContactService(_context);
+        _contactCommandHandler = new ContactCommandHandler(_contactService);
     }
 
     public void Run()
@@ -40,7 +37,7 @@ public class App
             new FigletText("Robodex")
                 .LeftJustified()
                 .Color(Color.SeaGreen1_1));
-        Utilities.PrintNewLines(2);
+        Util.PrintNewLines(2);
     }
 
     private void PromptForMenuOption()
@@ -50,7 +47,7 @@ public class App
                 .Title("Select an option:")
                 .PageSize(10)
                 .AddChoices(Enum.GetNames(typeof(MainMenuOption))
-                .Select(Utilities.SplitCamelCase)));
+                .Select(Util.SplitCamelCase)));
 
         ExecuteSelectedOption(selectedOption);
     }
@@ -63,19 +60,20 @@ public class App
                 CloseSession();
                 break;
             case MainMenuOption.ViewContacts:
-                // TODO: Implement this feature
-                Utilities.DisplayWarningMessage("This feature is not yet implemented.");
-                _inputHandler.PauseForContinueInput();
+                _contactCommandHandler.HandleViewContacts();
+                UserInput.PauseForContinueInput();
                 break;
             case MainMenuOption.AddNewContact:
-                // TODO: Finish Implement this feature
-                Utilities.DisplayWarningMessage("This feature is not yet implemented.");
-                _inputHandler.PauseForContinueInput();
+                _contactCommandHandler.HandleAddContact();
+                UserInput.PauseForContinueInput();
                 break;
-            case MainMenuOption.ManageContacts:
-                // TODO: Implement this feature
-                Utilities.DisplayWarningMessage("This feature is not yet implemented.");
-                _inputHandler.PauseForContinueInput();
+            case MainMenuOption.UpdateContact:
+                _contactCommandHandler.HandleUpdateContact();
+                UserInput.PauseForContinueInput();
+                break;
+            case MainMenuOption.DeleteContact:
+                _contactCommandHandler.HandleDeleteContact();
+                UserInput.PauseForContinueInput();
                 break;
         }
     }
@@ -84,6 +82,6 @@ public class App
     {
         _running = false;
         AnsiConsole.Markup("[teal]Goodbye![/]");
-        Utilities.PrintNewLines(2);
+        Util.PrintNewLines(2);
     }
 }
