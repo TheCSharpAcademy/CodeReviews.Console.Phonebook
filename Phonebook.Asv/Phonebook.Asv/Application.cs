@@ -1,4 +1,7 @@
-﻿using Phonebook.Data;
+﻿using Twilio;
+using Twilio.Types;
+using Twilio.Rest.Api.V2010.Account;
+using Phonebook.Data;
 using Phonebook.Models;
 using Phonebook.Helper;
 using Phonebook.Queries;
@@ -7,13 +10,17 @@ namespace Phonebook;
 
 internal class Application
 {
+    internal Application()
+    {
+        DotNetEnv.Env.TraversePath().Load();
+    }
     internal void MainMenu()
     {
         bool runApp = true;
         while (runApp)
         {
             Console.Clear();
-            string option = Display.GetSelection("Hi! What do you wish to do?", new List<string> { "Create Contact", "Edit Contact", "Delete Contact", "View Contacts", "Send Message/Email", "Quit" });
+            string option = Display.GetSelection("Hi! What do you wish to do?", new List<string> { "Create Contact", "Edit Contact", "Delete Contact", "View Contacts", "Send Message/Email Contact", "Quit" });
             switch (option)
             {
                 case "Create Contact":
@@ -43,7 +50,28 @@ internal class Application
 
     private void ContactContacts()
     {
-        throw new NotImplementedException();
+        string? twilioAccountSid = DotNetEnv.Env.GetString("TWILIO_ACCOUNT_SID");
+        string? twilioAccountToken = DotNetEnv.Env.GetString("TWILIO_AUTH_TOKEN");
+        string? twilioPhoneNumber = DotNetEnv.Env.GetString("TWILIO_PHONE_NUMBER");
+
+        TwilioClient.Init(twilioAccountSid, twilioAccountToken);
+
+        // Replace with your Twilio phone number and the recipient's phone number
+        var fromPhoneNumber = new PhoneNumber(twilioPhoneNumber);
+        var toPhoneNumber = new PhoneNumber("+919370717380");
+
+        // Create and send the message
+        var message = MessageResource.Create(
+            body: "Proud of myself!",
+            from: fromPhoneNumber,
+            to: toPhoneNumber
+        );
+
+        // Output the message SID to the console
+        Console.WriteLine($"Message sent with SID: {message.Sid}");
+        var messageStatus = MessageResource.Fetch(pathSid: message.Sid);
+        Console.WriteLine($"Message status: {messageStatus.Status}");
+        Console.ReadLine();
     }
 
     private void ViewContacts()
