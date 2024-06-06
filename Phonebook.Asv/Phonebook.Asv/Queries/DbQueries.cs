@@ -81,4 +81,65 @@ internal class DbQueries
             .ToList();
         return contacts;
     }
+
+    public static bool IsGivenIdPresent(int id)
+    {
+        using var context = new ContactContext();
+        var contact = context.Contacts.Find(id);
+        if (contact == null)
+            return false;
+        return true;
+    }
+
+    public static bool AreContactsPresent()
+    {
+        using var context = new ContactContext();
+        var count = context.Contacts.Count();
+        if (count >0)
+            return true;
+        return false;
+    }
+
+    public static void SaveContact(Contact contact)
+    {
+        using var context = new ContactContext();
+        context.Add(contact);
+        context.SaveChanges();
+    }
+
+    public static void EditDetails(Contact contact)
+    {
+        using var context = new ContactContext();
+        var existingContact = context.Contacts.Find(contact.Id);
+        existingContact.ContactName = contact.ContactName;
+        existingContact.ContactPhoneno = contact.ContactPhoneno;
+        existingContact.ContactEmailid = contact.ContactEmailid;
+        existingContact.CategoryId = contact.CategoryId;
+        context.SaveChanges();
+    }
+
+    public static void DeleteContact(int id)
+    {
+        using var context = new ContactContext();
+        var contact = context.Contacts.Find(id);
+        if (contact != null)
+        {
+            context.Remove(contact);
+            context.SaveChanges();
+        }   
+    }
+
+    public static string GetPhoneNo(int id)
+    {
+        using var context = new ContactContext();
+        var contact = context.Contacts.Find(id);
+        return contact.ContactPhoneno.ToString();
+    }
+
+    public static string GetEmailId(int id)
+    {
+        using var context = new ContactContext();
+        var contact = context.Contacts.Find(id);
+        return contact.ContactEmailid.ToString();
+    }
 }

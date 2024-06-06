@@ -1,7 +1,6 @@
 ﻿using Spectre.Console;
 using Phonebook.Models;
 
-
 namespace Phonebook;
 
 internal class Display

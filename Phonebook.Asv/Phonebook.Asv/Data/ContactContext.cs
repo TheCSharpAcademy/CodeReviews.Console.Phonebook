@@ -11,5 +11,4 @@ internal class ContactContext: DbContext
     {
         optionsBuilder.UseSqlServer(DotNetEnv.Env.GetString("CONNECION_STRING"));
     }
-
 }

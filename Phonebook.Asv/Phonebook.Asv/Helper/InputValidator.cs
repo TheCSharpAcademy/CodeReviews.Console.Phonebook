@@ -17,4 +17,12 @@ internal class InputValidator
     {
         return Regex.IsMatch(phoneNumber, @"^\+[1-9]\d{1,14}$");
     }
+
+    internal static bool IsGivenInputInteger(string? input)
+    {
+        if (int.TryParse(input, out _))
+            return true;
+        else
+            return false;
+    }
 }
