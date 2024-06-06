@@ -41,7 +41,7 @@ internal class UserInput
                     DeleteContactDetails();
                     break;
 
-                case "Exit the applitcation":
+                case "Exit the application":
                     isRunning = false;
                     Environment.Exit(0);
                     break;
