@@ -25,8 +25,20 @@ public class ContactController
         {
             var firstName = AnsiConsole.Ask<string>("Firstname: ");
             var lastName = AnsiConsole.Ask<string>("Lastname: ");
+            
             var emailAddress = AnsiConsole.Ask<string>("Email: ");
+            while(!InputValidator.ValidateEmail(emailAddress)) 
+            {
+                Console.WriteLine("Invalid email format. Please enter a valid email address.");
+                emailAddress = AnsiConsole.Ask<string>("Email: ");
+            }
+            
             var phoneNumber = AnsiConsole.Ask<string>("Phone: ");
+            while(!InputValidator.ValidatePhoneNumber(phoneNumber)) 
+            {
+                Console.WriteLine("Invalid phone number. Please enter a 10 digit phone number with no dashes or spaces.");
+                phoneNumber = AnsiConsole.Ask<string>("Phone: ");
+            }
             
             using var db = new ContactContext();
 
