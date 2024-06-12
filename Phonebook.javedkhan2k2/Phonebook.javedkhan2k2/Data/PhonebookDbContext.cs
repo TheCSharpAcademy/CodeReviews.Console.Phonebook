@@ -25,5 +25,4 @@ public class PhonebookDbContext : DbContext
         
         optionsBuilder.UseSqlServer(@$"Server=localhost,1433;Initial Catalog=Phonebook; User Id={DatabaseUserID}; Password={DatabasePassword};TrustServerCertificate=True");
     }
-
 }
