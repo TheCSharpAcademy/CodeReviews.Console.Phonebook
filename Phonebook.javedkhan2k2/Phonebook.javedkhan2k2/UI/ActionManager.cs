@@ -6,13 +6,15 @@ namespace Phonebook.UI;
 
 public class ActionManager
 {
-    Menu menu;
-    ContactService contactService;
-
+    private Menu _menu;
+    private ContactService _contactService;
+    private ContactCategoryService _contactCategoryService;
     public ActionManager(string dbUser, string dbPassword)
     {
-        menu = new Menu();
-        contactService = new ContactService(new PhonebookDbContext(dbUser, dbPassword));
+        _menu = new Menu();
+        var context = new PhonebookDbContext(dbUser, dbPassword);
+        _contactService = new ContactService(context);
+        _contactCategoryService = new ContactCategoryService(context);
     }
 
     public void RunApp()
@@ -20,20 +22,14 @@ public class ActionManager
         bool runApplication = true;
         while(runApplication)
         {
-            var choice = menu.GetMainMenu();
+            var choice = _menu.GetMainMenu();
             switch (choice)
             {
-                case "View All Contacts":
-                    contactService.ViewAllContacts();
+                case "Phonebook":
+                    ViewPhonebookMenu();
                     break;
-                case "Add Contact":
-                    contactService.AddContact();
-                    break;
-                case "Update Contact":
-                    contactService.UpdateContact();
-                    break;
-                case "Delete Contact":
-                    contactService.DeleteContact();
+                case "Categories":
+                    ViewCategoryMenu();
                     break;
                 case "Exit":
                     runApplication = false;
@@ -43,4 +39,56 @@ public class ActionManager
             }
         }
     }
+
+    private void ViewCategoryMenu()
+    {
+        while(true)
+        {
+            var choice = _menu.GetCategoryMenu();
+            switch (choice)
+            {
+                case "View All Categories":
+                    _contactCategoryService.ViewAllContactCategories();
+                    break;
+                case "Add Category":
+                    _contactCategoryService.AddContactCategory();
+                    break;
+                case "Update Category":
+                    _contactCategoryService.UpdateContactCategory();
+                    break;
+                case "[maroon]Go Back[/]":
+                    return;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void ViewPhonebookMenu()
+    {
+        while(true)
+        {
+            var choice = _menu.GetPhonebookMenu();
+            switch (choice)
+            {
+                case "View All Contacts":
+                    _contactService.ViewAllContacts();
+                    break;
+                case "Add Contact":
+                    _contactService.AddContact();
+                    break;
+                case "Update Contact":
+                    _contactService.UpdateContact();
+                    break;
+                case "Delete Contact":
+                    _contactService.DeleteContact();
+                    break;
+                case "[maroon]Go Back[/]":
+                    return;
+                default:
+                    break;
+            }
+        }
+    }
+
 }

@@ -16,7 +16,7 @@ public class ContactRepository : IContactRepository
         _context = context;
     }
 
-    public IEnumerable<Contact> GetAllContacts() => _context.Contacts.ToList();
+    public IEnumerable<Contact> GetAllContacts() => _context.Contacts.Include( c => c.ContactCategory).ToList();
 
     public Contact? GetContactById(int id) => _context.Contacts.Find(id);
 

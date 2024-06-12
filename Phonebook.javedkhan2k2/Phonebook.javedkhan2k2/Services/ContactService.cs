@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Drinks;
 using Phonebook.Data;
 using Phonebook.Entities;
 using Phonebook.Repositories;
@@ -22,7 +21,7 @@ public class ContactService
         var contact = UserInput.GetNewContact();
         _contactRepository.AddContact(contact);
         AnsiConsole.Markup($"Contact {contact.Name} {contact.Email} {contact.PhoneNumber} Added [green]Successfully[/]");
-        Console.ReadLine();
+        VisualizationEngine.DisplayContinueMessage();
     }
 
     internal void UpdateContact()
@@ -40,8 +39,8 @@ public class ContactService
         }
         UserInput.UpdateContact(contact);
         _contactRepository.UpdateContact(contact);
-        AnsiConsole.Markup($"Contact {contact.Name} {contact.Email} {contact.PhoneNumber} Updated [green]Successfully[/]");
-        Console.ReadLine();
+        AnsiConsole.Markup($"Contact {contact.Name} {contact.Email} {contact.PhoneNumber} Updated [green]Successfully[/]\n");
+        VisualizationEngine.DisplayContinueMessage();
     }
 
     internal void DeleteContact()

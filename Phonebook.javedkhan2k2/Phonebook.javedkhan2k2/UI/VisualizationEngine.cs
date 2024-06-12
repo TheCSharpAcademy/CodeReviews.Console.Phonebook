@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Phonebook.Entities;
 using Spectre.Console;
-namespace Drinks;
+namespace Phonebook;
 
 internal class VisualizationEngine
 {
@@ -34,12 +34,26 @@ internal class VisualizationEngine
         // {
         //     table.AddColumn(property.Name);
         // }
-        table.AddColumns(["Id", "Name", "Email", "Phone Number"]);
+        table.AddColumns(["Id", "Name", "Email", "Phone Number", "Category"]);
         foreach (var contact in contacts)
         {
-            table.AddRow(contact.Id.ToString(), contact.Name, contact.Email, contact.PhoneNumber);
+            table.AddRow(contact.Id.ToString(), contact.Name, contact.Email, contact.PhoneNumber, contact.ContactCategory.CategoryName);
         }
         AnsiConsole.Write(table);
     }
-    
+
+    internal static void DisplayContactCategoriess(IEnumerable<ContactCategory> contactcategories, string title)
+    {
+        if (title == null)
+        {
+            title = "";
+        }
+        var table = CreateTable(title, $"Displaying [blue]{contactcategories.Count()}[/] records");
+        table.AddColumns(["Id", "Category Name"]);
+        foreach (var contactCategory in contactcategories)
+        {
+            table.AddRow(contactCategory.Id.ToString(), contactCategory.CategoryName);
+        }
+        AnsiConsole.Write(table);
+    }
 }

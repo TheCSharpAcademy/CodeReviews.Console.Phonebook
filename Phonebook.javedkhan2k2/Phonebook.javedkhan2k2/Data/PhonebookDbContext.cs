@@ -17,7 +17,7 @@ public class PhonebookDbContext : DbContext
 
     
     public DbSet<Contact> Contacts { get; set; }
-
+    public DbSet<ContactCategory> ContactCategories{ get; set; }
     
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
