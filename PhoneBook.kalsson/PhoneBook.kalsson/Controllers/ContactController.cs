@@ -34,61 +34,92 @@ public class ContactController
     /// If an error occurs during the contact addition process, an exception is thrown and error details are displayed.
     /// </remarks>
     internal static void AddContact()
+{
+    try
     {
-        try
+        // Asking for user input
+        var firstName = AnsiConsole.Ask<string>("Firstname (or type 'Cancel' to return to the menu): ");
+        if (firstName.ToLower() == "cancel")
         {
-            var firstName = AnsiConsole.Ask<string>("Firstname: ");
-            var lastName = AnsiConsole.Ask<string>("Lastname: ");
-            
-            var emailAddress = AnsiConsole.Ask<string>("Email: ");
-            while(!InputValidator.ValidateEmail(emailAddress)) 
-            {
-                Console.WriteLine("Invalid email format. Please enter a valid email address.");
-                emailAddress = AnsiConsole.Ask<string>("Email: ");
-            }
-            
-            var phoneNumber = AnsiConsole.Ask<string>("Phone: ");
-            while(!InputValidator.ValidatePhoneNumber(phoneNumber)) 
-            {
-                Console.WriteLine("Invalid phone number. Please enter a 10 digit phone number with no dashes or spaces.");
-                phoneNumber = AnsiConsole.Ask<string>("Phone: ");
-            }
-            
-            using var db = new ContactContext();
-
-            var contactEmail = new Email { EmailAddress = emailAddress };
-            var contactPhone = new Phone { PhoneNumber = phoneNumber };
-
-            var emailList = new List<Email> { contactEmail };
-            var phoneList = new List<Phone> { contactPhone };
-
-            db.Add(new Contact
-                { FirstName = firstName, LastName = lastName, EmailAddresses = emailList, PhoneNumbers = phoneList });
-
-            db.SaveChanges();
-            
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("You have added a new contact.");
-            Console.ResetColor();
+            Console.WriteLine("Addition was cancelled. Returning to the menu.");
+            return;
         }
-        catch (Exception e)
+
+        var lastName = AnsiConsole.Ask<string>("Lastname: ");
+        if (lastName.ToLower() == "cancel")
         {
-            Console.WriteLine("An error occurred while adding the contact. Please try again.");
-            Console.WriteLine($"Error detail: {e.Message}");
-            throw;
+            Console.WriteLine("Addition was cancelled. Returning to the menu.");
+            return;
         }
+
+        var emailAddress = AnsiConsole.Ask<string>("Email: ");
+        while (!InputValidator.ValidateEmail(emailAddress))
+        {
+            Console.WriteLine("Invalid email format. Please enter a valid email address.");
+            emailAddress = AnsiConsole.Ask<string>("Email: ");
+        }
+        if (emailAddress.ToLower() == "cancel")
+        {
+            Console.WriteLine("Addition was cancelled. Returning to the menu.");
+            return;
+        }
+
+        var phoneNumber = AnsiConsole.Ask<string>("Phone: ");
+        while (!InputValidator.ValidatePhoneNumber(phoneNumber))
+        {
+            Console.WriteLine("Invalid phone number. Please enter a 10 digit phone number with no dashes or spaces.");
+            phoneNumber = AnsiConsole.Ask<string>("Phone: ");
+        }
+        if (phoneNumber.ToLower() == "cancel")
+        {
+            Console.WriteLine("Addition was cancelled. Returning to the menu.");
+            return;
+        }
+
+        // Adding the contact to the database
+        using var db = new ContactContext();
+
+        var contactEmail = new Email { EmailAddress = emailAddress };
+        var contactPhone = new Phone { PhoneNumber = phoneNumber };
+
+        var emailList = new List<Email> { contactEmail };
+        var phoneList = new List<Phone> { contactPhone };
+
+        db.Add(new Contact
+        {
+            FirstName = firstName,
+            LastName = lastName,
+            EmailAddresses = emailList,
+            PhoneNumbers = phoneList
+        });
+
+        db.SaveChanges();
+
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("You have added a new contact.");
+        Console.ResetColor();
     }
+    catch (Exception e)
+    {
+        Console.WriteLine("An error occurred while adding the contact. Please try again.");
+        Console.WriteLine($"Error detail: {e.Message}");
+        throw;
+    }
+}
 
     /// <summary>
     /// Updates a contact in the phone book.
     /// </summary>
     /// <remarks>
-    /// This method allows the user to select a contact from the existing contacts in the phone book
-    /// and update its details including first name, last name, email address, and phone number. The
-    /// updated contact is then saved in the database.
+    /// This method allows the user to update the details of a specific contact in the phone book.
     /// </remarks>
-    /// <exception cref="System.Exception">Thrown when an error occurs while updating the contact.</exception>
+    /// <param name="id">The ID of the contact to update.</param>
+    /// <param name="firstName">The updated first name of the contact.</param>
+    /// <param name="lastName">The updated last name of the contact.</param>
+    /// <param name="emailAddress">The updated email address of the contact.</param>
+    /// <param name="phoneNumber">The updated phone number of the contact.</param>
+    /// <returns>Void</returns>
     internal static void UpdateContact()
 {
     try
@@ -100,15 +131,24 @@ public class ContactController
             .ToList();
 
         var selectionPrompt = new SelectionPrompt<string>()
-            .Title("Please select the contact you wish to update:")
+            .Title("Please select the contact you wish to update (or type 'Cancel' to return to the menu):")
             .PageSize(10);
 
         foreach (var contact in contacts)
         {
             selectionPrompt.AddChoice($"{contact.FirstName} {contact.LastName} (ID: {contact.Id})");
         }
+        
+        selectionPrompt.AddChoice("Cancel");
 
         var selectedContactDetail = AnsiConsole.Prompt(selectionPrompt);
+
+        if (selectedContactDetail == "Cancel")
+        {
+            Console.WriteLine("Update was cancelled. Returning to the menu.");
+            return;
+        }
+
         var id = int.Parse(selectedContactDetail.Split(" (ID: ")[1].Replace(")", ""));
         var contactToUpdate = contacts.First(c => c.Id == id);
 
@@ -180,9 +220,17 @@ public class ContactController
     }
 }
 
+
     /// <summary>
     /// Deletes a contact from the phone book.
     /// </summary>
+    /// <remarks>
+    /// This method prompts the user to select a contact from the phone book and confirms the deletion.
+    /// If the user confirms, the selected contact will be removed from the phone book database.
+    /// </remarks>
+    /// <exception cref="Exception">
+    /// An error occurred while deleting the contact. Please try again.
+    /// </exception>
     internal static void DeleteContact()
     {
         try
@@ -193,20 +241,30 @@ public class ContactController
                 .Include(c => c.PhoneNumbers)
                 .ToList();
             var selectionPrompt = new SelectionPrompt<string>()
-                .Title("Please select the contact you wish to delete:")
+                .Title("Please select the contact you wish to delete (or type 'Cancel' to return to the menu):")
                 .PageSize(10);
+
             foreach (var contact in contacts)
             {
-                selectionPrompt.AddChoice($"{contact.FirstName} {contact.LastName} (ID: {contact.Id})");
+                selectionPrompt.AddChoice($"(ID: {contact.Id}) {contact.FirstName} {contact.LastName}");
             }
 
+            selectionPrompt.AddChoice("Cancel");
+
             var selectedContactDetail = AnsiConsole.Prompt(selectionPrompt);
+
+            if (selectedContactDetail == "Cancel")
+            {
+                Console.WriteLine("Deletion was cancelled. Returning to the menu.");
+                return;
+            }
+
             var id = int.Parse(selectedContactDetail.Split(" (ID: ")[1].Replace(")", ""));
             var contactToDelete = contacts.First(c => c.Id == id);
 
             // Confirm deletion
             Console.Write(
-                $"Are you sure you want to delete {contactToDelete.FirstName} {contactToDelete.LastName}? Type yes to confirm, no to cancel: ");
+                $"Are you sure you want to delete {contactToDelete.FirstName} {contactToDelete.LastName}? Type 'yes' to confirm, 'no' to cancel: ");
 
             if (Console.ReadLine().ToLower() == "yes")
             {
@@ -229,4 +287,5 @@ public class ContactController
             throw;
         }
     }
+
 }

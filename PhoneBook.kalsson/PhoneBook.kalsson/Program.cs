@@ -40,5 +40,3 @@ while (isAppRunning)
         break;
     }   
 }
-
-Console.ReadLine();
