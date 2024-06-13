@@ -16,30 +16,42 @@ public class ContactService
         _contactRepository = new ContactRepository(context);
     }
 
-    public void AddContact()
+    public void AddContact(IEnumerable<ContactCategory> contactCategories)
     {
-        var contact = UserInput.GetNewContact();
+        var contact = UserInput.GetNewContact(contactCategories);
+        if (contact == null)
+        {
+            AnsiConsole.Markup("You canceled the Operation\n");
+            VisualizationEngine.DisplayContinueMessage();
+            return;
+        }
         _contactRepository.AddContact(contact);
         AnsiConsole.Markup($"Contact {contact.Name} {contact.Email} {contact.PhoneNumber} Added [green]Successfully[/]");
         VisualizationEngine.DisplayContinueMessage();
     }
 
-    internal void UpdateContact()
+    internal void UpdateContact(IEnumerable<ContactCategory> contactCategories)
     {
         var contacts = _contactRepository.GetAllContacts();
         VisualizationEngine.DisplayContacts(contacts, "Contacts Table");
         var id = UserInput.GetIntInput();
         // Validation goes here
         var contact = contacts.FirstOrDefault(x => x.Id == id);
-        if(contact == null)
+        if (contact == null)
         {
             AnsiConsole.Markup($"Contact with id {id} not found!");
             Console.ReadLine();
             return;
         }
-        UserInput.UpdateContact(contact);
-        _contactRepository.UpdateContact(contact);
-        AnsiConsole.Markup($"Contact {contact.Name} {contact.Email} {contact.PhoneNumber} Updated [green]Successfully[/]\n");
+        if (UserInput.UpdateContact(contact, contactCategories))
+        {
+            _contactRepository.UpdateContact(contact);
+            AnsiConsole.Markup($"Contact {contact.Name} {contact.Email} {contact.PhoneNumber} Updated [green]Successfully[/]\n");
+        }
+        else
+        {
+            AnsiConsole.Markup("You canceled the Operation\n");
+        }
         VisualizationEngine.DisplayContinueMessage();
     }
 
@@ -49,7 +61,7 @@ public class ContactService
         VisualizationEngine.DisplayContacts(contacts, "Contacts Table");
         var id = UserInput.GetIntInput();
         var contact = _contactRepository.GetContactById(id);
-        if(contact == null)
+        if (contact == null)
         {
             AnsiConsole.Markup($"Contact with id [maroon]{id}[/] not found!");
             VisualizationEngine.DisplayContinueMessage();

@@ -1,10 +1,11 @@
+using Phonebook.Entities;
 using Spectre.Console;
 
 namespace Phonebook.UI;
 
 public class Menu
 {
-    public string CancelOperation = $"[maroon]Go Back[/]";
+    public static string CancelOperation = $"[maroon]Go Back[/]";
 
     public string[] MainMenu = ["Phonebook", "Categories", "Exit"];
     public string[] PhonebookMenu = ["View All Contacts", "Add Contact", "Update Contact", "Delete Contact", $"[maroon]Go Back[/]"];
@@ -37,6 +38,16 @@ public class Menu
                     .Title("Please Select An Action From The Options Below")
                     .PageSize(10)
                     .AddChoices(CategoryMenu)
+        );
+    }
+
+    internal static string GetContactCategoryMenu(IEnumerable<ContactCategory> contactCategories)
+    {
+        return AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Please Select An Action From The Options Below")
+                    .PageSize(10)
+                    .AddChoices(Helpers.ConvertToArray(contactCategories, contactCategory => contactCategory.CategoryName).Append(CancelOperation))
         );
     }
 

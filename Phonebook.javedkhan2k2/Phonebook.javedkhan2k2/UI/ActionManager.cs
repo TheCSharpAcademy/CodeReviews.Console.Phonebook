@@ -9,10 +9,9 @@ public class ActionManager
     private Menu _menu;
     private ContactService _contactService;
     private ContactCategoryService _contactCategoryService;
-    public ActionManager(string dbUser, string dbPassword)
+    public ActionManager(PhonebookDbContext context)
     {
         _menu = new Menu();
-        var context = new PhonebookDbContext(dbUser, dbPassword);
         _contactService = new ContactService(context);
         _contactCategoryService = new ContactCategoryService(context);
     }
@@ -75,10 +74,10 @@ public class ActionManager
                     _contactService.ViewAllContacts();
                     break;
                 case "Add Contact":
-                    _contactService.AddContact();
+                    _contactService.AddContact(_contactCategoryService.GetAllContactCategories());
                     break;
                 case "Update Contact":
-                    _contactService.UpdateContact();
+                    _contactService.UpdateContact(_contactCategoryService.GetAllContactCategories());
                     break;
                 case "Delete Contact":
                     _contactService.DeleteContact();

@@ -1,5 +1,3 @@
-using System.ComponentModel;
-
 namespace Phonebook.Entities;
 
 public class Contact
@@ -9,7 +7,7 @@ public class Contact
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
     
-    public int? ContactCategoryId { get; set; }
+    public int ContactCategoryId { get; set; }
     public ContactCategory ContactCategory { get; set; }
 
 }

@@ -11,8 +11,4 @@ public static class ValidatorHelper
 
     public static bool IsValidPhoneNumber(string value) => Regex.IsMatch(value, @"^0\d{11}$");
 
-    internal static bool isValidContact(IEnumerable<Contact> contacts)
-    {
-        throw new NotImplementedException();
-    }
 }

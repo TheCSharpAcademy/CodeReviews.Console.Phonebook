@@ -24,5 +24,5 @@ var serviceProvider = new ServiceCollection()
 
 var dbContext = serviceProvider.GetRequiredService<PhonebookDbContext>();
 
-ActionManager actionManager = new ActionManager(databaseUserId, databasePassword);
+ActionManager actionManager = new ActionManager(dbContext);
 actionManager.RunApp();

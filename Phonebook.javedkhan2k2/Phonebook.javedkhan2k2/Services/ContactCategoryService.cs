@@ -19,13 +19,14 @@ public class ContactCategoryService
 
     public void AddContactCategory()
     {
-        var contactCategory = new ContactCategory();
-        contactCategory.CategoryName = UserInput.GetStringInput("Enter A Category Name: ");
-        while(_contactCategoryRepository.FindContactCategoryByName(contactCategory.CategoryName) != null)
+        var contactCategory = UserInput.GetNewContactCategory(_contactCategoryRepository);
+        if(contactCategory == null)
         {
-            AnsiConsole.Markup($"The [maroon]{contactCategory.CategoryName}[/] Exists in Database.\n");
-            contactCategory.CategoryName = UserInput.GetStringInput("Enter A Category Name: ");
+            AnsiConsole.Markup("You canceled the Operation\n");
+            VisualizationEngine.DisplayContinueMessage();
+            return;
         }
+        
         _contactCategoryRepository.AddContactCategory(contactCategory);
         AnsiConsole.Markup($"Contact Category {contactCategory.CategoryName} Added [green]Successfully[/].\n");
         VisualizationEngine.DisplayContinueMessage();
@@ -57,5 +58,7 @@ public class ContactCategoryService
         VisualizationEngine.DisplayContactCategoriess(contactcategories, "Contact Categories Table");
         VisualizationEngine.DisplayContinueMessage();
     }
+
+    public IEnumerable<ContactCategory> GetAllContactCategories() => _contactCategoryRepository.GetAllContactCategories();
 
 }

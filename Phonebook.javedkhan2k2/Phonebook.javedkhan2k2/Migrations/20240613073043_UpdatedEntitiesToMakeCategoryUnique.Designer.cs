@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Phonebook.Data;
 
@@ -10,9 +11,11 @@ using Phonebook.Data;
 namespace Phonebook.javedkhan2k2.Migrations
 {
     [DbContext(typeof(PhonebookDbContext))]
-    partial class PhonebookDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240613073043_UpdatedEntitiesToMakeCategoryUnique")]
+    partial class UpdatedEntitiesToMakeCategoryUnique
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
