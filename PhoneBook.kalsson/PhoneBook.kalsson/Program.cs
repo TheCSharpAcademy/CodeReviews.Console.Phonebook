@@ -1,6 +1,5 @@
 ﻿using PhoneBook.kalsson;
 using PhoneBook.kalsson.Controllers;
-using PhoneBook.kalsson.Services;
 using PhoneBook.kalsson.UI;
 using Spectre.Console;
 
@@ -13,7 +12,6 @@ while (isAppRunning)
         .AddChoices(
             MenuOptions.ViewAllContacts,
             MenuOptions.AddContact,
-            MenuOptions.ViewContact,
             MenuOptions.UpdateContact,
             MenuOptions.DeleteContact,
             MenuOptions.Exit));
@@ -29,11 +27,6 @@ while (isAppRunning)
             ContactController.AddContact();
             break;
     
-        case MenuOptions.ViewContact:
-            var contact = ContactService.GetContactOptionInput();
-            ContactController.GetContactById(contact.Id);
-            break;
-    
         case MenuOptions.UpdateContact:
             ContactController.UpdateContact();
             break;
@@ -47,3 +40,5 @@ while (isAppRunning)
         break;
     }   
 }
+
+Console.ReadLine();
