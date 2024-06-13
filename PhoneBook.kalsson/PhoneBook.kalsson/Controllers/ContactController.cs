@@ -232,60 +232,95 @@ public class ContactController
     /// An error occurred while deleting the contact. Please try again.
     /// </exception>
     internal static void DeleteContact()
+{
+    try
     {
+        using var db = new ContactContext();
+        var contacts = db.Contacts
+            .Include(c => c.EmailAddresses)
+            .Include(c => c.PhoneNumbers)
+            .ToList();
+        var selectionPrompt = new SelectionPrompt<string>()
+            .Title("Please select the contact you wish to delete (or type 'Cancel' to return to the menu):")
+            .PageSize(10);
+
+        foreach (var contact in contacts)
+        {
+            selectionPrompt.AddChoice($"(ID: {contact.Id}) {contact.FirstName} {contact.LastName}");
+        }
+
+        selectionPrompt.AddChoice("Cancel");
+
+        var selectedContactDetail = AnsiConsole.Prompt(selectionPrompt);
+
+        if (selectedContactDetail == "Cancel")
+        {
+            Console.WriteLine("Deletion was cancelled. Returning to the menu.");
+            return;
+        }
+
         try
         {
-            using var db = new ContactContext();
-            var contacts = db.Contacts
-                .Include(c => c.EmailAddresses)
-                .Include(c => c.PhoneNumbers)
-                .ToList();
-            var selectionPrompt = new SelectionPrompt<string>()
-                .Title("Please select the contact you wish to delete (or type 'Cancel' to return to the menu):")
-                .PageSize(10);
+            // Ensure the selectedContactDetail contains the expected format
+            var idStartIndex = selectedContactDetail.IndexOf("(ID: ") + "(ID: ".Length;
+            var idEndIndex = selectedContactDetail.IndexOf(")", idStartIndex);
 
-            foreach (var contact in contacts)
+            if (idStartIndex >= "(ID: ".Length && idEndIndex > idStartIndex)
             {
-                selectionPrompt.AddChoice($"(ID: {contact.Id}) {contact.FirstName} {contact.LastName}");
-            }
+                var idString = selectedContactDetail.Substring(idStartIndex, idEndIndex - idStartIndex);
 
-            selectionPrompt.AddChoice("Cancel");
+                if (int.TryParse(idString, out int id))
+                {
+                    var contactToDelete = contacts.FirstOrDefault(c => c.Id == id);
+                    if (contactToDelete == null)
+                    {
+                        Console.WriteLine("Selected contact not found.");
+                        return;
+                    }
 
-            var selectedContactDetail = AnsiConsole.Prompt(selectionPrompt);
+                    // Confirm deletion
+                    Console.Write(
+                        $"Are you sure you want to delete {contactToDelete.FirstName} {contactToDelete.LastName}? Type 'yes' to confirm, 'no' to cancel: ");
 
-            if (selectedContactDetail == "Cancel")
-            {
-                Console.WriteLine("Deletion was cancelled. Returning to the menu.");
-                return;
-            }
-
-            var id = int.Parse(selectedContactDetail.Split(" (ID: ")[1].Replace(")", ""));
-            var contactToDelete = contacts.First(c => c.Id == id);
-
-            // Confirm deletion
-            Console.Write(
-                $"Are you sure you want to delete {contactToDelete.FirstName} {contactToDelete.LastName}? Type 'yes' to confirm, 'no' to cancel: ");
-
-            if (Console.ReadLine().ToLower() == "yes")
-            {
-                db.Contacts.Remove(contactToDelete);
-                db.SaveChanges();
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("You have deleted the contact.");
-                Console.ResetColor();
+                    if (Console.ReadLine().ToLower() == "yes")
+                    {
+                        db.Contacts.Remove(contactToDelete);
+                        db.SaveChanges();
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("You have deleted the contact.");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Deletion was cancelled.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Failed to parse the contact ID. Deletion was cancelled.");
+                }
             }
             else
             {
-                Console.WriteLine("Deletion was cancelled.");
+                Console.WriteLine("Failed to parse the contact ID. Deletion was cancelled.");
             }
         }
-        catch (Exception e)
+        catch (Exception parseException)
         {
-            Console.WriteLine("An error occurred while deleting the contact. Please try again.");
-            Console.WriteLine($"Error detail: {e.Message}");
-            throw;
+            Console.WriteLine("An error occurred while parsing the selected contact detail. Please try again.");
+            Console.WriteLine($"Error detail: {parseException.Message}");
         }
     }
+    catch (Exception e)
+    {
+        Console.WriteLine("An error occurred while deleting the contact. Please try again.");
+        Console.WriteLine($"Error detail: {e.Message}");
+        throw;
+    }
+}
+
+
+
 
 }
