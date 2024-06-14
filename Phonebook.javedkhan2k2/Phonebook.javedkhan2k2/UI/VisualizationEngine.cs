@@ -8,7 +8,7 @@ internal class VisualizationEngine
 
     internal static void DisplayContinueMessage()
     {
-        AnsiConsole.Markup($"Press [blue]Enter[/] To Continue\n");
+        AnsiConsole.Markup($"\nPress [blue]Enter[/] To Continue\n");
         Console.ReadLine();
     }
 

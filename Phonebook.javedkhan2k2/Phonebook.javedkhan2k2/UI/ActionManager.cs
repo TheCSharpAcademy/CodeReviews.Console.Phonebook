@@ -20,6 +20,7 @@ public class ActionManager
 
     public void RunApp()
     {
+        Console.Clear();
         bool runApplication = true;
         while(runApplication)
         {
