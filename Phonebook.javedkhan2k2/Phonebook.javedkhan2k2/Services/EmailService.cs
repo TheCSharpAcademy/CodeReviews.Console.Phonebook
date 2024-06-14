@@ -1,5 +1,3 @@
-
-using System.Net;
 using System.Net.Mail;
 using Spectre.Console;
 
@@ -30,7 +28,7 @@ internal class EmailService
 
         SmtpClient smtpClient = new SmtpClient(_smtpHost, _smtpPort)
         {
-            Credentials = new NetworkCredential(_senderEmail, _senderPassword),
+            Credentials = new System.Net.NetworkCredential(_senderEmail, _senderPassword),
             EnableSsl = true,
         };
 

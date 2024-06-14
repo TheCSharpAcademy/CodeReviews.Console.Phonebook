@@ -9,15 +9,8 @@ var builder = new ConfigurationBuilder()
 
 var configuration = builder.Build();
 
-var databaseUserId = configuration["DatabaseUserID"];
-var databasePassword = configuration["DatabasePassword"];
-
 if (ValidatorHelper.IsValidConfiguration(configuration))
 {
-    var serviceProvider = new ServiceCollection()
-        .AddSingleton(new PhonebookDbContext(configuration["DatabaseUserID"], configuration["DatabasePassword"]))
-        .BuildServiceProvider();
-
     ActionManager actionManager = new ActionManager(configuration);
     actionManager.RunApp();
 }

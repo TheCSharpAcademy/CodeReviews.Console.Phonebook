@@ -48,7 +48,7 @@ namespace Phonebook.javedkhan2k2.Migrations
 
                     b.HasIndex("ContactCategoryId");
 
-                    b.ToTable("Contacts");
+                    b.ToTable("Contacts", (string)null);
                 });
 
             modelBuilder.Entity("Phonebook.Entities.ContactCategory", b =>
@@ -68,7 +68,7 @@ namespace Phonebook.javedkhan2k2.Migrations
                     b.HasIndex("CategoryName")
                         .IsUnique();
 
-                    b.ToTable("ContactCategories");
+                    b.ToTable("ContactCategories", (string)null);
                 });
 
             modelBuilder.Entity("Phonebook.Entities.Contact", b =>

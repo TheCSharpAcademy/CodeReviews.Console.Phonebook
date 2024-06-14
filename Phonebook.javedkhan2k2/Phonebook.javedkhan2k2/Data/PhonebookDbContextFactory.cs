@@ -10,7 +10,6 @@ namespace Phonebook.Data
         {
             var configuration = new ConfigurationBuilder()
                 .AddUserSecrets<PhonebookDbContextFactory>()
-                .AddEnvironmentVariables()
                 .Build();
 
             var databaseUserId = configuration["DatabaseUserID"];
