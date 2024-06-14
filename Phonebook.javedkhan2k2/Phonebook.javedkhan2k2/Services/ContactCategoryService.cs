@@ -1,5 +1,6 @@
 
 
+using Microsoft.Data.SqlClient;
 using Phonebook.Data;
 using Phonebook.Entities;
 using Phonebook.Repositories;
@@ -19,37 +20,61 @@ public class ContactCategoryService
 
     public void AddContactCategory()
     {
-        var contactCategory = UserInput.GetNewContactCategory(_contactCategoryRepository);
-        if(contactCategory == null)
+        try
         {
-            AnsiConsole.Markup("You canceled the Operation\n");
+            var contactCategory = UserInput.GetNewContactCategory();
+            if (contactCategory == null)
+            {
+                AnsiConsole.Markup("You canceled the Operation\n");
+                VisualizationEngine.DisplayContinueMessage();
+                return;
+            }
+            _contactCategoryRepository.AddContactCategory(contactCategory);
+            AnsiConsole.Markup($"Contact Category {contactCategory.CategoryName} Added [green]Successfully[/].\n");
             VisualizationEngine.DisplayContinueMessage();
-            return;
         }
-        
-        _contactCategoryRepository.AddContactCategory(contactCategory);
-        AnsiConsole.Markup($"Contact Category {contactCategory.CategoryName} Added [green]Successfully[/].\n");
-        VisualizationEngine.DisplayContinueMessage();
+        catch (Exception ex)
+        {
+            if (ex.InnerException != null)
+            {
+                AnsiConsole.Markup($"[maroon]{ex.InnerException.Message}[/]\n");
+            }
+            else
+            {
+                AnsiConsole.Markup($"[maroon]{ex.Message}[/]\n");
+            }
+            VisualizationEngine.DisplayContinueMessage();
+        }
     }
 
     public void UpdateContactCategory()
     {
-        var contactcategories = _contactCategoryRepository.GetAllContactCategories();
-        VisualizationEngine.DisplayContactCategoriess(contactcategories, "Contact Categories Table");
-        var id = UserInput.GetIntInput();
-        // Validation goes here
-        var contactCategory = contactcategories.FirstOrDefault(x => x.Id == id);
-        if(contactCategory == null)
+        try
         {
-            AnsiConsole.Markup($"Contact Category with id {id} not found!");
+            var contactcategories = _contactCategoryRepository.GetAllContactCategories();
+            var contactCategory = UserInput.UpdateContactCategory(contactcategories);
+            if (contactCategory == null)
+            {
+                AnsiConsole.Markup("You canceled the Operation or Category not found\n");
+                VisualizationEngine.DisplayContinueMessage();
+                return;
+            }
+            _contactCategoryRepository.UpdateContactCategory(contactCategory);
+            AnsiConsole.Markup($"Contact {contactCategory.CategoryName} Updated [green]Successfully[/]\n");
             VisualizationEngine.DisplayContinueMessage();
-            return;
         }
-        
-        contactCategory.CategoryName = UserInput.GetStringInput("Enter A Category Name: ");
-        _contactCategoryRepository.UpdateContactCategory(contactCategory);
-        AnsiConsole.Markup($"Contact {contactCategory.CategoryName} Updated [green]Successfully[/]\n");
-        VisualizationEngine.DisplayContinueMessage();
+        catch (Exception ex)
+        {
+            if (ex.InnerException != null)
+            {
+                AnsiConsole.Markup($"[maroon]{ex.InnerException.Message}[/]\n");
+            }
+            else
+            {
+                AnsiConsole.Markup($"[maroon]{ex.Message}[/]\n");
+            }
+            VisualizationEngine.DisplayContinueMessage();
+        }
     }
 
     public void ViewAllContactCategories()

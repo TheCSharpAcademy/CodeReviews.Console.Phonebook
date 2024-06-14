@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Client;
 using Phonebook.Data;
 using Phonebook.Services;
@@ -9,10 +10,11 @@ public class ActionManager
     private Menu _menu;
     private ContactService _contactService;
     private ContactCategoryService _contactCategoryService;
-    public ActionManager(PhonebookDbContext context)
+    public ActionManager(IConfigurationRoot config)
     {
         _menu = new Menu();
-        _contactService = new ContactService(context);
+        PhonebookDbContext context = new PhonebookDbContext(config["DatabaseUserID"], config["DatabasePassword"]);
+        _contactService = new ContactService(context, config);
         _contactCategoryService = new ContactCategoryService(context);
     }
 
@@ -70,6 +72,12 @@ public class ActionManager
             var choice = _menu.GetPhonebookMenu();
             switch (choice)
             {
+                case "Send Email":
+                    _contactService.SendEmail();
+                    break;
+                case "Send SMS":
+                    _contactService.SendSms();
+                    break;
                 case "View All Contacts":
                     _contactService.ViewAllContacts();
                     break;

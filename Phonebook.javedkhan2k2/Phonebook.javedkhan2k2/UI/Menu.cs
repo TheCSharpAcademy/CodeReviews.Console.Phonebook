@@ -8,7 +8,7 @@ public class Menu
     public static string CancelOperation = $"[maroon]Go Back[/]";
 
     public string[] MainMenu = ["Phonebook", "Categories", "Exit"];
-    public string[] PhonebookMenu = ["View All Contacts", "Add Contact", "Update Contact", "Delete Contact", $"[maroon]Go Back[/]"];
+    public string[] PhonebookMenu = ["Send Email", "Send SMS", "View All Contacts", "Add Contact", "Update Contact", "Delete Contact", $"[maroon]Go Back[/]"];
     public string[] CategoryMenu = ["View All Categories", "Add Category", "Update Category", $"[maroon]Go Back[/]"];
     
     internal string GetMainMenu()

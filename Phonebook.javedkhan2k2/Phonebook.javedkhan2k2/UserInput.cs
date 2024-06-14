@@ -93,23 +93,28 @@ public class UserInput
 
     internal static int GetIntInput()
     {
-        int id = AnsiConsole.Ask<int>("Enter contact Id from the table");
+        int id = AnsiConsole.Ask<int>("Enter an Id from the table Or Enter 0 to Cancel: ");
         return id;
     }
 
-    internal static ContactCategory GetNewContactCategory(ContactCategoryRepository repository)
+    internal static ContactCategory? GetNewContactCategory()
     {
         var contactCategory = new ContactCategory();
         contactCategory.CategoryName = UserInput.GetStringInput("Enter A Category Name Or Enter [green]0[/] to Cancel: ");
         if (contactCategory.CategoryName == "") return null;
-
-        while (repository.FindContactCategoryByName(contactCategory.CategoryName) != null)
-        {
-            AnsiConsole.Markup($"The [maroon]{contactCategory.CategoryName}[/] Exists in Database.\n");
-            contactCategory.CategoryName = UserInput.GetStringInput("Enter A Category Name: ");
-            contactCategory.CategoryName = UserInput.GetStringInput("Enter A Category Name Or Enter [green]0[/] to Cancel: ");
-            if (contactCategory.CategoryName == "") return null;
-        }
         return contactCategory;
     }
+
+    internal static ContactCategory? UpdateContactCategory(IEnumerable<ContactCategory> contactcategories)
+    {
+        VisualizationEngine.DisplayContactCategoriess(contactcategories, "Contact Categories Table");
+        var id = GetIntInput();
+        var contactCategory = contactcategories.FirstOrDefault(x => x.Id == id);
+        if (contactCategory == null) return null;
+
+        contactCategory.CategoryName = UserInput.GetStringInput("Enter A Category Name Or Enter [green]0[/] to Cancel: ");
+        if (contactCategory.CategoryName == "") return null;
+        return contactCategory;
+    }
+
 }

@@ -29,10 +29,6 @@ internal class VisualizationEngine
             title = "";
         }
         var table = CreateTable(title, $"Displaying [blue]{contacts.Count()}[/] records");
-        // foreach(PropertyInfo property in contacts.FirstOrDefault().GetType().GetProperties())
-        // {
-        //     table.AddColumn(property.Name);
-        // }
         table.AddColumns(["Id", "Name", "Email", "Phone Number", "Category"]);
         foreach (var contact in contacts)
         {
@@ -53,6 +49,22 @@ internal class VisualizationEngine
         {
             table.AddRow(contactCategory.Id.ToString(), contactCategory.CategoryName);
         }
+        AnsiConsole.Write(table);
+    }
+
+    internal static void DisplayContactDetail(Contact contact, string title)
+    {
+        if (title == null)
+        {
+            title = "";
+        }
+        var table = CreateTable(title, $"Displaying [blue]Contact Details[/]");
+        table.AddColumns([" ", " "]);
+        table.AddRow("Id", contact.Id.ToString());
+        table.AddRow("Name", contact.Name);
+        table.AddRow("Category", contact.ContactCategory.CategoryName);
+        table.AddRow("Email", contact.Email);
+        table.AddRow("Phone Number", contact.PhoneNumber);
         AnsiConsole.Write(table);
     }
 }

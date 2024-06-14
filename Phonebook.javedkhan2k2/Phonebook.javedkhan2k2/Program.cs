@@ -2,27 +2,22 @@
 using Microsoft.Extensions.DependencyInjection;
 using Phonebook.UI;
 using Phonebook.Data;
+using Phonebook.Validators;
 
 var builder = new ConfigurationBuilder()
-    .AddUserSecrets<Program>()
-    .AddEnvironmentVariables();
+    .AddUserSecrets<Program>();
 
 var configuration = builder.Build();
 
 var databaseUserId = configuration["DatabaseUserID"];
 var databasePassword = configuration["DatabasePassword"];
 
-if (databaseUserId == null || databasePassword == null)
+if (ValidatorHelper.IsValidConfiguration(configuration))
 {
-    Console.WriteLine("Please create the secrets using dotnet user-secrets set");
-    System.Environment.Exit(0);
+    var serviceProvider = new ServiceCollection()
+        .AddSingleton(new PhonebookDbContext(configuration["DatabaseUserID"], configuration["DatabasePassword"]))
+        .BuildServiceProvider();
+
+    ActionManager actionManager = new ActionManager(configuration);
+    actionManager.RunApp();
 }
-
-var serviceProvider = new ServiceCollection()
-    .AddSingleton(new PhonebookDbContext(databaseUserId, databasePassword))
-    .BuildServiceProvider();
-
-var dbContext = serviceProvider.GetRequiredService<PhonebookDbContext>();
-
-ActionManager actionManager = new ActionManager(dbContext);
-actionManager.RunApp();
