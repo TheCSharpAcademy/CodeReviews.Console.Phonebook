@@ -12,8 +12,19 @@ public class UserInput
         _validation = new Validation();
     }
 
+    private void Header()
+    {
+        AnsiConsole.Clear();
+        AnsiConsole.Write(new 
+            FigletText("Phone Book")
+            .Centered()
+            .Color(Color.DarkTurquoise)
+            );
+    }
+
     public MainMenuOptions MainMenu()
     {
+        Header();
         var input = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
             .Title("Please choose an action:")
@@ -26,6 +37,7 @@ public class UserInput
 
     public Contact Add()
     {
+        Header();
         var name = _validation.GetValidName("Add a contact name:");
         var emails = _validation.AddEmails();
         var phoneNumbers = _validation.AddPhoneNumber();
