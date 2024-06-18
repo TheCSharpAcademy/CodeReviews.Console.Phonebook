@@ -30,10 +30,10 @@ public class UserInput
         var emails = _validation.AddEmails();
         var phoneNumbers = _validation.AddPhoneNumber();
 
-        var contact = new Contact{Name = name, EmailAddresses = emails, PhoneNumbers = phoneNumbers };
+        var contact = new Contact { Name = name, EmailAddresses = emails, PhoneNumbers = phoneNumbers };
 
         return contact;
     }
 
-    
+
 }

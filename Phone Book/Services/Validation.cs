@@ -1,6 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using Spectre.Console;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
+﻿using Spectre.Console;
 
 public class Validation
 {
@@ -89,6 +87,8 @@ public class Validation
 
             var phoneNumber = GetValidPhoneNumber("Add a phone number");
             phoneNumbers.Add(new PhoneNumber { Number = phoneNumber });
+
+            confirm = AnsiConsole.Confirm("Would you like to add an Phone Number?"); // TODO refactor this. Repeated code on Confirm prompt
         }
         return phoneNumbers;
     }

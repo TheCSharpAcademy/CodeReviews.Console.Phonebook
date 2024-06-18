@@ -1,12 +1,16 @@
-﻿using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
+﻿using Microsoft.EntityFrameworkCore;
 
 public class App
 {
     private UserInput _userInput;
+    private ContactRepository _contactRepository;
+    private ContactController _contactController;
 
     public App()
     {
         _userInput = new UserInput();
+        _contactRepository = new ContactRepository();
+        _contactController = new ContactController(_contactRepository);
     }
 
     public void Run()
@@ -18,6 +22,7 @@ public class App
             {
                 case MainMenuOptions.Add:
                     var contact = _userInput.Add();
+                    _contactController.Add(contact);
                     break;
                 case MainMenuOptions.Update:
                     break;
@@ -26,7 +31,6 @@ public class App
                 case MainMenuOptions.View:
                     break;
             }
-            Console.ReadKey();
         }
 
     }
