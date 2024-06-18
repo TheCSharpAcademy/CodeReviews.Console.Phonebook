@@ -3,5 +3,6 @@
     Add,
     Update,
     Delete,
-    View
+    ViewByName,
+    ViewAll
 }

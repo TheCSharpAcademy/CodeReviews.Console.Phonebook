@@ -15,7 +15,7 @@ public class UserInput
     private void Header()
     {
         AnsiConsole.Clear();
-        AnsiConsole.Write(new 
+        AnsiConsole.Write(new
             FigletText("Phone Book")
             .Centered()
             .Color(Color.DarkTurquoise)
@@ -45,6 +45,30 @@ public class UserInput
         var contact = new Contact { Name = name, EmailAddresses = emails, PhoneNumbers = phoneNumbers };
 
         return contact;
+    }
+
+    public void DisplayMultipleContacts(List<Contact> contacts)
+    {
+        Header();
+
+        var table = new Table()
+            .Border(TableBorder.Minimal)
+            .BorderColor(Color.LightCyan1)
+            ;
+
+        table.AddColumn("[Green]Name[/]");
+        table.AddColumn("[Green]Phone Numbers[/]");
+        table.AddColumn("[Green]Email Addresses[/]");
+        table.Expand();
+
+        foreach (var contact in contacts)
+        {
+            var phoneNumbers = contact.PhoneNumbers.Select(n => n.Number);
+            var emailAddresses = contact.EmailAddresses.Select(e => e.EmailAddress);
+            table.AddRow(contact.Name, string.Join("\n", phoneNumbers), string.Join("\n", emailAddresses));
+        }
+
+        AnsiConsole.Write(table);
     }
 
 

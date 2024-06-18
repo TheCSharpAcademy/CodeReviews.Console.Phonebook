@@ -1,4 +1,6 @@
-﻿public class ContactRepository
+﻿using Microsoft.EntityFrameworkCore;
+
+public class ContactRepository
 {
     public void Add(Contact contact)
     {
@@ -25,6 +27,12 @@
 
     public List<Contact> GetAllContacts()
     {
-        throw new NotImplementedException();
+        using (var _dbContext = new PhoneBookContext())
+        {
+            return _dbContext.Contacts
+                .Include(e => e.EmailAddresses)
+                .Include(p => p.PhoneNumbers)
+                .ToList();
+        }
     }
 }

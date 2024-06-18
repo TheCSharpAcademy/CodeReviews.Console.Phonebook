@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-public class App
+﻿public class App
 {
     private UserInput _userInput;
     private ContactRepository _contactRepository;
@@ -28,7 +26,12 @@ public class App
                     break;
                 case MainMenuOptions.Delete:
                     break;
-                case MainMenuOptions.View:
+                case MainMenuOptions.ViewByName:
+                    break;
+                case MainMenuOptions.ViewAll:
+                    var contacts = _contactController.GetAll();
+                    _userInput.DisplayMultipleContacts(contacts);
+                    Console.ReadLine();
                     break;
             }
         }

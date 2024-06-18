@@ -9,6 +9,13 @@
 
     public void Add(Contact contact)
     {
-        _contactRepository.Add(contact);
+        if (contact.Name.Length > 0 && contact.PhoneNumbers.Count > 0)
+        {
+            _contactRepository.Add(contact);
+        }
+
+        throw new ArgumentNullException("Error, invalid record.");
     }
+
+    public List<Contact> GetAll() => _contactRepository.GetAllContacts();
 }
