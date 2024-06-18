@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Spectre.Console;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
@@ -47,14 +48,11 @@ public class UserInput
         return contact;
     }
 
-    public void DisplayMultipleContacts(List<Contact> contacts)
+    private Table CreateContactTable(IEnumerable<Contact> contacts)
     {
-        Header();
-
         var table = new Table()
             .Border(TableBorder.Minimal)
-            .BorderColor(Color.LightCyan1)
-            ;
+            .BorderColor(Color.LightCyan1);
 
         table.AddColumn("[Green]Name[/]");
         table.AddColumn("[Green]Phone Numbers[/]");
@@ -68,8 +66,47 @@ public class UserInput
             table.AddRow(contact.Name, string.Join("\n", phoneNumbers), string.Join("\n", emailAddresses));
         }
 
-        AnsiConsole.Write(table);
+        return table;
     }
 
+    public void DisplayContact(Contact contact)
+    {
+        Header();
 
+        var table = CreateContactTable(new[] { contact });
+
+        AnsiConsole.Write(table);
+
+        PauseAndWaitForUserInput();
+    }
+
+    public void DisplayContacts(List<Contact> contacts)
+    {
+        Header();
+
+        var table = CreateContactTable(contacts);
+
+        AnsiConsole.Write(table);
+
+        PauseAndWaitForUserInput();
+    }
+
+    public Contact PickAContact(List<Contact> contacts)
+    {
+
+        var input = AnsiConsole.Prompt(
+            new SelectionPrompt<Contact>()
+            .Title("Please choose a contact")
+            .PageSize(10)
+            .AddChoices(contacts)
+            );
+
+        return input;
+    }
+
+    private void PauseAndWaitForUserInput()
+    {
+        AnsiConsole.WriteLine("Press any key to continue");
+        Console.ReadKey(true);
+    }
 }
