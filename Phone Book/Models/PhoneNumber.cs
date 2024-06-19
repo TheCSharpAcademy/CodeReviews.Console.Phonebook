@@ -7,4 +7,9 @@ public class PhoneNumber
     public string Number { get; set; }
     public int ContactId { get; set; }
     public Contact Contact { get; set; }
+
+    public override string ToString()
+    {
+        return Number;
+    }
 }

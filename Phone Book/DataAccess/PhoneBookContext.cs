@@ -9,7 +9,9 @@ public class PhoneBookContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        optionsBuilder.UseSqlServer(
+            ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString,
+            o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -23,17 +23,17 @@ public class UserInput
             );
     }
 
-    public MainMenuOptions MainMenu()
+    public T Menu<T>(string title) where T : struct, Enum
     {
         Header();
         var input = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
-            .Title("Please choose an action:")
+            .Title(title)
             .PageSize(10)
-            .AddChoices(Enum.GetNames(typeof(MainMenuOptions)).ToList())
+            .AddChoices(Enum.GetNames(typeof(T)).ToList())
             );
 
-        return Enum.Parse<MainMenuOptions>(input);
+        return Enum.Parse<T>(input);
     }
 
     public Contact Add()
@@ -46,6 +46,23 @@ public class UserInput
         var contact = new Contact { Name = name, EmailAddresses = emails, PhoneNumbers = phoneNumbers };
 
         return contact;
+    }
+
+    public string UpdateName() => _validation.GetValidName("Type a new name for this contact:");
+
+    public string UpdateNumber() => _validation.GetValidPhoneNumber("Type a new number:");
+
+    public string UpdateEmail() => _validation.GetValidEmail("Type a new e-mail address:");
+
+    public T SelectItemFromList<T>(List<T> numbers, string title) where T : class
+    {
+        Header();
+        return AnsiConsole.Prompt(
+            new SelectionPrompt<T>()
+            .Title(title)
+            .PageSize(10)
+            .AddChoices(numbers)
+            );
     }
 
     private Table CreateContactTable(IEnumerable<Contact> contacts)
@@ -108,5 +125,13 @@ public class UserInput
     {
         AnsiConsole.WriteLine("Press any key to continue");
         Console.ReadKey(true);
+    }
+
+    public void NoRecords()
+    {
+        Console.Beep();
+        AnsiConsole.MarkupLine("[red]Cannot access this option as insufficient records could be found for this option.[/]");
+        AnsiConsole.MarkupLine("Please add records before access this option.");
+        PauseAndWaitForUserInput();
     }
 }
