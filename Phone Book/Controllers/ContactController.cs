@@ -31,5 +31,17 @@
         }
     }
 
+    public void Remove(Contact contact)
+    {
+        if (contact is not null)
+        {
+            _contactRepository.Remove(contact);
+        }
+        else
+        {
+            throw new ArgumentNullException("Error, can't remove record. Invalid record.");
+        }
+    }
+
     public List<Contact> GetAll() => _contactRepository.GetAllContacts();
 }

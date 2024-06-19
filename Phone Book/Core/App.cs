@@ -45,6 +45,12 @@ public class App
 
                     break;
                 case MainMenuOptions.Delete:
+                    if (contacts.Count > 0)
+                    {
+                        contact = _userInput.PickAContact(contacts);
+                        _contactController.Remove(contact);
+                    }
+                    else _userInput.NoRecords();
                     break;
                 case MainMenuOptions.ViewByName:
 

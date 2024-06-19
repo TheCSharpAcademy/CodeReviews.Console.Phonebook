@@ -23,6 +23,8 @@ public class ContactRepository : IDisposable
 
     public void Remove(Contact contact)
     {
+        _dbContext.Remove(contact);
+        _dbContext.SaveChanges();
     }
 
     public Contact GetContact(Contact contact)
