@@ -21,7 +21,8 @@
 
     public void Update(Contact contact)
     {
-        if (contact.PhoneNumbers.Count > 0 && contact.Name.Length > 0 && GetAll().Count(n => n.Name == contact.Name) == 0)
+        var count = GetAll().Count(n => n.Name == contact.Name);
+        if (contact.PhoneNumbers.Count > 0 && contact.Name.Length > 0 && count == 1)
         {
             _contactRepository.Update(contact);
         }
