@@ -121,6 +121,14 @@ public class UserInput
         return input;
     }
 
+    public (string Title, string Body) SendMessage()
+    {
+        var title = AnsiConsole.Ask<string>("Give your email a title");
+        var body = AnsiConsole.Ask<string>("Type a body for your email");
+        var email = (Title: title, Body: body);
+        return email;
+    }
+
     private void PauseAndWaitForUserInput()
     {
         AnsiConsole.WriteLine("Press any key to continue");

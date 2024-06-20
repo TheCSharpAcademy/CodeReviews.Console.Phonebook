@@ -4,5 +4,6 @@
     Update,
     Delete,
     ViewByName,
-    ViewAll
+    ViewAll,
+    SendMessage
 }

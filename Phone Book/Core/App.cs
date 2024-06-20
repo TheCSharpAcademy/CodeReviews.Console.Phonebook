@@ -1,7 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using Spectre.Console;
-
-public class App
+﻿public class App
 {
     private UserInput _userInput;
     private ContactRepository _contactRepository;
@@ -76,7 +73,32 @@ public class App
 
                     if (contacts.Count > 0) _userInput.DisplayContacts(contacts);
                     else _userInput.NoRecords();
-
+                    break;
+                case MainMenuOptions.SendMessage:
+                    // Currently, only the Email service is available for messaging. However, if we decide to
+                    // implement additional messaging services in the future (e.g., SMS), we can create an
+                    // enum to represent the different services and pass it as a generic parameter to the
+                    // Menu<T> method. This way, we can prompt the user to select their preferred messaging
+                    // service. To add a new service, simply create a class that implements the IMessagingService
+                    // interface, such as SMSMessaging with the appropriate parameters.
+                    if (contacts.Count > 0)
+                    {
+                        var selectedContact = _userInput.PickAContact(contacts);
+                        if (selectedContact.EmailAddresses.Any())
+                        {
+                            var emailAddress = _userInput.SelectItemFromList(selectedContact.EmailAddresses, "Pick an email to send to");
+                            var message = _userInput.SendMessage();
+                            SendMessageToContact(selectedContact, message.Title, message.Body);
+                        }
+                        else
+                        {
+                            _userInput.NoRecords();
+                        }
+                    }
+                    else
+                    {
+                        _userInput.NoRecords();
+                    }
                     break;
             }
         }
@@ -163,5 +185,11 @@ public class App
         return contact;
     }
 
+    private void SendMessageToContact(Contact contact, string title, string body)
+    {
+        var emailService = new EmailService();
+        var messagingService = new MessagingService(emailService);
+        messagingService.Send(contact, title, body);
+    }
 
 }
