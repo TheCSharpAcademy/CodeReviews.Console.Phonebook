@@ -1,4 +1,5 @@
-﻿using MailKit.Net.Smtp;
+﻿using System.Net.Sockets;
+using MailKit.Net.Smtp;
 using MimeKit;
 
 public class EmailService : IMessagingService
@@ -15,13 +16,25 @@ public class EmailService : IMessagingService
 
         using (var client = new SmtpClient())
         {
-            client.Connect("127.0.0.1", 25, false);
+            try
+            {
+                client.Connect("127.0.0.1", 25, false);
 
-            // Note: only needed if the SMTP server requires authentication
-            // client.Authenticate("username", "password");
+                // Note: only needed if the SMTP server requires authentication
+                // client.Authenticate("username", "password");
 
-            client.Send(message);
-            client.Disconnect(true);
+                client.Send(message);
+                client.Disconnect(true);
+            }
+            catch (SocketException)
+            {
+                Console.Beep();
+                Console.WriteLine("Could not connect to a SmtpClient. Please make sure you configure the SmtpClient.");
+                Console.WriteLine("Or use a dummy service such as Papercut.");
+                Console.WriteLine("Press any key to continue.");
+                Console.ReadKey(true);
+            }
+
         }
     }
 }
