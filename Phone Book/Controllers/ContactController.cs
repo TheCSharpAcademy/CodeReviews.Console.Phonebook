@@ -9,7 +9,7 @@
 
     public void Add(Contact contact)
     {
-        if (contact.Name.Length > 0 && contact.PhoneNumbers.Count > 0)
+        if (contact.Name.Length > 0 && contact.PhoneNumbers.Count > 0 && GetAll().Count(n => n.Name == contact.Name) == 0)
         {
             _contactRepository.Add(contact);
         }
@@ -21,7 +21,7 @@
 
     public void Update(Contact contact)
     {
-        if (contact.PhoneNumbers.Count > 0 && contact.Name.Length > 0)
+        if (contact.PhoneNumbers.Count > 0 && contact.Name.Length > 0 && GetAll().Count(n => n.Name == contact.Name) == 0)
         {
             _contactRepository.Update(contact);
         }

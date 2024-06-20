@@ -134,4 +134,12 @@ public class UserInput
         AnsiConsole.MarkupLine("Please add records before access this option.");
         PauseAndWaitForUserInput();
     }
+
+    public void InvalidName()
+    {
+        Console.Beep();
+        AnsiConsole.MarkupLine("[red]Cannot insert or update this record, as this name already exists in our records. Names must be unique.[/]");
+        AnsiConsole.MarkupLine("Please add records before access this option.");
+        PauseAndWaitForUserInput();
+    }
 }

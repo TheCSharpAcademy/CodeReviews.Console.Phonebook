@@ -31,7 +31,9 @@ public class App
             {
                 case MainMenuOptions.Add:
                     contact = _userInput.Add();
-                    _contactController.Add(contact);
+                    if (contacts.Count(n => n.Name == contact.Name) == 0) _contactController.Add(contact);
+                    else _userInput.InvalidName();
+
                     break;
                 case MainMenuOptions.Update:
 
@@ -39,7 +41,15 @@ public class App
                     {
                         contact = _userInput.PickAContact(contacts);
                         contact = GetUpdatedRecord(contact);
-                        _contactController.Update(contact);
+                        if (contacts.Count(n => n.Name == contact.Name) == 0)
+                        {
+                            _contactController.Update(contact);
+                        }
+                        else
+                        {
+                            _userInput.InvalidName();
+                            contact = null!;
+                        }
                     }
                     else _userInput.NoRecords();
 
@@ -75,17 +85,22 @@ public class App
     private Contact GetUpdatedRecord(Contact contact)
     {
         var updateOptions = _userInput.Menu<UpdateDetailsOptions>("How would you like to update this contact?");
+
+        // Creating a new temporary Contact object to hold the updated data.
+        // This is to avoid directly modifying the original Contact reference at this stage,
+        // as we still need to perform a Name validation check in the preceding scope.
+        var updatedContact = new Contact();
+
         switch (updateOptions)
         {
             case UpdateDetailsOptions.Name:
-                contact.Name = _userInput.UpdateName();
-                // TODO verify unique names
+                updatedContact.Name = _userInput.UpdateName();
                 break;
             case UpdateDetailsOptions.PhoneNumber:
-                contact = UpdateNumber(contact);
+                updatedContact = UpdateNumber(contact);
                 break;
             case UpdateDetailsOptions.Email:
-                contact = UpdateEmail(contact);
+                updatedContact = UpdateEmail(contact);
                 break;
         }
 
