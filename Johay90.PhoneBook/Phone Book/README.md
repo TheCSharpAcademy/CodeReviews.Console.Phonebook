@@ -23,15 +23,12 @@ This project demonstrates a basic Phone Book application built using C# and Enti
 ### Setting up the Database and Application
 
 1. **Install SQL Server:** Ensure you have SQL Server installed and running. Update the connection string in `PhoneBookContext.cs` to match your SQL Server configuration.
-2. **Configure the Database:** The application uses Entity Framework Code-First approach. Run the following commands to set up the database:
+2. **Configure the Connection String**: Update the connection string to match your SQL Server configuration. The connection string can be found in `app.config`
+3. **Configure the Database:** The application uses Entity Framework Code-First approach. Run the following command to set up the database:
 ```c#
-dotnet ef migrations add InitialCreate
-dotnet ef database update
+Update-Database
 ```
-3. **Run the Application:** Start the application using the following command:
-```c#
-dotnet run
-```
+4. **Run the Application:** Start the application
 
 ### Mock Email Sending
 
