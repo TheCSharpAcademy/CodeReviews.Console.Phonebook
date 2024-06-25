@@ -107,15 +107,15 @@ public class ContactsController
 
     }
 
-    private static async Task<List<ContactCategory>> SetContactCategories(
+    private static async Task SetContactCategories(
         PhonebookContext db,
         List<Category> categories,
         int contactId
     )
     {
-        List<ContactCategory> contactCategories = categories.Select(category =>
+        List<CreateContactCategoryDto> createContactCategories = categories.Select(category =>
             {
-                return new ContactCategory { CategoryId = category.CategoryId, ContactId = contactId };
+                return new CreateContactCategoryDto { CategoryId = category.CategoryId, ContactId = contactId };
             })
             .ToList();
 
@@ -124,9 +124,16 @@ public class ContactsController
             .ToList();
 
         db.ContactCategories.RemoveRange(contactCategoriesToDelete);
-        await db.ContactCategories.AddRangeAsync(contactCategories);
 
-        return contactCategories;
+        await db.ContactCategories.AddRangeAsync(
+            createContactCategories.Select(createPayload =>
+                new ContactCategory
+                {
+                    CategoryId = createPayload.CategoryId,
+                    ContactId = createPayload.ContactId
+                }
+            )
+        );
     }
 
     public static async Task UpdateContact(PhonebookContext db, int contactId)
