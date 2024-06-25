@@ -39,7 +39,7 @@ public class Program
                     await ContactsController.ListContacts(db);
                     break;
                 case MainMenu.CreateContact:
-                    await ContactsController.CreateOrUpdateContact(db);
+                    await ContactsController.CreateContact(db);
                     break;
                 case MainMenu.EditContact:
                     await ContactsController.EditContact(db);

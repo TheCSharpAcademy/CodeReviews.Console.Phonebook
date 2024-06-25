@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Program.Contacts;
 using Program.ContactsCategories;
 using Spectre.Console;
@@ -69,41 +68,48 @@ public class ContactsController
         return existingContact;
     }
 
-    public static async Task CreateOrUpdateContact(PhonebookContext db, int? contactId = null)
+    private static Contact PromptContactInput(Contact? existingContact = null)
     {
-        Contact? existingContact = null;
-
-        if (contactId.HasValue)
-        {
-            existingContact = await FindContactById(db, contactId.Value);
-        }
-
-        string name = AnsiConsole.Ask<string>("Full name");
-        string email = ReadEmail();
-        string phone = ReadPhone();
+        string name = AnsiConsole.Ask<string>("Full name", existingContact?.Name ?? "");
+        string email = ReadEmail(existingContact?.Email);
+        string phone = ReadPhone(existingContact?.PhoneNumber);
         List<ContactCategory> contactCategories = [];
 
-        if (existingContact != null)
+        return new Contact
         {
-            existingContact.Name = string.IsNullOrEmpty(name) ? existingContact.Name : name;
-            existingContact.Email = string.IsNullOrEmpty(email) ? existingContact.Email : null;
-            existingContact.PhoneNumber = string.IsNullOrEmpty(email) ? existingContact.PhoneNumber : null;
-            existingContact.ContactCategories.AddRange(contactCategories);
+            Name = name,
+            Email = string.IsNullOrWhiteSpace(email) ? null : email,
+            PhoneNumber = string.IsNullOrWhiteSpace(phone) ? null : phone,
+            ContactCategories = contactCategories
+        };
+    }
 
-            db.Update(existingContact);
-        }
-        else
+    public static async Task CreateContact(PhonebookContext db)
+    {
+        Contact contactInput = PromptContactInput();
+
+        db.Add(contactInput);
+        await db.SaveChangesAsync();
+    }
+
+    public static async Task UpdateContact(PhonebookContext db, int contactId)
+    {
+        Contact? existingContact = await FindContactById(db, contactId);
+
+        if (existingContact == null)
         {
-            db.Add(
-                new Contact
-                {
-                    Name = name,
-                    Email = string.IsNullOrWhiteSpace(email) ? null : email,
-                    PhoneNumber = string.IsNullOrWhiteSpace(phone) ? null : phone,
-                    ContactCategories = contactCategories
-                }
-            );
+            return;
         }
+
+        Contact contactInput = PromptContactInput(existingContact);
+
+
+        existingContact.Name = contactInput.Name ?? existingContact.Name;
+        existingContact.Email = contactInput.Email ?? existingContact.Email ?? null;
+        existingContact.PhoneNumber = contactInput.PhoneNumber ?? existingContact.PhoneNumber ?? null;
+        existingContact.ContactCategories.AddRange(contactInput.ContactCategories);
+
+        db.Update(existingContact);
         await db.SaveChangesAsync();
     }
 
@@ -114,11 +120,12 @@ public class ContactsController
         AnsiConsole.MarkupLine("Edit contact");
         int? contactId = PromptForContactId();
 
-        if (contactId == null)
+        if (!contactId.HasValue || contactId == null)
         {
             return;
         }
-        await CreateOrUpdateContact(db, contactId);
+
+        await UpdateContact(db, contactId.Value);
     }
 
     public async static Task DeleteContact(PhonebookContext db)
@@ -144,10 +151,11 @@ public class ContactsController
         await db.SaveChangesAsync();
     }
 
-    private static string ReadEmail()
+    private static string ReadEmail(string? existingEmail)
     {
         return AnsiConsole.Prompt(
                 new TextPrompt<string>("Email (E.g. x@y.com) [grey](Press enter to skip)[/]")
+                .DefaultValue(existingEmail ?? "")
                 .AllowEmpty()
                 .Validate(input =>
                 {
@@ -163,10 +171,11 @@ public class ContactsController
             );
     }
 
-    private static string ReadPhone()
+    private static string ReadPhone(string? existingPhone)
     {
         return AnsiConsole.Prompt(
             new TextPrompt<string>("Phone (Enter only digits or '+') [grey](Press enter to skip)[/]")
+            .DefaultValue(existingPhone ?? "")
             .AllowEmpty()
             .Validate(input =>
             {
