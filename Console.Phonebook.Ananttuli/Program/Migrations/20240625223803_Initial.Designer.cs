@@ -11,8 +11,8 @@ using Program;
 namespace Program.Migrations
 {
     [DbContext(typeof(PhonebookContext))]
-    [Migration("20240625074320_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240625223803_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,9 +48,6 @@ namespace Program.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContactId"));
-
-                    b.Property<int>("ContactCategoryId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
