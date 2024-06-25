@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Program.Categories;
 using Program.Contacts;
 using Program.ContactsCategories;
 using Spectre.Console;
@@ -68,28 +69,64 @@ public class ContactsController
         return existingContact;
     }
 
-    private static Contact PromptContactInput(Contact? existingContact = null)
+    private static Contact PromptContactInput(PhonebookContext db, Contact? existingContact = null)
     {
         string name = AnsiConsole.Ask<string>("Full name", existingContact?.Name ?? "");
         string email = ReadEmail(existingContact?.Email);
         string phone = ReadPhone(existingContact?.PhoneNumber);
-        List<ContactCategory> contactCategories = [];
 
         return new Contact
         {
             Name = name,
             Email = string.IsNullOrWhiteSpace(email) ? null : email,
             PhoneNumber = string.IsNullOrWhiteSpace(phone) ? null : phone,
-            ContactCategories = contactCategories
+            ContactCategories = existingContact?.ContactCategories ?? []
         };
     }
 
     public static async Task CreateContact(PhonebookContext db)
     {
-        Contact contactInput = PromptContactInput();
-
+        Contact contactInput = PromptContactInput(db);
         db.Add(contactInput);
         await db.SaveChangesAsync();
+
+        Contact? insertedContact = await db.Contacts.FindAsync(contactInput.ContactId);
+        int? insertedContactId = insertedContact?.ContactId;
+
+        if (!insertedContactId.HasValue)
+        {
+            Utils.Text.Error("Could not create contact");
+            return;
+        }
+
+        var categories = await CategoriesController.MultiSelectCategories(db);
+
+        await AddContactCategoriesIfNotExist(db, categories, insertedContactId.Value);
+
+        await db.SaveChangesAsync();
+
+    }
+
+    private static async Task<List<ContactCategory>> AddContactCategoriesIfNotExist(
+        PhonebookContext db,
+        List<Category> categories,
+        int contactId
+    )
+    {
+        List<ContactCategory> contactCategories = categories.Select(category =>
+            {
+                return new ContactCategory { CategoryId = category.CategoryId, ContactId = contactId };
+            })
+            .ToList();
+
+        var contactCategoriesToDelete = db.ContactCategories
+            .Where(contactCat => contactCat.ContactId == contactId);
+
+        db.ContactCategories.RemoveRange(contactCategoriesToDelete);
+
+        await db.ContactCategories.AddRangeAsync(contactCategories);
+
+        return contactCategories;
     }
 
     public static async Task UpdateContact(PhonebookContext db, int contactId)
@@ -101,13 +138,20 @@ public class ContactsController
             return;
         }
 
-        Contact contactInput = PromptContactInput(existingContact);
+        Contact contactInput = PromptContactInput(db, existingContact);
 
 
         existingContact.Name = contactInput.Name ?? existingContact.Name;
         existingContact.Email = contactInput.Email ?? existingContact.Email ?? null;
         existingContact.PhoneNumber = contactInput.PhoneNumber ?? existingContact.PhoneNumber ?? null;
-        existingContact.ContactCategories.AddRange(contactInput.ContactCategories);
+
+        var existingCategories = existingContact.ContactCategories
+            .Select(contactCat => contactCat.Category).ToList();
+        var categories = await CategoriesController.MultiSelectCategories(db, existingCategories);
+
+        await AddContactCategoriesIfNotExist(db, categories, existingContact.ContactId);
+
+        await db.SaveChangesAsync();
 
         db.Update(existingContact);
         await db.SaveChangesAsync();

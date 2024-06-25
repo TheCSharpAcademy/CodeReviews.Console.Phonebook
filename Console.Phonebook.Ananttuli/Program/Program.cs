@@ -48,12 +48,16 @@ public class Program
                     await ContactsController.DeleteContact(db);
                     break;
                 case MainMenu.ViewCategories:
+                    await CategoriesController.ListCategories(db);
                     break;
                 case MainMenu.CreateCategory:
+                    await CategoriesController.CreateCategory(db);
                     break;
                 case MainMenu.EditCategory:
+                    await CategoriesController.EditCategory(db);
                     break;
                 case MainMenu.DeleteCategory:
+                    await CategoriesController.DeleteCategory(db);
                     break;
                 default:
                     break;
