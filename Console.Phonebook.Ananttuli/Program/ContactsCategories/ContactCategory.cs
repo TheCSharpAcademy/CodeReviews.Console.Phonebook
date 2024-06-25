@@ -8,8 +8,9 @@ public class ContactCategory
     public int ContactCategoryId { get; set; }
 
     public int ContactId { get; set; }
-    public int CategoryId { get; set; }
-
     public Contact Contact { get; set; }
+
+    public int CategoryId { get; set; }
     public Category Category { get; set; }
+
 }

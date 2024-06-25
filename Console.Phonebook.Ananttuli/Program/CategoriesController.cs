@@ -43,6 +43,11 @@ public class CategoriesController
             .ThenInclude(c => c.Contact)
             .ToListAsync();
 
+        if (categories.Count == 0)
+        {
+            return new List<Category>();
+        }
+
         var multiSelectPrompt = new MultiSelectionPrompt<Category>()
                 .Title("Choose categories")
                 .NotRequired()

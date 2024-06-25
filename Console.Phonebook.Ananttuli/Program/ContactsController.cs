@@ -101,13 +101,13 @@ public class ContactsController
 
         var categories = await CategoriesController.MultiSelectCategories(db);
 
-        await AddContactCategoriesIfNotExist(db, categories, insertedContactId.Value);
+        await SetContactCategories(db, categories, insertedContactId.Value);
 
         await db.SaveChangesAsync();
 
     }
 
-    private static async Task<List<ContactCategory>> AddContactCategoriesIfNotExist(
+    private static async Task<List<ContactCategory>> SetContactCategories(
         PhonebookContext db,
         List<Category> categories,
         int contactId
@@ -120,10 +120,10 @@ public class ContactsController
             .ToList();
 
         var contactCategoriesToDelete = db.ContactCategories
-            .Where(contactCat => contactCat.ContactId == contactId);
+            .Where(contactCat => contactCat.ContactId == contactId)
+            .ToList();
 
         db.ContactCategories.RemoveRange(contactCategoriesToDelete);
-
         await db.ContactCategories.AddRangeAsync(contactCategories);
 
         return contactCategories;
@@ -149,9 +149,7 @@ public class ContactsController
             .Select(contactCat => contactCat.Category).ToList();
         var categories = await CategoriesController.MultiSelectCategories(db, existingCategories);
 
-        await AddContactCategoriesIfNotExist(db, categories, existingContact.ContactId);
-
-        await db.SaveChangesAsync();
+        await SetContactCategories(db, categories, existingContact.ContactId);
 
         db.Update(existingContact);
         await db.SaveChangesAsync();
