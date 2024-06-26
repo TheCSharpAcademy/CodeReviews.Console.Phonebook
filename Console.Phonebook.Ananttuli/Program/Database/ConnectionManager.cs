@@ -63,12 +63,6 @@ public class ConnectionManager
             string databaseName = dbConfig["Name"] ?? throw new Exception("Database name must be configured in appsettings.json");
 
             CreateDatabaseIfNotExists(databaseName);
-
-            // Connection = new SqlConnection(
-            //     GetConnectionString(databaseName)
-            // );
-
-            // Connection.Open();
         }
         catch (Exception ex)
         {

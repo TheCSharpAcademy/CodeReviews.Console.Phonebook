@@ -11,15 +11,6 @@ public class Program
         using var db = new PhonebookContext();
 
         StartApp(db).GetAwaiter().GetResult();
-        // db.Add(
-        //     new Category { Name = "Friends" }
-        // );
-
-        // db.SaveChanges();
-
-        // var cat = db.Categories.OrderBy(c => c.CategoryId).First();
-
-        // Console.WriteLine($"Cat {cat.CategoryId} {cat.Name}");
     }
 
     public static async Task StartApp(PhonebookContext db)
@@ -69,8 +60,4 @@ public class Program
             }
         }
     }
-
-
-
-
 }

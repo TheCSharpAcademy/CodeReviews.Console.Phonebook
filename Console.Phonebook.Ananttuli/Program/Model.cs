@@ -12,11 +12,6 @@ public class PhonebookContext : DbContext
     public DbSet<Category> Categories { get; set; }
     public DbSet<ContactCategory> ContactCategories { get; set; }
 
-    public PhonebookContext()
-    {
-
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         ConnectionManager.Init();
