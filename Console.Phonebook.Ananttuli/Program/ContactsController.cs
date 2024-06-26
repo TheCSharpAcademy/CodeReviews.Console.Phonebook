@@ -69,9 +69,9 @@ public class ContactsController
         return existingContact;
     }
 
-    private static Contact PromptContactInput(PhonebookContext db, Contact? existingContact = null)
+    private static Contact PromptContactInput(Contact? existingContact = null)
     {
-        string name = AnsiConsole.Ask<string>("Full name", existingContact?.Name ?? "");
+        string name = AnsiConsole.Ask("Full name", existingContact?.Name ?? "");
         string email = ReadEmail(existingContact?.Email);
         string phone = ReadPhone(existingContact?.PhoneNumber);
 
@@ -86,7 +86,7 @@ public class ContactsController
 
     public static async Task CreateContact(PhonebookContext db)
     {
-        Contact contactInput = PromptContactInput(db);
+        Contact contactInput = PromptContactInput();
         db.Add(contactInput);
         await db.SaveChangesAsync();
 
@@ -145,7 +145,7 @@ public class ContactsController
             return;
         }
 
-        Contact contactInput = PromptContactInput(db, existingContact);
+        Contact contactInput = PromptContactInput(existingContact);
 
 
         existingContact.Name = contactInput.Name ?? existingContact.Name;

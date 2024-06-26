@@ -16,23 +16,21 @@ public class MainMenu
 
     public static string Prompt()
     {
-        {
-            return AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                .EnableSearch()
-                .Title("\n\t[green]Menu[/]")
-                .AddChoices(
-                    Exit,
-                    ViewContacts,
-                    CreateContact,
-                    EditContact,
-                    DeleteContact,
-                    ViewCategories,
-                    CreateCategory,
-                    EditCategory,
-                    DeleteCategory
-                )
-            );
-        }
+        return AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+            .EnableSearch()
+            .Title("\n\t[green]Menu[/]")
+            .AddChoices(
+                Exit,
+                ViewContacts,
+                CreateContact,
+                EditContact,
+                DeleteContact,
+                ViewCategories,
+                CreateCategory,
+                EditCategory,
+                DeleteCategory
+            )
+        );
     }
 }
