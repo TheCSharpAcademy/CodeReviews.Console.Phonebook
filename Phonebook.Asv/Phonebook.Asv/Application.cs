@@ -237,7 +237,7 @@ internal class Application
                 } while (!InputValidator.IsValidEmail(contact.ContactEmailid));
                 do
                 {
-                    Console.Write("Enter Phone Number with country code and wthout spaces: ");
+                    Console.Write("Enter Phone Number with country code and without spaces: ");
                     contact.ContactPhoneno = Console.ReadLine();
                 } while (!InputValidator.IsValidPhoneNumber(contact.ContactPhoneno));
                 string option = Display.GetSelection("Do you wish to register this contact under a specific category?", new List<string> { "Yes", "No" });
@@ -292,7 +292,7 @@ internal class Application
         } while (!InputValidator.IsValidEmail(contact.ContactEmailid));
         do
         {
-            Console.Write("Enter Phone Number with country code and wthout spaces: ");
+            Console.Write("Enter Phone Number with country code and without spaces: ");
             contact.ContactPhoneno = Console.ReadLine();
         } while (!InputValidator.IsValidPhoneNumber(contact.ContactPhoneno));
         string option = Display.GetSelection("Do you wish to register this contact under a specific category?", new List<string> {"Yes", "No"});

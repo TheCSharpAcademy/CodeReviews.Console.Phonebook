@@ -7,15 +7,50 @@ internal class InputValidator
 {
     internal static bool IsValidEmail(string email)
     {
-        if (!new EmailAddressAttribute().IsValid(email))
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            Console.WriteLine("The email address is empty or contains only whitespace.");
             return false;
-        return Regex.IsMatch(email,
-            @"^(?=.{1,256}$)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$");
+        }
+        if (email.Length > 256)
+        {
+            Console.WriteLine("The email address is too long.");
+            return false;
+        }
+        if (!Regex.IsMatch(email, @"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"))
+        {
+            Console.WriteLine("The email address format is invalid.");
+            return false;
+        }
+        if (!new EmailAddressAttribute().IsValid(email))
+        {
+            Console.WriteLine("The email address failed the EmailAddressAttribute validation.");
+            return false;
+        }
+        return true;
     }
 
     internal static bool IsValidPhoneNumber(string phoneNumber)
     {
-        return Regex.IsMatch(phoneNumber, @"^\+[1-9]\d{1,14}$");
+        string pattern = @"^\+\d{1,3}\d{9,11}$";
+        Match match = Regex.Match(phoneNumber, pattern);
+        if (!phoneNumber.StartsWith("+"))
+        {
+            Console.WriteLine("Error: Phone number must start with a '+' sign.");
+            return false;
+        }
+        else if (phoneNumber.Length < 12 || phoneNumber.Length > 14)
+        {
+            Console.WriteLine("Error: Phone number length is incorrect.");
+            return false;
+        }
+        else if (!match.Success)
+        {
+            Console.WriteLine("Error: Phone number contains invalid characters or whitespaces. Only digits and '+' for the initial country code are allowed.");
+            return false;
+        }
+        else
+            return true;
     }
 
     internal static bool IsGivenInputInteger(string? input)
