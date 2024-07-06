@@ -17,8 +17,7 @@ Ensure you have the following information ready:
 2. Under "Signing in to Google," click on "2-Step Verification" and follow the steps to set it up if you haven't already.
 3. Once 2-Step Verification is set up, go back to the Security page.
 4. Click on "App passwords."
-5. Select "Mail" as the app and "Other" as the device, then enter a custom name if desired.
-6. Click on "Generate" to get your app password.
+5. Click on "Generate" to get your app password.
 
 ## Creating the `appsettings.json` File
 
