@@ -4,10 +4,16 @@ namespace PhoneBook
     {
         public enum MenuOptions
         {
+            AddCategory,
+            ViewCategories,
+            ViewCategoryContacts,
             AddContact,
             ViewAllContacts,
             UpdateContact,
             DeleteContact,
+            SearchContactsByCategory,
+            SearchContactsByEmail,
+            SearchContactsByPhoneNumber,
             Exit
         }
     }
