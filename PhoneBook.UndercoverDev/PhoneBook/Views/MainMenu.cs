@@ -1,3 +1,4 @@
+using PhoneBook.UserInteraction;
 using Spectre.Console;
 using static PhoneBook.MenuEnum;
 
@@ -30,7 +31,7 @@ namespace PhoneBook.Views
                 case MenuOptions.DeleteContact:
                     break;
                 case MenuOptions.Exit:
-                    Environment.Exit(0);
+                    UserInteractions.Exit();
                     break;
             }
         }
