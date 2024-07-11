@@ -1,3 +1,3 @@
 ﻿using PhoneBook.Views;
 
-MainMenu.ShowMAinMenu();
+MainMenu.ShowMainMenu();
