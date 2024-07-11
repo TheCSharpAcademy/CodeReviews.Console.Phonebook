@@ -7,14 +7,14 @@ namespace PhoneBook.UserInteraction
     {
         public static void Exit()
         {
-            AnsiConsole.WriteLine("Exiting from application\n");
+            AnsiConsole.MarkupLine("\n[bold][red]Exiting from application[/][/]\n");
             Environment.Exit(0);
         }
 
         public static Category GetCategoryDetails()
         {
             var name = AnsiConsole.Prompt(
-                new TextPrompt<string>("Enter [green]Category Name[/]:")
+                new TextPrompt<string>("[bold]Enter [green]Category Name[/][/]:")
                     .PromptStyle("blue")
                     .ValidationErrorMessage("[red]Name cannot be empty[/]")
                     .Validate(name =>
@@ -30,9 +30,47 @@ namespace PhoneBook.UserInteraction
             return category;
         }
 
-        public static void GetContactDetails(string message)
+        public static Contact GetContactDetails()
         {
-            AnsiConsole.WriteLine($"[bold][yellow]{message}[/]");
+            var name = AnsiConsole.Prompt(
+                new TextPrompt<string>("\n[bold]Enter [green]Contact Name[/][/]:")
+                    .PromptStyle("blue")
+                    .ValidationErrorMessage("[red]Name cannot be empty[/]")
+                    .Validate(name =>
+                    {
+                        return!string.IsNullOrWhiteSpace(name);
+                    })
+            );
+
+            var phoneNumber = AnsiConsole.Prompt(
+                new TextPrompt<string>("[bold]Enter [green]Phone Number[/][/]:")
+                    .PromptStyle("blue")
+                    .ValidationErrorMessage("[red]Phone number cannot be empty[/]")
+                    .Validate(number =>
+                    {
+                        return!string.IsNullOrWhiteSpace(number);
+                    })
+            );
+            
+            var email = AnsiConsole.Prompt(
+                new TextPrompt<string>("[bold]Enter [green]Email Address[/][/]:")
+                    .PromptStyle("blue")
+                    .ValidationErrorMessage("[red]Email address cannot be empty[/]")
+                    .Validate(email =>
+                    {
+                        return!string.IsNullOrWhiteSpace(email);
+                    })
+            );
+
+            var contact = new Contact
+            {
+                Name = name,
+                PhoneNumber = phoneNumber,
+                Email = email,
+                Category = new Category()
+            };
+
+            return contact;
         }
 
         internal static void DisplayContacts(Category category)
@@ -54,7 +92,7 @@ namespace PhoneBook.UserInteraction
             }
             else
             {
-                AnsiConsole.WriteLine("\n[bold][red]No contacts found in this category.[/]");
+                AnsiConsole.MarkupLine("\n[bold][red]No contacts found in this category.[/]");
             }
         }
     }
