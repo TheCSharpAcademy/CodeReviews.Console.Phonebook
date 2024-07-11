@@ -7,16 +7,24 @@ namespace PhoneBook.Views
 {
     public class MainMenu
     {
-        public static void ShowMAinMenu()
+        public static void ShowMainMenu()
         {
             var option = AnsiConsole.Prompt(
                 new SelectionPrompt<MenuOptions>()
                 .Title("\n[bold][blue]Phone Book Application Menu[/][/]")
+                .PageSize(6)
                 .AddChoices(
+                    MenuOptions.AddCategory,
+                    MenuOptions.ViewCategories,
+                    MenuOptions.EditCategories,
+                    MenuOptions.DeleteCategory,
                     MenuOptions.AddContact,
                     MenuOptions.ViewAllContacts,
                     MenuOptions.UpdateContact,
                     MenuOptions.DeleteContact,
+                    MenuOptions.SearchContactsByCategory,
+                    MenuOptions.SearchContactsByEmail,
+                    MenuOptions.SearchContactsByPhoneNumber,
                     MenuOptions.Exit
                 )
             );
@@ -28,6 +36,12 @@ namespace PhoneBook.Views
                     break;
                 case MenuOptions.ViewCategories:
                     CategoryService.ViewCategories();
+                    break;
+                case MenuOptions.EditCategories:
+                    CategoryService.EditCategories();
+                    break;
+                case MenuOptions.DeleteCategory:
+                    CategoryService.DeleteCategory();
                     break;
                 case MenuOptions.AddContact:
                     ContactService.AddContact();

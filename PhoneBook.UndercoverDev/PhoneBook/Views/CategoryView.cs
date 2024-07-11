@@ -12,11 +12,14 @@ namespace PhoneBook.Views
             var grid = new Grid()
                 .AddColumn()
                 .AddColumn();
+            
+            grid.AddRow(columns);
 
+            var count = 1;
             foreach (var category in categories)
             {
-                grid.AddRow(columns);
-                grid.AddRow(category.CategoryId.ToString(), category.Name);
+                grid.AddRow(count.ToString(), category.Name);
+                count++;
             }
 
             AnsiConsole.Write(grid);
