@@ -5,7 +5,6 @@ namespace PhoneBook.Models
 {
     public class Contact
     {
-        [Key]
         public int ContactId { get; set; }
         [Required]
         public string Name { get; set; }
