@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using PhoneBook.Models;
 
 namespace PhoneBook.Controllers
@@ -8,6 +9,13 @@ namespace PhoneBook.Controllers
         {
             using var context = new ContactContext();
             context.Add(category);
+            context.SaveChanges();
+        }
+
+        internal static void Delete(Category category)
+        {
+            using var context = new ContactContext();
+            context.Categories.Remove(category);
             context.SaveChanges();
         }
 
@@ -22,8 +30,16 @@ namespace PhoneBook.Controllers
         internal static Category GetCategoryById(int id)
         {
             using var context = new ContactContext();
-            var category = context.Categories.Single(c => c.CategoryId == id);
-            return category;
+            return context.Categories
+                .Include(c => c.Contacts)
+                .SingleOrDefault(c => c.CategoryId == id) ?? new Category();
+        }
+
+        internal static void Update(Category category)
+        {
+            using var context = new ContactContext();
+            context.Update(category);
+            context.SaveChanges();
         }
     }
 }
