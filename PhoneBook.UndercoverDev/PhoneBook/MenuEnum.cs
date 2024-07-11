@@ -6,7 +6,8 @@ namespace PhoneBook
         {
             AddCategory,
             ViewCategories,
-            ViewCategoryContacts,
+            EditCategories,
+            DeleteCategory,
             AddContact,
             ViewAllContacts,
             UpdateContact,
