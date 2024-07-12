@@ -40,14 +40,25 @@ namespace PhoneBook.Services
         internal static void ViewAllContacts()
         {
             var contacts = ContactController.GetContacts();
-            ContactView.DisplayContacts(contacts);
+            if (contacts == null || contacts.Count == 0)
+                AnsiConsole.MarkupLine("[red]No contacts available.[/]");
+            else
+                ContactView.DisplayContacts(contacts);
             MainMenu.ShowMainMenu();
         }
 
         internal static void UsePreviousCategory()
         {
             var selectedCategory = CategoryService.GetCategoriesOptionInput();
-            AddContactToCategory(selectedCategory);
+            if (selectedCategory == null)
+            {
+                AnsiConsole.MarkupLine("[red]No Categories available. Add a new Category first before a contact can be added.[/]");
+                AddContact();
+            }
+            else
+            {
+                AddContactToCategory(selectedCategory);
+            }
         }
 
         internal static void AddNewCategory()
