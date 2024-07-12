@@ -27,14 +27,6 @@ namespace PhoneBook.Controllers
             return categories;
         }
 
-        internal static Category GetCategoryById(int id)
-        {
-            using var context = new ContactContext();
-            return context.Categories
-                .Include(c => c.Contacts)
-                .SingleOrDefault(c => c.CategoryId == id) ?? new Category();
-        }
-
         internal static void Update(Category category)
         {
             using var context = new ContactContext();
