@@ -49,5 +49,19 @@ namespace PhoneBook.Controllers
             }
         }
 
+        internal static void Update(Contact contact)
+        {
+            try
+            {
+                using var context = new ContactContext();
+                context.Contacts.Update(contact);
+                context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                // Handle the exception
+                Console.WriteLine($"Error updating contact: {ex.InnerException?.Message}");
+            }
+        }
     }
 }

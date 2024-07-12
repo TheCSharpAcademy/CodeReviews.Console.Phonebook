@@ -1,6 +1,7 @@
 
 using PhoneBook.Controllers;
 using PhoneBook.Models;
+using PhoneBook.Utilities;
 using PhoneBook.Views;
 using Spectre.Console;
 
@@ -123,9 +124,16 @@ namespace PhoneBook.Services
         internal static void AddContactToCategory(Category category)
         {
             var contact = UserInteraction.UserInteractions.GetContactDetails();
-            contact.Category = category;
-            ContactController.Add(contact);
-            AnsiConsole.MarkupLine("[green]Added contact to category successfully[/]");
+            if (ValidationHelper.ContactExists(new ContactContext(), contact.PhoneNumber))
+            {
+                AnsiConsole.MarkupLine("[red]Contact already exists.[/]");
+            }
+            else
+            {
+                contact.Category = category;
+                ContactController.Add(contact);
+                AnsiConsole.MarkupLine("[green]Added contact to category successfully[/]");
+            }
         }
 
         internal static void SearchContactsByCategory()
