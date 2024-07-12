@@ -27,5 +27,11 @@ namespace PhoneBook.Controllers
             var contacts = context.Contacts.ToList();
             return contacts;
         }
+
+        internal static List<Contact> GetContactsByCategory(int categoryId)
+        {
+            using var context = new ContactContext();
+            return [.. context.Contacts.Where(c => c.CategoryId == categoryId)];
+        }
     }
 }

@@ -23,8 +23,6 @@ namespace PhoneBook.Views
                     MenuOptions.UpdateContact,
                     MenuOptions.DeleteContact,
                     MenuOptions.SearchContactsByCategory,
-                    MenuOptions.SearchContactsByEmail,
-                    MenuOptions.SearchContactsByPhoneNumber,
                     MenuOptions.Exit
                 )
             );
@@ -54,6 +52,9 @@ namespace PhoneBook.Views
                     break;
                 case MenuOptions.DeleteContact:
                     ContactService.DeleteContact();
+                    break;
+                case MenuOptions.SearchContactsByCategory:
+                    ContactService.SearchContactsByCategory();
                     break;
                 case MenuOptions.Exit:
                     UserInteractions.Exit();

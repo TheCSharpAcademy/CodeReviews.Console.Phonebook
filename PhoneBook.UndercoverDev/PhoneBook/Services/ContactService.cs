@@ -76,5 +76,23 @@ namespace PhoneBook.Services
             ContactController.Add(contact);
             AnsiConsole.MarkupLine("[green]Added contact to category successfully[/]");
         }
+
+        internal static void SearchContactsByCategory()
+        {
+            var selectedCategory = CategoryService.GetCategoriesOptionInput();
+            if (selectedCategory == null)
+            {
+                AnsiConsole.MarkupLine("[red]No Categories available. Add a new Category before a contact can be searched.[/]");
+            }
+            else
+            {
+                var contacts = ContactController.GetContactsByCategory(selectedCategory.CategoryId);
+                if (contacts == null || contacts.Count == 0)
+                    AnsiConsole.MarkupLine("[red]No contacts found in this category.[/]");
+                else
+                    ContactView.DisplayContacts(contacts);
+            }
+            MainMenu.ShowMainMenu();
+        }
     }
 }
