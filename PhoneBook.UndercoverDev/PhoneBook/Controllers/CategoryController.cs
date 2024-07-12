@@ -8,7 +8,7 @@ namespace PhoneBook.Controllers
         public static void Add(Category category)
         {
             using var context = new ContactContext();
-            context.Add(category);
+            context.Categories.Add(category);
             context.SaveChanges();
         }
 
@@ -38,7 +38,7 @@ namespace PhoneBook.Controllers
         internal static void Update(Category category)
         {
             using var context = new ContactContext();
-            context.Update(category);
+            context.Categories.Update(category);
             context.SaveChanges();
         }
     }
