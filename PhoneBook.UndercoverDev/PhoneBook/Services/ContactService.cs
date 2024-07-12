@@ -86,7 +86,8 @@ namespace PhoneBook.Services
 
         internal static void UpdateContact()
         {
-            AnsiConsole.MarkupLine("[bold]Select the Category where contact is to be updated[/]");
+            AnsiConsole.MarkupLine("[bold][greenyellow]Select the Category where contact is to be updated[/][/]");
+
             var category = CategoryService.GetCategoriesOptionInput();
             if (category == null)
             {
@@ -124,6 +125,8 @@ namespace PhoneBook.Services
                 ContactController.Update(selectedContact);
                 AnsiConsole.MarkupLine("[green]Updated contact successfully[/]");
             }
+
+            MainMenu.ShowMainMenu();
         }
 
         internal static void ViewAllContacts()
