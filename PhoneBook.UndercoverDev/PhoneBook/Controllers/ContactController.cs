@@ -33,5 +33,21 @@ namespace PhoneBook.Controllers
             using var context = new ContactContext();
             return [.. context.Contacts.Where(c => c.CategoryId == categoryId)];
         }
+
+        internal static void Delete(Contact contact)
+        {
+            try
+            {
+                using var context = new ContactContext();
+                context.Contacts.Remove(contact);
+                context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                // Handle the exception
+                Console.WriteLine($"Error deleting contact: {ex.InnerException?.Message}");
+            }
+        }
+
     }
 }
