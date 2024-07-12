@@ -39,7 +39,9 @@ namespace PhoneBook.Services
 
         internal static void ViewAllContacts()
         {
-            throw new NotImplementedException();
+            var contacts = ContactController.GetContacts();
+            ContactView.DisplayContacts(contacts);
+            MainMenu.ShowMainMenu();
         }
 
         internal static void UsePreviousCategory()
@@ -60,8 +62,6 @@ namespace PhoneBook.Services
         {
             var contact = UserInteraction.UserInteractions.GetContactDetails();
             contact.Category = category;
-            category.Contacts.Add(contact);
-            CategoryController.Update(category);
             ContactController.Add(contact);
             AnsiConsole.MarkupLine("[green]Added contact to category successfully[/]");
         }
