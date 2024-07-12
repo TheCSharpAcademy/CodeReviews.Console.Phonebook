@@ -86,7 +86,44 @@ namespace PhoneBook.Services
 
         internal static void UpdateContact()
         {
-            throw new NotImplementedException();
+            AnsiConsole.MarkupLine("[bold]Select the Category where contact is to be updated[/]");
+            var category = CategoryService.GetCategoriesOptionInput();
+            if (category == null)
+            {
+                AnsiConsole.MarkupLine("[red]No categories available. Add a new Category first before updating.[/]");
+            }
+            else
+            {
+                var contacts = ContactController.GetContactsByCategory(category.CategoryId);
+
+                if (contacts == null || contacts.Count == 0)
+                {
+                    AnsiConsole.MarkupLine("[red]No contacts found in this category. Add a new Contact first before updating.[/]");
+                    return;
+                }
+
+                var contactsArray = contacts.Select(c => c.Name).ToArray();
+
+                var choice = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("\n[bold][yellow]Select a contact to update:[/][/]")
+                        .AddChoices(contactsArray)
+                );
+
+                var selectedContact = contacts.Single(c => c.Name.Equals(choice));
+
+                selectedContact.Name = AnsiConsole.Confirm("Update name?") ?
+                AnsiConsole.Ask<string>("Enter new contact name: ") : selectedContact.Name;
+
+                selectedContact.PhoneNumber = AnsiConsole.Confirm("Update phone number?") ?
+                AnsiConsole.Ask<string>("Enter new contact phone number: ") : selectedContact.PhoneNumber;
+
+                selectedContact.Email = AnsiConsole.Confirm("Update email?") ?
+                AnsiConsole.Ask<string>("Enter new contact email: ") : selectedContact.Email;
+
+                ContactController.Update(selectedContact);
+                AnsiConsole.MarkupLine("[green]Updated contact successfully[/]");
+            }
         }
 
         internal static void ViewAllContacts()
