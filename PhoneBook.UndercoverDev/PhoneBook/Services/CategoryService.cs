@@ -27,7 +27,10 @@ namespace PhoneBook.Services
         internal static void ViewCategories()
         {
             var categories = CategoryController.GetCategories();
-            CategoryView.DisplayCategories(categories);
+            if (categories == null || categories.Count == 0)
+                AnsiConsole.MarkupLine("[red]No Category available[/]");
+            else
+                CategoryView.DisplayCategories(categories);
             MainMenu.ShowMainMenu();
         }
 
@@ -35,18 +38,25 @@ namespace PhoneBook.Services
         {
             var category = GetCategoriesOptionInput();
 
-            var newName = AnsiConsole.Prompt(
-                new TextPrompt<string>("\n[bold]Enter new category name[/]: ")
-                    .Validate(name =>
-                    {
-                        return !string.IsNullOrWhiteSpace(name)
-                            ? ValidationResult.Success()
-                            : ValidationResult.Error("[red]Category name cannot be empty![/]");
-                    }));
+            if (category == null)
+            {
+                AnsiConsole.MarkupLine("[red]No Categories available. Add a new Category[/]");
+            }
+            else
+            {
+                var newName = AnsiConsole.Prompt(
+                    new TextPrompt<string>("\n[bold]Enter new category name[/]: ")
+                        .Validate(name =>
+                        {
+                            return !string.IsNullOrWhiteSpace(name)
+                                ? ValidationResult.Success()
+                                : ValidationResult.Error("[red]Category name cannot be empty![/]");
+                        }));
 
-            category.Name = newName;
-            CategoryController.Update(category);
-            AnsiConsole.MarkupLine("[green]Updated category successfully[/]");
+                category.Name = newName;
+                CategoryController.Update(category);
+                AnsiConsole.MarkupLine("[green]Updated category successfully[/]");
+            }
             MainMenu.ShowMainMenu();
         }
 
@@ -64,7 +74,7 @@ namespace PhoneBook.Services
             var category = GetCategoriesOptionInput();
             if (category == null)
             {
-                AnsiConsole.MarkupLine("[red]No categories found to delete.[/]");
+                AnsiConsole.MarkupLine("[red]No Categories available.[/]");
             }
             else
             {
@@ -74,9 +84,15 @@ namespace PhoneBook.Services
             MainMenu.ShowMainMenu();
         }
 
-        internal static Category GetCategoriesOptionInput()
+        internal static Category? GetCategoriesOptionInput()
         {
             var categories = CategoryController.GetCategories();
+
+            if (categories == null || categories.Count == 0)
+            {
+                return null;
+            }
+
             var categoriesArray = categories.Select(c => c.Name).ToArray();
             var option = AnsiConsole.Prompt(new
                 SelectionPrompt<string>()
@@ -85,9 +101,7 @@ namespace PhoneBook.Services
             );
 
             var id = categories.Single(c => c.Name == option).CategoryId;
-            var category = CategoryController.GetCategoryById(id);
-
-            return category;
+            return CategoryController.GetCategoryById(id);
         }
     }
 }
