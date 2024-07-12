@@ -29,7 +29,58 @@ namespace PhoneBook.Services
 
         internal static void DeleteContact()
         {
-            throw new NotImplementedException();
+            var category = CategoryService.GetCategoriesOptionInput();
+
+            if (category == null)
+            {
+                AnsiConsole.MarkupLine("[red]No categories available. Add a new Category first before deleting.[/]");
+            }
+            else
+            {
+                var contacts = ContactController.GetContactsByCategory(category.CategoryId);
+
+                if (contacts == null || contacts.Count == 0)
+                {
+                    AnsiConsole.MarkupLine("[red]No contacts found in this category. Add a new Contact first before deleting.[/]");
+                }
+                else
+                {
+                    var contact = GetContactOptionInput();
+
+                    if (contact == null)
+                    {
+                        AnsiConsole.MarkupLine("[red]No contacts available. Add a new Contact first before deleting.[/]");
+                    }
+                    else
+                    {
+                        ContactController.Delete(contact);
+                        AnsiConsole.MarkupLine("[green]Deleted contact successfully[/]");
+                    }
+                }
+            }
+            
+            MainMenu.ShowMainMenu();
+        }
+
+        private static Contact? GetContactOptionInput()
+        {
+            var contacts = ContactController.GetContacts();
+
+            if (contacts == null || contacts.Count == 0)
+            {
+                return null;
+            }
+
+            var contactsArray = contacts.Select(c => $"{c.Name}: {c.PhoneNumber}").ToArray();
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("\n[bold][yellow]Select a contact to delete:[/][/]")
+                    .AddChoices(contactsArray)
+            );
+
+            var phoneNumber = choice.Split(':').Last().Trim();
+            
+            return contacts.Single(c => c.PhoneNumber.Equals(phoneNumber));
         }
 
         internal static void UpdateContact()
