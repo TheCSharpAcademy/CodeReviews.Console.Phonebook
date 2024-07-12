@@ -1,4 +1,6 @@
 using PhoneBook.Models;
+using PhoneBook.Utilities;
+using PhoneNumbers;
 using Spectre.Console;
 
 namespace PhoneBook.UserInteraction
@@ -42,30 +44,28 @@ namespace PhoneBook.UserInteraction
                     })
             );
 
+            var formattedNumber = string.Empty;
             var phoneNumber = AnsiConsole.Prompt(
-                new TextPrompt<string>("[bold]Enter [green]Phone Number[/][/]:")
+                new TextPrompt<string>("[bold]Enter [green]Phone Number(Format: (+code)-number)[/][/]:")
                     .PromptStyle("blue")
-                    .ValidationErrorMessage("[red]Phone number cannot be empty[/]")
+                    .ValidationErrorMessage("[red]Please enter a valid phone number[/]")
                     .Validate(number =>
                     {
-                        return!string.IsNullOrWhiteSpace(number);
+                        return ValidationHelper.PhoneNumberIsValid(number, out formattedNumber);
                     })
             );
             
             var email = AnsiConsole.Prompt(
                 new TextPrompt<string>("[bold]Enter [green]Email Address[/][/]:")
                     .PromptStyle("blue")
-                    .ValidationErrorMessage("[red]Email address cannot be empty[/]")
-                    .Validate(email =>
-                    {
-                        return!string.IsNullOrWhiteSpace(email);
-                    })
+                    .ValidationErrorMessage("[red]Please enter a valid email[/]")
+                    .Validate(ValidationHelper.EmailIsValid)
             );
 
             var contact = new Contact
             {
                 Name = name,
-                PhoneNumber = phoneNumber,
+                PhoneNumber = formattedNumber,
                 Email = email,
                 Category = new Category()
             };
