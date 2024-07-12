@@ -100,8 +100,7 @@ namespace PhoneBook.Services
                 .AddChoices(categoriesArray)
             );
 
-            var id = categories.Single(c => c.Name == option).CategoryId;
-            return CategoryController.GetCategoryById(id);
+            return categories.Single(c => c.Name.Equals(option));
         }
     }
 }
