@@ -9,15 +9,23 @@ namespace PhoneBook.Controllers
         {
             try
             {
-            using var context = new ContactContext();
-            context.Contacts.Add(contact);
-            context.SaveChanges();
+                using var context = new ContactContext();
+                context.Entry(contact.Category).State = EntityState.Unchanged;
+                context.Contacts.Add(contact);
+                context.SaveChanges();
             }
             catch (DbUpdateException ex)
             {
                 // Handle the exception
                 Console.WriteLine($"Error adding contact: {ex.InnerException?.Message}");
             }
+        }
+
+        internal static List<Contact> GetContacts()
+        {
+            using var context = new ContactContext();
+            var contacts = context.Contacts.ToList();
+            return contacts;
         }
     }
 }
