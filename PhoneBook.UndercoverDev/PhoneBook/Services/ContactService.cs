@@ -193,5 +193,15 @@ namespace PhoneBook.Services
             }
             MainMenu.ShowMainMenu();
         }
+
+        internal static void SendEmail()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static void SendSMS()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

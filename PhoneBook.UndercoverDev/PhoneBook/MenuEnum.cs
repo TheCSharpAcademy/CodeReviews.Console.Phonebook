@@ -13,8 +13,8 @@ namespace PhoneBook
             UpdateContact,
             DeleteContact,
             SearchContactsByCategory,
-            SearchContactsByEmail,
-            SearchContactsByPhoneNumber,
+            SendEmail,
+            SendSMS,
             Exit
         }
     }
