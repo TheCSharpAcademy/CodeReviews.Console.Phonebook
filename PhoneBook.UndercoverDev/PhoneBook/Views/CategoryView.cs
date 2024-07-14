@@ -24,5 +24,28 @@ namespace PhoneBook.Views
 
             AnsiConsole.Write(grid);
         }
+
+        internal static void DisplayContacts(Category category)
+        {
+            if (category.Contacts != null)
+            {
+            var table = new Table()
+                .AddColumn("Contact ID")
+                .AddColumn("Name")
+                .AddColumn("Phone Number")
+                .AddColumn("Email");
+
+            foreach (var contact in category.Contacts)
+            {
+                table.AddRow(contact.ContactId.ToString(), contact.Name, contact.PhoneNumber, contact.Email);
+            }
+
+            AnsiConsole.Write(table);
+            }
+            else
+            {
+                AnsiConsole.MarkupLine("\n[bold][red]No contacts found in this category.[/]");
+            }
+        }
     }
 }

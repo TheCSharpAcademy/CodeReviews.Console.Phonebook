@@ -67,7 +67,7 @@ namespace PhoneBook.Services
         internal static void ViewContactsInCategories()
         {
             var category = GetCategoriesOptionInput();
-            UserInteraction.UserInteractions.DisplayContacts(category);
+            CategoryView.DisplayContacts(category);
             MainMenu.ShowMainMenu();
         }
 
