@@ -1,3 +1,4 @@
+using PhoneBook.Extension;
 using PhoneBook.Models;
 using PhoneBook.Utilities;
 using PhoneNumbers;
@@ -26,7 +27,7 @@ namespace PhoneBook.UserInteraction
             );
             var category = new Category
             {
-                Name = name
+                Name = name.TrimAndLower().ToTitleCase() ?? "",
             };
 
             return category;
@@ -64,7 +65,7 @@ namespace PhoneBook.UserInteraction
 
             var contact = new Contact
             {
-                Name = name,
+                Name = name.TrimAndLower().ToUpper(),
                 PhoneNumber = formattedNumber,
                 Email = email,
                 Category = new Category()
