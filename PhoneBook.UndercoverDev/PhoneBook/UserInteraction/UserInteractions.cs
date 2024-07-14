@@ -65,7 +65,7 @@ namespace PhoneBook.UserInteraction
 
             var contact = new Contact
             {
-                Name = name.TrimAndLower().ToUpper(),
+                Name = name.TrimAndLower().ToTitleCase() ?? "",
                 PhoneNumber = formattedNumber,
                 Email = email,
                 Category = new Category()
