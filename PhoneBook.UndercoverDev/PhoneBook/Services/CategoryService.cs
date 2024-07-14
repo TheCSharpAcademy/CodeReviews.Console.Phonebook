@@ -18,6 +18,7 @@ namespace PhoneBook.Services
             }
             else
             {
+                Console.Clear();
                 CategoryController.Add(category);
                 AnsiConsole.MarkupLine("[green]Added category successfully[/]");
             }
@@ -26,6 +27,7 @@ namespace PhoneBook.Services
 
         internal static void ViewCategories()
         {
+            Console.Clear();
             var categories = CategoryController.GetCategories();
             if (categories == null || categories.Count == 0)
                 AnsiConsole.MarkupLine("[red]No Category available[/]");
@@ -36,6 +38,7 @@ namespace PhoneBook.Services
 
         internal static void EditCategories()
         {
+            Console.Clear();
             var category = GetCategoriesOptionInput();
 
             if (category == null)
@@ -70,6 +73,7 @@ namespace PhoneBook.Services
 
         internal static void DeleteCategory()
         {
+            Console.Clear();
             AnsiConsole.MarkupLine("[bold][red]Select a category to delete[/][/]");
             var category = GetCategoriesOptionInput();
             if (category == null)

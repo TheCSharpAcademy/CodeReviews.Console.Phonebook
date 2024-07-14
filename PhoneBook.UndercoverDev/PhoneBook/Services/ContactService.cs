@@ -11,6 +11,7 @@ namespace PhoneBook.Services
     {
         internal static void AddContact()
         {
+            Console.Clear();
             var choice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                     .Title("\n[bold][yellow]Do you want to use a previous category or create a new one?[/][/]")
@@ -30,6 +31,7 @@ namespace PhoneBook.Services
 
         internal static void DeleteContact()
         {
+            Console.Clear();
             var category = CategoryService.GetCategoriesOptionInput();
 
             if (category == null)
@@ -86,6 +88,7 @@ namespace PhoneBook.Services
 
         internal static void UpdateContact()
         {
+            Console.Clear();
             AnsiConsole.MarkupLine("[bold][greenyellow]Select the Category where contact is to be updated[/][/]");
 
             var category = CategoryService.GetCategoriesOptionInput();
@@ -131,6 +134,7 @@ namespace PhoneBook.Services
 
         internal static void ViewAllContacts()
         {
+            Console.Clear();
             var contacts = ContactController.GetContacts();
             if (contacts == null || contacts.Count == 0)
                 AnsiConsole.MarkupLine("[red]No contacts available.[/]");
@@ -149,6 +153,7 @@ namespace PhoneBook.Services
             }
             else
             {
+                Console.Clear();
                 AddContactToCategory(selectedCategory);
             }
         }
@@ -178,6 +183,7 @@ namespace PhoneBook.Services
 
         internal static void SearchContactsByCategory()
         {
+            Console.Clear();
             var selectedCategory = CategoryService.GetCategoriesOptionInput();
             if (selectedCategory == null)
             {
