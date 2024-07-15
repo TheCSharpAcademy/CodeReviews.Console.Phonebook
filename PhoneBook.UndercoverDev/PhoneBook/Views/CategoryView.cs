@@ -5,42 +5,37 @@ namespace PhoneBook.Views
 {
     public class CategoryView
     {
-        private static readonly string[] columns = ["Id", "Name"];
+        private static readonly string[] categoryColumns = ["Id", "Name"];
+        private static readonly string[] contactsColumns = ["Id", "Name", "Phone", "Email"];
 
         internal static void DisplayCategories(List<Category> categories)
         {
-            var grid = new Grid()
-                .AddColumn()
-                .AddColumn();
-            
-            grid.AddRow(columns);
+            var table = new Table{ Border = TableBorder.DoubleEdge };
+            table.AddColumns(categoryColumns);
 
             var count = 1;
             foreach (var category in categories)
             {
-                grid.AddRow(count.ToString(), category.Name);
+                table.AddRow(count.ToString(), category.Name);
                 count++;
             }
 
-            AnsiConsole.Write(grid);
+            AnsiConsole.Write(table);
         }
 
         internal static void DisplayContacts(Category category)
         {
             if (category.Contacts != null)
             {
-            var table = new Table()
-                .AddColumn("Contact ID")
-                .AddColumn("Name")
-                .AddColumn("Phone Number")
-                .AddColumn("Email");
+                var table = new Table{ Border = TableBorder.DoubleEdge };
+                table.AddColumns(contactsColumns);
 
-            foreach (var contact in category.Contacts)
-            {
-                table.AddRow(contact.ContactId.ToString(), contact.Name, contact.PhoneNumber, contact.Email);
-            }
+                foreach (var contact in category.Contacts)
+                {
+                    table.AddRow(contact.ContactId.ToString(), contact.Name, contact.PhoneNumber, contact.Email);
+                }
 
-            AnsiConsole.Write(table);
+                AnsiConsole.Write(table);
             }
             else
             {

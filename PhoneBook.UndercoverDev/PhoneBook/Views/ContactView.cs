@@ -10,22 +10,17 @@ namespace PhoneBook.Views
 
         internal static void DisplayContacts(List<Contact> contacts)
         {
-            var grid = new Grid()
-                .AddColumn()
-                .AddColumn()
-                .AddColumn()
-                .AddColumn();
-            
-            grid.AddRow(columns);
+            var table = new Table{ Border = TableBorder.DoubleEdge };
+            table.AddColumns(columns);
 
             var count = 1;
             foreach (var contact in contacts)
             {
-                grid.AddRow(count.ToString(), contact.Name, contact.PhoneNumber, contact.Email);
+                table.AddRow(count.ToString(), contact.Name, contact.PhoneNumber, contact.Email);
                 count++;
             }
 
-            AnsiConsole.Write(grid);
+            AnsiConsole.Write(table);
         }
     }
 }
