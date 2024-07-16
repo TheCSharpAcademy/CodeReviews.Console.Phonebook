@@ -116,14 +116,29 @@ namespace PhoneBook.Services
 
                 var selectedContact = contacts.Single(c => c.Name.Equals(choice));
 
+                // Update Name
                 selectedContact.Name = AnsiConsole.Confirm("Update name?") ?
                 AnsiConsole.Ask<string>("Enter new contact name: ") : selectedContact.Name;
 
+                // Update Phone Number
+                var formattedNumber = string.Empty;
                 selectedContact.PhoneNumber = AnsiConsole.Confirm("Update phone number?") ?
                 AnsiConsole.Ask<string>("Enter new contact phone number: ") : selectedContact.PhoneNumber;
+                while (!ValidationHelper.PhoneNumberIsValid(selectedContact.PhoneNumber, out formattedNumber))
+                {
+                    AnsiConsole.MarkupLine("[bold][red]Please enter a valid phone number(Format: (+code)-number).[/][/]");
+                    selectedContact.PhoneNumber = AnsiConsole.Ask<string>("Enter new contact phone number: ");
+                }
+                selectedContact.PhoneNumber = formattedNumber;
 
+                // Update Email
                 selectedContact.Email = AnsiConsole.Confirm("Update email?") ?
                 AnsiConsole.Ask<string>("Enter new contact email: ") : selectedContact.Email;
+                while (!ValidationHelper.EmailIsValid(selectedContact.Email))
+                {
+                    AnsiConsole.MarkupLine("[bold][red]Please enter a valid email[/][/]");
+                    selectedContact.Email = AnsiConsole.Ask<string>("Enter new contact email: ");
+                }
 
                 ContactController.Update(selectedContact);
                 AnsiConsole.MarkupLine("[green]Updated contact successfully[/]");

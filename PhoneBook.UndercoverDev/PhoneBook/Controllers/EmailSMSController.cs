@@ -7,7 +7,7 @@ namespace PhoneBook.Controllers
 {
     public class EmailSMSController
     {
-        private const string EmailPassword = "";
+        private const string EmailPassword = "hjvg vbut imok ishw";
         internal static void Send(List<string> emailDetails, Contact contact)
         {
             try
