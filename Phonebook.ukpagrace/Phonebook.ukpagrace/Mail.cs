@@ -13,7 +13,8 @@ namespace Phonebook.ukpagrace.Mail
             .AddJsonFile("appsettings.json")
             .Build();
 
-            string? password = config.GetSection("Email")["Password"];
+            string? email = config.GetSection("Mail")["Email"];
+            string? password = config.GetSection("Mail")["Password"];
             MailMessage message = new MailMessage(
                 "noreply@gmail.com",
                 receiver,
@@ -21,7 +22,7 @@ namespace Phonebook.ukpagrace.Mail
                 $"You have been added to {receiver} phonebook"
             );
             SmtpClient smtpClient = new ("smtp.gmail.com");
-            NetworkCredential networkCredential = new NetworkCredential("ukpauchechi1@gmail.com", $"{password}");
+            NetworkCredential networkCredential = new NetworkCredential($"{email}", $"{password}");
             smtpClient.Credentials = networkCredential;
             smtpClient.Port = 587;
             smtpClient.EnableSsl = true;
