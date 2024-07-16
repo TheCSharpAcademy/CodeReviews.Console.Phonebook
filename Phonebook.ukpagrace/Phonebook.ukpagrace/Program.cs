@@ -28,6 +28,9 @@ class Program
                 case "Delete":
                     contactController.Delete();
                     break;
+                case "Exit":
+                    Environment.Exit(1);
+                    break;
                 default:
                     Console.WriteLine("Invalid Input");
                     break;
@@ -42,7 +45,7 @@ class Program
             new SelectionPrompt<string>()
                 .Title("What would you [green]like to do[/]?")
                 .AddChoices(new[] {
-                    "Create", "List", "Update", "Delete"
+                    "Create", "List", "Update", "Delete", "Exit"
                 }));
 
         return option;
