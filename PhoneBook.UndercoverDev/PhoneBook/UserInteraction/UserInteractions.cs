@@ -1,7 +1,6 @@
 using PhoneBook.Extension;
 using PhoneBook.Models;
 using PhoneBook.Utilities;
-using PhoneNumbers;
 using Spectre.Console;
 
 namespace PhoneBook.UserInteraction
@@ -72,6 +71,48 @@ namespace PhoneBook.UserInteraction
             };
 
             return contact;
+        }
+
+        internal static List<string> GetEmailDetails()
+        {
+            var name = AnsiConsole.Prompt(
+                new TextPrompt<string>("\n[bold]Enter [green]Your Name[/][/]:")
+                    .PromptStyle("blue")
+                    .ValidationErrorMessage("[red]Name cannot be empty[/]")
+                    .Validate(name =>
+                    {
+                        return!string.IsNullOrWhiteSpace(name);
+                    })
+            );
+
+            var fromEmail = AnsiConsole.Prompt(
+                new TextPrompt<string>("\n[bold]Enter [green]Sender Email[/][/]:")
+                    .PromptStyle("blue")
+                    .ValidationErrorMessage("[red]enter a valid email address[/]")
+                    .Validate(ValidationHelper.EmailIsValid)
+            );
+
+            var subject = AnsiConsole.Prompt(
+                new TextPrompt<string>("\n[bold]Enter [green]Email Subject[/][/]:")
+                    .PromptStyle("blue")
+                    .ValidationErrorMessage("[red]Subject cannot be empty[/]")
+                    .Validate(name =>
+                    {
+                        return!string.IsNullOrWhiteSpace(name);
+                    })
+            );
+
+            var body = AnsiConsole.Prompt(
+                new TextPrompt<string>("\n[bold]Enter [green]Email Body[/][/]:")
+                    .PromptStyle("blue")
+                    .ValidationErrorMessage("[red]Email body cannot be empty[/]")
+                    .Validate(name =>
+                    {
+                        return!string.IsNullOrWhiteSpace(name);
+                    })
+            );
+
+            return [name, fromEmail, subject, body];
         }
     }
 }

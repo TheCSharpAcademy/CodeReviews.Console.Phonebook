@@ -59,7 +59,7 @@ namespace PhoneBook.Views
                     ContactService.SearchContactsByCategory();
                     break;
                 case MenuOptions.SendEmail:
-                    ContactService.SendEmail();
+                    EmailSMSService.SendEmail();
                     break;
                 case MenuOptions.SendSMS:
                     ContactService.SendSMS();

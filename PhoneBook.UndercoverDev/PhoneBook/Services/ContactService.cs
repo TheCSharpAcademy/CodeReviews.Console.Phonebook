@@ -65,7 +65,7 @@ namespace PhoneBook.Services
             MainMenu.ShowMainMenu();
         }
 
-        private static Contact? GetContactOptionInput()
+        internal static Contact? GetContactOptionInput()
         {
             var contacts = ContactController.GetContacts();
 
