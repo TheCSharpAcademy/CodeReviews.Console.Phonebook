@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols;
+using System.Configuration;
 namespace Phonebook.kjanos89
 {
     public class PhonebookContext : DbContext
@@ -6,11 +8,8 @@ namespace Phonebook.kjanos89
         public DbSet<Contact> Contacts { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=PhonebookDB;Trusted_Connection=True;");
-        }
-        public void Initialize()
-        {
-            this.Database.EnsureCreated();
+            string _connectionString = "Server=localhost;Database=PhonebookDB;Integrated Security=True;TrustServerCertificate=True;";
+            optionsBuilder.UseSqlServer(_connectionString);
         }
     }
 }

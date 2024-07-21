@@ -3,9 +3,8 @@ class Program
 {
     static void Main(string[] args)
     {
-        using (var context = new PhonebookContext())
-        {
-            context.Initialize();
-        }
+        PhonebookManipulation manipulation = new PhonebookManipulation();
+        Menu menu = new Menu(manipulation);
+        menu.DisplayMenu();
     }
 }
