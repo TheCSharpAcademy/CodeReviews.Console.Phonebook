@@ -3,8 +3,9 @@ class Program
 {
     static void Main(string[] args)
     {
-        PhonebookManipulation manipulation = new PhonebookManipulation();
-        Menu menu = new Menu(manipulation);
+        Menu menu = new Menu();
+        PhonebookManipulation manipulation = new PhonebookManipulation(menu);
+        menu.SetPBManipulation(manipulation);
         menu.DisplayMenu();
     }
 }

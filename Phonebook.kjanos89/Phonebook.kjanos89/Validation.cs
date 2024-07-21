@@ -8,5 +8,9 @@ namespace Phonebook.kjanos89
 {
     public class Validation
     {
+        public bool CheckString(string str)
+        {
+            return !String.IsNullOrEmpty(str);
+        }
     }
 }
