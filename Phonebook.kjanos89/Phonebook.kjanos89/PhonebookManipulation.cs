@@ -35,14 +35,16 @@ namespace Phonebook.kjanos89
             }
             string phoneNumber = tempPhone;
             Console.WriteLine("Please type in the e-mail address of the contact or press '0' to return to the menu");
+            Console.WriteLine("Try to stick with the format of the example here: \"example@example.com\"");
             string tempMail=Console.ReadLine();
             if (tempMail == "0")
             {
                 menu.DisplayMenu();
             }
-            while(!validation.CheckString(tempMail))
+            while(!validation.CheckEmail(tempMail))
             {
                 Console.WriteLine("There was an error with the e-mail address you've typed in. Try again, pressing '0' will abort adding a new contact to your list.");
+                tempMail=Console.ReadLine();
             }
             string email = tempMail;
 
