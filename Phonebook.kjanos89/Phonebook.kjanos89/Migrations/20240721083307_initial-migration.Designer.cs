@@ -12,7 +12,7 @@ namespace Phonebook.kjanos89.Migrations
 {
     [DbContext(typeof(PhonebookContext))]
     [Migration("20240721083307_initial-migration")]
-    partial class initialmigration
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

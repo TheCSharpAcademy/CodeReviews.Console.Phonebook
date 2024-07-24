@@ -27,7 +27,7 @@ namespace Phonebook.kjanos89
             try
             {
                 var mailAddress = new MailAddress(str);
-                return HasValidDomain(str);
+                return mailAddress.Address == str && HasValidDomain(mailAddress.Host);
             }
             catch (FormatException)
             {
