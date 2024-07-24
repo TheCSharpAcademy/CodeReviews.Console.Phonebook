@@ -6,11 +6,24 @@ namespace Phonebook.kjanos89
     {
         public bool CheckString(string str)
         {
-            return !String.IsNullOrEmpty(str);
+            return !string.IsNullOrEmpty(str);
         }
+
+        public bool CheckNumber(string str)
+        {
+            foreach (char c in str)
+            {
+                if (!char.IsDigit(c))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public bool CheckEmail(string str)
         {
-            if (String.IsNullOrEmpty(str)) return false;
+            if (string.IsNullOrEmpty(str)) return false;
             try
             {
                 var mailAddress = new MailAddress(str);
@@ -21,23 +34,51 @@ namespace Phonebook.kjanos89
                 return false;
             }
         }
+
         public bool HasValidDomain(string email)
         {
             string domain = email.Split('@').Last();
             int lastDotIndex = domain.LastIndexOf('.');
-            if (lastDotIndex>=2)
+            if (lastDotIndex >= 2)
             {
                 string ending = domain.Substring(lastDotIndex + 1);
                 foreach (char c in ending)
                 {
-                    if (Char.IsDigit(c))
+                    if (char.IsDigit(c))
                     {
-                        return false; 
+                        return false;
                     }
                 }
             }
             return lastDotIndex > 0 && lastDotIndex < domain.Length - 2;
         }
+
+        public bool CheckName(string str)
+        {
+            foreach (char c in str)
+            {
+                if (!char.IsLetter(c) && c != ' ')
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool CheckPhoneNumber(string str)
+        {
+            if (str[0] == '+')
+            {
+                str = str.Substring(1);
+            }
+            foreach (char c in str)
+            {
+                if (!char.IsDigit(c))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
-    
 }
