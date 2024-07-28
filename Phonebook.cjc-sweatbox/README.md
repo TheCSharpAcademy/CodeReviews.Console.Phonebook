@@ -65,10 +65,6 @@ The console application will handle the performing of any created database migra
 3. Build the application:
     - `dotnet build`
 
-4. Create database migration:
-    - Navigate to the `.\src\` directory.
-    - `dotnet ef migrations add InitialCreate --project Phonebook.Data --startup-project Phonebook.ConsoleApp`
-
 ### Running the Application
 
 1. Run the application using the .NET CLI:
