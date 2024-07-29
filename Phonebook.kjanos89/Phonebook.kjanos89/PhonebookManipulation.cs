@@ -155,22 +155,29 @@ public class PhonebookManipulation(Menu menu)
                 Console.WriteLine("Please type in the phone number of the contact or leave empty if you don't want to modify it:");
                 Console.WriteLine("Example: +36201234567 or 06201234567");
                 string phoneNumber = Console.ReadLine();
-                if (!validation.CheckPhoneNumber(phoneNumber))
+                if(!string.IsNullOrEmpty(phoneNumber))
                 {
-                    Console.WriteLine("Phone number not in acceptable format! Press any key to try again from the beginning...\"");
-                    Console.ReadLine();
-                    UpdateContact();
-                    return;
+                    if (!validation.CheckPhoneNumber(phoneNumber))
+                    {
+                        Console.WriteLine("Phone number not in acceptable format! Press any key to try again from the beginning...\"");
+                        Console.ReadLine();
+                        UpdateContact();
+                        return;
+                    }
                 }
+                
                 Console.WriteLine("Please type in the e-mail address of the contact or leave empty if you don't want to modify it:");
                 Console.WriteLine("Example: \"example@example.com\"");
                 string email = Console.ReadLine();
-                if (!validation.CheckEmail(email))
+                if (!string.IsNullOrEmpty(email))
                 {
-                    Console.WriteLine("Email not in acceptable format! Press any key to try again from the beginning...\".");
-                    Console.ReadLine();
-                    UpdateContact();
-                    return;
+                    if (!validation.CheckEmail(email))
+                    {
+                        Console.WriteLine("Email not in acceptable format! Press any key to try again from the beginning...\".");
+                        Console.ReadLine();
+                        UpdateContact();
+                        return;
+                    }
                 }
                 if (!String.IsNullOrEmpty(newName)&&validation.CheckName(newName))
                 {

@@ -24,7 +24,6 @@ namespace Phonebook.kjanos89
 
         public bool CheckEmail(string str)
         {
-            if (string.IsNullOrEmpty(str)) return false;
             try
             {
                 var mailAddress = new MailAddress(str);
@@ -56,10 +55,6 @@ namespace Phonebook.kjanos89
 
         public bool CheckName(string str)
         {
-            if (string.IsNullOrEmpty(str))
-            { 
-                return false; 
-            }
             foreach (char c in str)
             {
                 if (!char.IsLetter(c) && c != ' ')
@@ -72,10 +67,6 @@ namespace Phonebook.kjanos89
 
         public bool CheckPhoneNumber(string str)
         {
-            if (string.IsNullOrEmpty(str))
-            {
-                return false;
-            }
             if (str[0] == '+')
             {
                 str = str.Substring(1);
