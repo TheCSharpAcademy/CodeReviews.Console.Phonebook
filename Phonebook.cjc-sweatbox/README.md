@@ -7,7 +7,7 @@
 
 Welcome to the Phonebook App!
 
-This is a .NET project designed to demonstrate using the Entity Framework ORM and SQL Server. 
+This is a .NET project designed to demonstrate using the Entity Framework ORM and SQL Server.
 
 ## Requirements
 
@@ -35,10 +35,9 @@ This is a .NET project designed to demonstrate using the Entity Framework ORM an
 
     Set `SeedDatabase` to `true` in the appsettings.json file if you wish to generate mocked up seed data on initial database creation.
 
-
 ## Getting Started
 
-**IMPORTANT!** 
+**IMPORTANT!**
 
 I have already created and staged the InitialCreate database migration in the repo.
 
@@ -86,6 +85,8 @@ The console application will handle the performing of any created database migra
 
 - **Console Application**: Display is mostly through the [Spectre Console](https://spectreconsole.net/) library.
 - **Menu Navigation**: Navigate the application through the Selection Prompts class provided by Spectre to perform actions.
+- **Email Validation**: Emails are validated using System.ComponentModel.DataAnnotations library.
+- **Phone Number Validation**: Phone numbers are validated using the [libphonenumber-csharp](https://github.com/twcclegg/libphonenumber-csharp) library.
 - **Data Storage**: An SQL Server database is required to be created before running the application.
 - **Data Access**: Code-First Entity Framework is used for the database access methods.
 - **Data Seeding**: The required Categories data is seeded on first time start-up. If configured, a set of mock Contacts will be added.

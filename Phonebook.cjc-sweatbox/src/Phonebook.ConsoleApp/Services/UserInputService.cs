@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using Phonebook.ConsoleApp.Enums;
 using Phonebook.ConsoleApp.Models;
 using Phonebook.Data.Entities;
 using Phonebook.Extensions;
+using PhoneNumbers;
 using Spectre.Console;
 
 namespace Phonebook.ConsoleApp.Services;
@@ -10,16 +12,16 @@ namespace Phonebook.ConsoleApp.Services;
 /// <summary>
 /// Helper service for getting valid user inputs of different types.
 /// </summary>
-internal static class UserInputService
+internal static partial class UserInputService
 {
     #region Constants
 
     private readonly static string EmailValidationErrorMessage = "[red]Invalid email address![/] Expected format: [blue]user@domain.tld[/]";
 
-    private readonly static string PhoneValidationErrorMessage = "[red]Invalid phone number[/] Expected format: [blue]01234567890[/]";
+    private readonly static string PhoneValidationErrorMessage = "[red]Invalid phone number[/] Enter according to your regional standard.";
 
     #endregion
-    #region Methods
+    #region Methods - Internal
 
     internal static string GetString(string prompt)
     {
@@ -75,7 +77,7 @@ internal static class UserInputService
             .ValidationErrorMessage(PhoneValidationErrorMessage)
             .Validate(input =>
             {
-                return (input == "0" || new PhoneAttribute().IsValid(input))
+                return (input == "0" || IsValidPhoneNumber(input))
                 ? Spectre.Console.ValidationResult.Success()
                 : Spectre.Console.ValidationResult.Error();
             }));
@@ -90,7 +92,7 @@ internal static class UserInputService
             .ValidationErrorMessage(PhoneValidationErrorMessage)
             .Validate(input =>
             {
-                return (input == "0" || new PhoneAttribute().IsValid(input))
+                return (input == "0" || IsValidPhoneNumber(input))
                 ? Spectre.Console.ValidationResult.Success()
                 : Spectre.Console.ValidationResult.Error();
             }));
@@ -127,5 +129,22 @@ internal static class UserInputService
     }
 
     #endregion
-}
+    #region Methods - Private
 
+    private static bool IsValidPhoneNumber(string input)
+    {
+        var phoneNumberUtil = PhoneNumberUtil.GetInstance();
+
+        try
+        {
+            var phoneNumber = phoneNumberUtil.Parse(input, RegionInfo.CurrentRegion.Name);
+            return phoneNumberUtil.IsValidNumber(phoneNumber);
+        }
+        catch (NumberParseException)
+        {
+            return false;
+        }
+    }
+
+    #endregion
+}
