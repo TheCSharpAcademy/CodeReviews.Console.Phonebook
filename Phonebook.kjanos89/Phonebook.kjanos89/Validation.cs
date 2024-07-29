@@ -11,6 +11,7 @@ namespace Phonebook.kjanos89
 
         public bool CheckNumber(string str)
         {
+            if(string.IsNullOrEmpty(str)) return false;
             foreach (char c in str)
             {
                 if (!char.IsDigit(c))
@@ -55,6 +56,10 @@ namespace Phonebook.kjanos89
 
         public bool CheckName(string str)
         {
+            if (string.IsNullOrEmpty(str))
+            { 
+                return false; 
+            }
             foreach (char c in str)
             {
                 if (!char.IsLetter(c) && c != ' ')
@@ -67,9 +72,17 @@ namespace Phonebook.kjanos89
 
         public bool CheckPhoneNumber(string str)
         {
+            if (string.IsNullOrEmpty(str))
+            {
+                return false;
+            }
             if (str[0] == '+')
             {
                 str = str.Substring(1);
+            }
+            if (str.Length < 3 || str.Length > 15)
+            {
+                return false;
             }
             foreach (char c in str)
             {
