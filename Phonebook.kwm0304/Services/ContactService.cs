@@ -1,3 +1,4 @@
+using Phonebook.kwm0304.Enums;
 using Phonebook.kwm0304.Interfaces;
 using Phonebook.kwm0304.Models;
 using Phonebook.kwm0304.Utils;
@@ -6,10 +7,11 @@ using Spectre.Console;
 
 namespace Phonebook.kwm0304.Services;
 
-public class ContactService(IContactRepository repository, GroupService service)
+public class ContactService(IContactRepository repository, GroupService service, EmailService emailService)
 {
   private readonly IContactRepository _repository = repository;
   private readonly GroupService _groupService = service;
+  private readonly EmailService _emailService = emailService;
 
   public async Task CreateContact()
   {
@@ -17,7 +19,7 @@ public class ContactService(IContactRepository repository, GroupService service)
     string number = Helper.GetInput("number", Validation.IsValidPhoneNumber);
     string email = Helper.GetInput("email", Validation.IsValidEmail);
     string numberStr = Validation.FormatContactNumberStr(number);
-    int numberInt = Validation.NormalizePhoneNumberInt(number);
+    long numberInt = Validation.NormalizePhoneNumberInt(number);
     ContactGroup? group = await _groupService.GetGroup();
     var contact = new Contact
     {
@@ -48,7 +50,7 @@ public class ContactService(IContactRepository repository, GroupService service)
       case "Number":
         string number = Helper.GetInput("number", Validation.IsValidPhoneNumber);
         string newNumberString = Validation.FormatContactNumberStr(number);
-        int newNumber = Validation.NormalizePhoneNumberInt(number);
+        long newNumber = Validation.NormalizePhoneNumberInt(number);
         contact.ContactPhoneInt = newNumber;
         contact.ContactPhoneStr = newNumberString;
         await _repository.UpdateContact(contact);
@@ -63,5 +65,37 @@ public class ContactService(IContactRepository repository, GroupService service)
       default:
         return;
     }
+  }
+
+  public async Task HandleViewContacts()
+  {
+    Contact contact = await ChooseContact();
+    ContactOption option = SelectionMenu.SelectContactOption();
+    switch (option)
+    {
+      case ContactOption.EmailContact:
+        if (contact.ContactEmail != null)
+        {
+          await _emailService.CreateMessage(contact)!;
+        }
+        else return;
+        break;
+      case ContactOption.EditContact:
+        await UpdateContact(contact);
+        break;
+      case ContactOption.DeleteContact:
+        bool confirmDelete = AnsiConsole.Confirm(
+          $"Are you sure you want to delete\n{contact.ContactName}\n{contact.ContactPhoneStr}");
+        if (confirmDelete)
+        {
+          await _repository.DeleteContact(contact);
+        }
+        break;
+    }
+  }
+  public async Task<Contact> ChooseContact()
+  {
+    List<Contact> contacts = await _repository.GetAllContactsAsync();
+    return SelectionMenu.SelectContact(contacts);
   }
 }

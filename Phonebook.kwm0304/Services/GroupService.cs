@@ -39,7 +39,10 @@ public class GroupService
 
   public async Task<ContactGroup> AddGroup(string name)
   {
-    ContactGroup newGroup = new(name);
+    ContactGroup newGroup = new()
+    {
+      GroupName = name
+    };
     AnsiConsole.WriteLine("Group added successfully");
     return await _repository.AddGroupAsync(newGroup);
   }

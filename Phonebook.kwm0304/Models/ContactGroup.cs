@@ -4,8 +4,10 @@ public class ContactGroup
 {
   public int GroupId { get; set; }
   public string? GroupName { get; set; }
-  public ContactGroup(string name)
-  {
-    GroupName = name;
-  }
+    public override string ToString()
+    {
+        return $"{GroupName}";
+    }
+
+
 }

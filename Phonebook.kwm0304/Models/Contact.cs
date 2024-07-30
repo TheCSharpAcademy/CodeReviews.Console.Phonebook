@@ -6,6 +6,10 @@ public class Contact
   public string? ContactName { get; set; }
   public string? ContactEmail { get; set; }
   public string? ContactPhoneStr { get; set; }
-  public int ContactPhoneInt { get; set; }
+  public long ContactPhoneInt { get; set; }
   public ContactGroup? Group { get; set; }
+  public override string ToString()
+  {
+    return $"NAME: {ContactName} | NUMBER: {ContactPhoneStr} | EMAIL: {ContactEmail} | GROUP: {Group?.GroupName?.ToString()}";
+  }
 }

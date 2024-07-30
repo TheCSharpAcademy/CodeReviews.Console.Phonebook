@@ -18,11 +18,11 @@ public class SelectionMenu
     return menu.Show()!;
   }
   //main menu crud
-
+  
 
   public static string InitialSelection()
   {
-    var menuOptions = new List<string> { "Add contact", "View contact", "Exit" };
+    var menuOptions = new List<string> { "Add contact", "View contacts", "Exit" };
     var menu = new Container<string>("[bold chartreuse2_1]What would you like to do?[/]", menuOptions);
     return menu.Show()!;
   }

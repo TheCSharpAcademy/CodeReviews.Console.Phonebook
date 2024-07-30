@@ -1,10 +1,4 @@
-﻿//record contacts with their phone numbers
-//users should be able to add, delete, update and readon from database using the console
-//Contact class with Id Int, Name string, Email string, phonenumber string
-// validate emails and phone numbers with regex
-//reverse scaffold
-//allow users to add an email and be able to send email
-//create categories of contacts (Family, friends, work)
+﻿//allow users to add an email and be able to send email
 //add sms functionality
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,9 +12,17 @@ using Phonebook.kwm0304.Services;
 namespace Phonebook.kwm0304;
 public class Program
 {
-  public static void Main(string[] args)
+  public static async Task Main(string[] args)
   {
-    CreateHostBuilder(args).Build().Run();
+    var host = CreateHostBuilder(args).Build();
+
+    using (var scope = host.Services.CreateScope())
+    {
+      var services = scope.ServiceProvider;
+      var runApp = services.GetRequiredService<RunApplication>();
+      await runApp.OnStart();
+    }
+    host.Run();
   }
 
   public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -31,6 +33,9 @@ public class Program
       options.UseSqlServer(hostContext.Configuration.GetConnectionString("DefaultConnection")));
       services.AddScoped<IContactRepository, ContactRepository>();
       services.AddScoped<ContactService>();
+      services.AddScoped<GroupService>();
       services.AddScoped<IGroupRepository, GroupRepository>();
+      services.AddScoped<RunApplication>();
+      services.AddScoped<EmailService>();
     });
 }
