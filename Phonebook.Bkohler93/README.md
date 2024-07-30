@@ -1,16 +1,6 @@
-<!--
-{
-    "headings": [
-        "# Head",
-        "## Item",
-        "### Detail"
-    ]
-}
--->
-
 # Phonebook App
 
-Console application that stores contacts and allows users to create,
+- Console application that stores contacts and allows users to create,
 read, update, delete contacts from a SQL Server database.
 
 ## Running the application
