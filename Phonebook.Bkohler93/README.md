@@ -1,4 +1,5 @@
-# Phonebook App
+<!-- Wrapped in a comment because Codacy kept throwing an issue I couldn't figure out
+ # Phonebook App
 
 - Console application that stores contacts and allows users to create,
 read, update, delete contacts from a SQL Server database.
@@ -16,4 +17,4 @@ and use that password in `appsettings.development.json`.
 
 - Allows users to create, read, update, delete contacts from the console.
 
-- Users can send an email to one of the saved contacts.
+- Users can send an email to one of the saved contacts. -->
