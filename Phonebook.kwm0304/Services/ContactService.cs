@@ -7,11 +7,12 @@ using Spectre.Console;
 
 namespace Phonebook.kwm0304.Services;
 
-public class ContactService(IContactRepository repository, GroupService service, EmailService emailService)
+public class ContactService(IContactRepository repository, GroupService service, EmailService emailService, SMSHandler handler)
 {
   private readonly IContactRepository _repository = repository;
   private readonly GroupService _groupService = service;
   private readonly EmailService _emailService = emailService;
+  private readonly SMSHandler _smsHandler = handler;
 
   public async Task CreateContact()
   {
@@ -79,6 +80,11 @@ public class ContactService(IContactRepository repository, GroupService service,
           await _emailService.CreateMessage(contact)!;
         }
         else return;
+        break;
+      case ContactOption.TextContact:
+        string sid = await _smsHandler.SendSms(contact);
+        AnsiConsole.WriteLine(sid);
+        Thread.Sleep(4000);
         break;
       case ContactOption.EditContact:
         await UpdateContact(contact);

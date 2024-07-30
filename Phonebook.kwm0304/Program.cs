@@ -9,6 +9,7 @@ using Phonebook.kwm0304.Interfaces;
 using Phonebook.kwm0304.Repositories;
 using Phonebook.kwm0304.Services;
 using dotenv.net;
+using Phonebook.kwm0304.Utils;
 
 namespace Phonebook.kwm0304;
 public class Program
@@ -40,5 +41,6 @@ public class Program
       services.AddScoped<IGroupRepository, GroupRepository>();
       services.AddScoped<RunApplication>();
       services.AddScoped<EmailService>();
+      services.AddScoped<SMSHandler>();
     });
 }
