@@ -5,5 +5,6 @@ public enum ContactOption
     EditContact,
     DeleteContact,
     EmailContact,
-    TextContact
+    TextContact,
+    Back
 }

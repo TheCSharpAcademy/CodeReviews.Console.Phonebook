@@ -20,4 +20,5 @@ public class Helper
       return GetInput(input, function);
     }
   }
+  
 }

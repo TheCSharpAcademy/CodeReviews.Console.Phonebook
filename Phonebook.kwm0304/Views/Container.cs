@@ -2,7 +2,7 @@ using Spectre.Console;
 
 namespace Phonebook.kwm0304.Views;
 
-public class Container<T>(string title, List<T> choices) where T : notnull
+public class Container<T>(string title, List<T> choices, T cancelMethod) where T : notnull
 {
   public string Title { get; set; } = title;
   public List<T> Choices { get; set; } = choices;
@@ -18,6 +18,7 @@ public class Container<T>(string title, List<T> choices) where T : notnull
         new SelectionPrompt<T>()
             .Title(Title)
             .AddChoices(Choices)
+            .AddChoices(cancelMethod)
     );
   }
 }

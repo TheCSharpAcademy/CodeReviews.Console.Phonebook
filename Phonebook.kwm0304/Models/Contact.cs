@@ -10,6 +10,6 @@ public class Contact
   public ContactGroup? Group { get; set; }
   public override string ToString()
   {
-    return $"NAME: {ContactName} | NUMBER: {ContactPhoneStr} | EMAIL: {ContactEmail} | GROUP: {Group?.GroupName?.ToString()}";
+    return ContactName == "Back" ? "Back" : $"NAME: {ContactName} | NUMBER: {ContactPhoneStr} | EMAIL: {ContactEmail} | GROUP: {Group?.GroupName?.ToString()}";
   }
 }

@@ -71,6 +71,10 @@ public class ContactService(IContactRepository repository, GroupService service,
   public async Task HandleViewContacts()
   {
     Contact contact = await ChooseContact();
+    if (contact.ContactName == "Back")
+    {
+      return;
+    }
     ContactOption option = SelectionMenu.SelectContactOption();
     switch (option)
     {
@@ -97,6 +101,8 @@ public class ContactService(IContactRepository repository, GroupService service,
           await _repository.DeleteContact(contact);
         }
         break;
+      case ContactOption.Back:
+        return;
     }
   }
   public async Task<Contact> ChooseContact()
