@@ -8,7 +8,6 @@
 }
 -->
 
-
 # Phonebook App
 
 Console application that stores contacts and allows users to create,
@@ -27,5 +26,4 @@ and use that password in `appsettings.development.json`.
 
 - Allows users to create, read, update, delete contacts from the console.
 
-- Users can send an email to one of the saved contacts. 
-
+- Users can send an email to one of the saved contacts.
