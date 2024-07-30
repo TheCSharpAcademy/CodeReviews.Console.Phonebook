@@ -39,6 +39,6 @@ public class Program
       services.AddScoped<IGroupRepository, GroupRepository>();
       services.AddScoped<RunApplication>();
       services.AddScoped<EmailService>();
-      services.AddScoped<SMSHandler>();
+      services.AddScoped<SmsHandler>();
     });
 }

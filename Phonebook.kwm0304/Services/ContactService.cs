@@ -7,12 +7,12 @@ using Spectre.Console;
 
 namespace Phonebook.kwm0304.Services;
 
-public class ContactService(IContactRepository repository, GroupService service, EmailService emailService, SMSHandler handler)
+public class ContactService(IContactRepository repository, GroupService service, EmailService emailService, SmsHandler handler)
 {
   private readonly IContactRepository _repository = repository;
   private readonly GroupService _groupService = service;
   private readonly EmailService _emailService = emailService;
-  private readonly SMSHandler _smsHandler = handler;
+  private readonly SmsHandler _smsHandler = handler;
 
   public async Task CreateContact()
   {
@@ -105,7 +105,7 @@ public class ContactService(IContactRepository repository, GroupService service,
         return;
     }
   }
-  
+
   public async Task<Contact> ChooseContact()
   {
     List<Contact> contacts = await _repository.GetAllContactsAsync();

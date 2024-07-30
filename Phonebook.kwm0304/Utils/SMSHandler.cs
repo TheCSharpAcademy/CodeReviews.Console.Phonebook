@@ -5,12 +5,12 @@ using Twilio;
 
 namespace Phonebook.kwm0304.Utils;
 
-public class SMSHandler
+public class SmsHandler
 {
   private readonly string _accountSid;
   private readonly string _authToken;
   private readonly string _twilioNumber;
-  public SMSHandler()
+  public SmsHandler()
   {
     _accountSid = Environment.GetEnvironmentVariable("TWILIO_SID")
         ?? throw new InvalidOperationException("TWILIO_SID environment variable is not set.");
