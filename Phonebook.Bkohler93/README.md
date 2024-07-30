@@ -1,4 +1,6 @@
-<!-- Wrapped in a comment because Codacy kept throwing an issue I couldn't figure out
+<!-- Wrapped in a comment because Codacy kept throwing an issue I 
+couldn't figure out
+
  # Phonebook App
 
 - Console application that stores contacts and allows users to create,
