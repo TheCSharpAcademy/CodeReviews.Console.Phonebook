@@ -1,9 +1,7 @@
-using System.Net;
 using System.Net.Mail;
 using Phonebook.Console.Config;
 using Phonebook.Console.Models;
 using Phonebook.Console.UserInterface;
-using Spectre.Console;
 
 namespace Phonebook.Console.Services;
 
