@@ -8,4 +8,5 @@ public interface IGroupRepository
   Task<ContactGroup> AddGroupAsync(ContactGroup group);
   Task<bool> UpdateGroupAsync(ContactGroup group);
   Task DeleteGroupAsync(ContactGroup group);
+  Task<bool> GroupExistsAsync(string groupName);
 }

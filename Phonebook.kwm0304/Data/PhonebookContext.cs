@@ -23,6 +23,6 @@ public class PhonebookContext : DbContext
         .HasKey(c => c.ContactId);
 
     modelBuilder.Entity<ContactGroup>()
-        .HasKey(g => g.GroupName);
+        .HasKey(g => g.GroupId);
   }
 }

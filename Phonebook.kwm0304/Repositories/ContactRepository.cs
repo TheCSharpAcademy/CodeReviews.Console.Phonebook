@@ -66,4 +66,17 @@ public class ContactRepository : IContactRepository
       return false;
     }
   }
+
+  public async Task RemoveContactFromGroupAsync(int contactId, int groupId)
+  {
+    var contact = await _context.Contacts
+        .Include(c => c.Group)
+        .FirstOrDefaultAsync(c => c.ContactId == contactId);
+
+    if (contact != null && contact.Group != null && contact.Group.GroupId == groupId)
+    {
+      contact.Group = null;
+      await _context.SaveChangesAsync();
+    }
+  }
 }

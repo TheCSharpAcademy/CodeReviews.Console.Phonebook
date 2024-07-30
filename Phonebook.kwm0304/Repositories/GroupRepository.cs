@@ -49,7 +49,7 @@ public class GroupRepository : IGroupRepository
     await _context.SaveChangesAsync();
   }
 
-  private async Task<bool> GroupExistsAsync(string groupName)
+  public async Task<bool> GroupExistsAsync(string groupName)
   {
     return await _context.ContactGroups.AnyAsync(e => e.GroupName == groupName);
   }
