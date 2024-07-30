@@ -11,8 +11,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Phonebook.kwm0304.Data;
+using Phonebook.kwm0304.Interfaces;
 using Phonebook.kwm0304.Repositories;
+using Phonebook.kwm0304.Services;
 
+namespace Phonebook.kwm0304;
 public class Program
 {
   public static void Main(string[] args)
@@ -26,6 +29,7 @@ public class Program
     {
       services.AddDbContext<PhonebookContext>(options =>
       options.UseSqlServer(hostContext.Configuration.GetConnectionString("DefaultConnection")));
-      services.AddScoped<ContactRepository>();
+      services.AddScoped<IContactRepository,ContactRepository>();
+      services.AddScoped<ContactService>();
     });
 }
