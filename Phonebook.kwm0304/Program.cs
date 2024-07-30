@@ -29,7 +29,8 @@ public class Program
     {
       services.AddDbContext<PhonebookContext>(options =>
       options.UseSqlServer(hostContext.Configuration.GetConnectionString("DefaultConnection")));
-      services.AddScoped<IContactRepository,ContactRepository>();
+      services.AddScoped<IContactRepository, ContactRepository>();
       services.AddScoped<ContactService>();
+      services.AddScoped<IGroupRepository, GroupRepository>();
     });
 }
