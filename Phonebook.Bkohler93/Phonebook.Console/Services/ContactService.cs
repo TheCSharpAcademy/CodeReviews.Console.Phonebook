@@ -1,4 +1,5 @@
 using Microsoft.IdentityModel.Tokens;
+using Phonebook.Console.Config;
 using Phonebook.Console.Data;
 using Phonebook.Console.Models;
 using Phonebook.Console.UserInterface;
@@ -7,16 +8,20 @@ namespace Phonebook.Console.Services;
 
 public class ContactService {
     private AppDbContext db;
+    private AppConfig config;
+    private EmailService emailService;
 
-    public ContactService(AppDbContext dbContext)
+    public ContactService(AppDbContext dbContext, AppConfig appConfig)
     {
         db = dbContext; 
+        config = appConfig;
+        emailService = new(config);
     }
 
     public void CreateContact()
     {
         var name = UI.GetName();
-        var email = UI.GetEmail();
+        var email = UI.GetEmail("Enter the contact's [green]email[/][grey] formatted as 'name@gmail.com'[/]:");
 
         var phone = UI.GetPhoneNumber();
 
@@ -53,15 +58,8 @@ public class ContactService {
 
         UI.ViewContacts(contacts);
 
-        Contact? contact = null;
-        while (contact == null) {
-            var contactId = UI.GetValidNumber("Enter the [green]id[/] of the contact you wish to delete:");
-            contact = contacts.FirstOrDefault(c => c.Id == contactId);
+        var contact = RetrieveContactFromList(contacts);
 
-            if (contact == null) {
-                UI.Write("[red]No contact with that id found[/]");
-            }
-        }
         db.Contacts.Attach(contact);
         db.Contacts.Remove(contact);
         db.SaveChanges();
@@ -80,15 +78,7 @@ public class ContactService {
 
         UI.ViewContacts(contacts);
 
-        Contact? contact = null;
-        while (contact == null) {
-            var contactId = UI.GetValidNumber("Enter the [green]id[/] of the contact you wish to update:");
-            contact = contacts.FirstOrDefault(c => c.Id == contactId);
-
-            if (contact == null) {
-                UI.Write("[red]No contact with that id found[/]");
-            }
-        }
+        var contact = RetrieveContactFromList(contacts);
 
         var name = UI.GetNameOrDefault(contact.Name ?? "");
         var email = UI.GetEmailOrDefault(contact.Email ?? "");
@@ -100,5 +90,47 @@ public class ContactService {
         db.SaveChanges();
 
         UI.ConfirmMessage("Saved changes");
+    }
+
+    public void SendEmail()
+    {
+        var contacts = db.Contacts.ToList();
+
+        if (contacts.IsNullOrEmpty())
+        {
+            UI.ConfirmMessage("You have no contacts to update yet");
+            return;
+        }
+
+        UI.ViewContacts(contacts);
+        var contact = RetrieveContactFromList(contacts);
+
+        try
+        {
+            emailService.SendEmail(contact);
+
+            UI.ConfirmMessage("Email sent successfully!");
+        }
+        catch (Exception e)
+        {
+            UI.ConfirmMessage($"Email was not sent: {e.Message}");
+        }
+    }
+
+    private static Contact RetrieveContactFromList(List<Contact> contacts)
+    {
+        Contact? contact = null;
+        while (contact == null)
+        {
+            var contactId = UI.GetValidNumber("Enter the [green]id[/] of the contact you wish to send an email to:");
+            contact = contacts.FirstOrDefault(c => c.Id == contactId);
+
+            if (contact == null)
+            {
+                UI.Write("[red]No contact with that id found[/]");
+            }
+        }
+
+        return contact;
     }
 }

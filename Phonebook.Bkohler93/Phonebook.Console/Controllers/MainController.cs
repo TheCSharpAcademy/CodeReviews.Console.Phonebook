@@ -1,3 +1,4 @@
+using Phonebook.Console.Config;
 using Phonebook.Console.Data;
 using Phonebook.Console.Services;
 
@@ -9,13 +10,16 @@ public class MainController {
     public const string DeleteContact = "Delete contact";
     public const string ViewContacts = "View contacts";
     public const string UpdateContact = "Update contact";
+    public const string SendEmail = "Send email"; 
     private AppDbContext db;
     private ContactService contactService;
+    private AppConfig config;
 
-    public MainController(AppDbContext dbContext)
+    public MainController(AppDbContext dbContext, AppConfig appConfig)
     {
         db = dbContext; 
-        contactService = new(db);
+        config = appConfig;
+        contactService = new(db, config);
     }
 
     public void HandleChoice(string choice) {
@@ -31,6 +35,9 @@ public class MainController {
                 break;
             case UpdateContact:
                 contactService.UpdateContact();
+                break;
+            case SendEmail:
+                contactService.SendEmail();
                 break;
         }
     }

@@ -26,8 +26,8 @@ public class UI {
         }
     }
 
-    public static string GetEmail() => AnsiConsole.Prompt(
-            new TextPrompt<string>("Enter the contact's [green]email[/][grey] formatted as 'name@gmail.com'[/]:")
+    public static string GetEmail(string prompt) => AnsiConsole.Prompt(
+            new TextPrompt<string>(prompt)
             .ValidationErrorMessage("[red]That's not a valid email address[/]")
             .Validate(AppValidator.IsValidEmail));
 
@@ -50,6 +50,10 @@ public class UI {
         .ValidationErrorMessage("[red]That's not a full name[/]")
         .Validate(AppValidator.IsValidFullName));
 
+    public static string GetResponse(string prompt) => AnsiConsole.Prompt(
+        new TextPrompt<string>(prompt)
+        .AllowEmpty());
+
    public static string GetNameOrDefault(string defaultName) { 
         var response = AnsiConsole.Prompt(
             new TextPrompt<string>($"Enter the contact's [green]full name. Or leave as '{defaultName}'[/]")
@@ -71,7 +75,7 @@ public class UI {
             .Title("[yellow]Contacts[/] [green]Main Menu[/]")
             .AddChoices([
                 MainController.Exit, MainController.CreateContact, MainController.UpdateContact, 
-                MainController.DeleteContact, MainController.ViewContacts 
+                MainController.DeleteContact, MainController.ViewContacts, MainController.SendEmail
             ]));
     }
 
