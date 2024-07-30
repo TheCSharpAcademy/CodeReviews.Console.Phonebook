@@ -8,12 +8,15 @@ using Phonebook.kwm0304.Data;
 using Phonebook.kwm0304.Interfaces;
 using Phonebook.kwm0304.Repositories;
 using Phonebook.kwm0304.Services;
+using dotenv.net;
 
 namespace Phonebook.kwm0304;
 public class Program
 {
+  
   public static async Task Main(string[] args)
   {
+    DotEnv.Load();
     var host = CreateHostBuilder(args).Build();
 
     using (var scope = host.Services.CreateScope())
