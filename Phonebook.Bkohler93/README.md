@@ -1,3 +1,13 @@
+<!--
+{
+    "headings": [
+        "# Head",
+        "## Item",
+        "### Detail"
+    ]
+}
+-->
+
 
 # Phonebook App
 
@@ -12,3 +22,10 @@ Gmail account is required. If your account uses 2-factor authentication,
 you will have to create a
 [Google App Password](https://support.google.com/accounts/answer/185833?hl=en)
 and use that password in `appsettings.development.json`.
+
+## Features
+
+- Allows users to create, read, update, delete contacts from the console.
+
+- Users can send an email to one of the saved contacts. 
+
