@@ -105,6 +105,7 @@ public class ContactService(IContactRepository repository, GroupService service,
         return;
     }
   }
+  
   public async Task<Contact> ChooseContact()
   {
     List<Contact> contacts = await _repository.GetAllContactsAsync();

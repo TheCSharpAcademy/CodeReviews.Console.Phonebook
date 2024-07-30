@@ -24,6 +24,7 @@ public class EmailService
     }
     throw new ArgumentException("Unknown email provider");
   }
+
   public async Task? CreateMessage(Contact contact)
   {
 
@@ -57,6 +58,7 @@ public class EmailService
       Thread.Sleep(4000);
     }
   }
+  
   public static string GetAndConfirm(string question)
   {
     string answer = AnsiConsole.Ask<string>(question);

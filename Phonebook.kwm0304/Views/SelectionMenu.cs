@@ -5,22 +5,19 @@ namespace Phonebook.kwm0304.Views;
 
 public class SelectionMenu
 {
-  //select contact to view 
   public static Contact SelectContact(List<Contact> contacts)
   {
     var cancel = new Contact { ContactName = "Back" };
     var menu = new Container<Contact>("[bold chartreuse2_1]Select contact:[/] \n\n", contacts, cancel);
     return menu.Show()!;
   }
-  //select group
+
   public static ContactGroup SelectGroup(List<ContactGroup> groups)
   {
     var cancel = new ContactGroup { GroupName = "Back" };
     var menu = new Container<ContactGroup>("[bold chartreuse2_1]Select group:[/] \n\n", groups, cancel);
     return menu.Show()!;
   }
-  //main menu crud
-
 
   public static string InitialSelection()
   {
@@ -36,7 +33,7 @@ public class SelectionMenu
     var menu = new Container<ContactOption>("[bold chartreuse2_1]What would you like to do?[/]", options, ContactOption.Back);
     return menu.Show();
   }
-  //if edit contact
+  
   public static string EditContactOptions()
   {
     var menuOptions = new List<string> { "Name", "Number", "Group", "Back" };

@@ -4,7 +4,6 @@ namespace Phonebook.kwm0304.Views;
 
 public class UserPrompts
 {
-  //service class will check if these already exist
   public static string StringPrompt(string input)
   {
     string answer = AnsiConsole.Ask<string>($"[bold blue]Contact {input}: [/]\n");

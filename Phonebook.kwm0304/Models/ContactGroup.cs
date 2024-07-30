@@ -8,6 +8,4 @@ public class ContactGroup
     {
         return $"{GroupName}";
     }
-
-
 }

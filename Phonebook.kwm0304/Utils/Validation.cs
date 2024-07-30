@@ -1,4 +1,3 @@
-
 using System.Text.RegularExpressions;
 using Spectre.Console;
 
@@ -46,12 +45,14 @@ public class Validation
     }
     return true;
   }
+
   public static string NormalizePhoneNumberStr(string phoneNumber)
   {
     string pattern = @"\D";
     return Regex.Replace(phoneNumber, pattern, "");
 
   }
+  
   public static long NormalizePhoneNumberInt(string phoneNumber)
   {
     string pattern = @"\D";

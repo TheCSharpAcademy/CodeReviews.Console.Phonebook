@@ -8,7 +8,6 @@ namespace Phonebook.kwm0304.Repositories;
 
 public class GroupRepository : IGroupRepository
 {
-
   private readonly PhonebookContext _context;
 
   public GroupRepository(PhonebookContext context)
