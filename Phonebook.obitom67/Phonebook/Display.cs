@@ -1,4 +1,5 @@
 ﻿using Spectre.Console;
+using System.Net.Mail;
 
 namespace Phonebook
 {
@@ -12,7 +13,8 @@ namespace Phonebook
                "[green]Add contact[/]",             
                "[yellow]Show contact info[/]",
                "[purple]Update contact[/]",
-               "[red]Delete contact[/]"
+               "[red]Delete contact[/]",
+               "[blue]Exit[/]"
             };
             selectionPrompt.AddChoices(menuPrompts);
             selectionPrompt.Title("[yellow]Please choose an option to perform[/]");
@@ -37,6 +39,9 @@ namespace Phonebook
                     currentSelect = SelectContact();
                     DeleteContact(currentSelect);
                     break;
+                case "[blue]Exit[/]":
+                    Environment.Exit(0);
+                    break;
             }
         }
 
@@ -51,31 +56,28 @@ namespace Phonebook
             TextPrompt<string> emailText = new TextPrompt<string>("Input email address [blue] Use format youremail@email.com[/]");
             emailText.Validate(email =>
             {
-                if (!email.Contains(".com"))
+                try
                 {
-                    return ValidationResult.Error("Please make sure the email contains .com");
+                    var emailAddress = new MailAddress(email);
                 }
-                else if (!email.Contains("@"))
+                catch
                 {
-                    return ValidationResult.Error("Please make sure the email contains @");
+                    return ValidationResult.Error("Incorrect format for email, try again.");
                 }
-                else
-                {
-                    return ValidationResult.Success();
-                }
+                return ValidationResult.Success();
             });
             contact.Email = AnsiConsole.Prompt<string> (emailText);
 
-            TextPrompt<string> phoneText = new TextPrompt<string>("Input phone number of contact [blue] Use format ***-****[/]");
+            TextPrompt<string> phoneText = new TextPrompt<string>("Input phone number of contact [blue] Use format 1-***-***-****[/]");
             phoneText.Validate(phoneNumber =>
             {
                 if (!phoneNumber.Contains("-"))
                 {
                     return ValidationResult.Error("Incorrect format, please try again");
                 }
-                else if (phoneNumber.Length != 8 )
+                else if (phoneNumber.Length != 14 )
                 {
-                    return ValidationResult.Error("Not enough numbers, please try again");
+                    return ValidationResult.Error("Not correct amount of characters, please try again");
                 }
                 else
                 {
@@ -141,40 +143,39 @@ namespace Phonebook
                     TextPrompt<string> emailText = new TextPrompt<string>("Input updated email address [blue] Use format youremail@email.com[/]");
                     emailText.Validate(email =>
                     {
-                        if (!email.Contains(".com"))
+                        try
                         {
-                            return ValidationResult.Error("Please make sure the email contains .com");
+                            var emailAddress = new MailAddress(emailText.ToString());
                         }
-                        else if (!email.Contains("@"))
+                        catch
                         {
-                            return ValidationResult.Error("Please make sure the email contains @");
-                        }
-                        else
-                        {
-                            return ValidationResult.Success();
-                        }
+                            return ValidationResult.Error("Incorrect format for email, try again.");
+                        }                  
+                        return ValidationResult.Success();
+                        
                     });
                     contact.Email = AnsiConsole.Prompt<string>(emailText);
                     db.SaveChanges();
                     break;
 
                 case "Phone Number":
-                    TextPrompt<string> phoneText = new TextPrompt<string>("Input updated phone number of contact [blue] Use format ***-****[/]");
+                    TextPrompt<string> phoneText = new TextPrompt<string>("Input updated phone number of contact [blue] Use format 1-***-***-****[/]");
                     phoneText.Validate(phoneNumber =>
                     {
                         if (!phoneNumber.Contains("-"))
                         {
                             return ValidationResult.Error("Incorrect format, please try again");
                         }
-                        else if (phoneNumber.Length != 8)
+                        else if (phoneNumber.Length != 14)
                         {
-                            return ValidationResult.Error("Not enough numbers, please try again");
+                            return ValidationResult.Error("Not correct amount of characters, please try again");
                         }
                         else
                         {
                             return ValidationResult.Success();
                         }
                     });
+                    contact.PhoneNumber = AnsiConsole.Prompt<string>(phoneText);
                     db.SaveChanges();
                     break;
             }
