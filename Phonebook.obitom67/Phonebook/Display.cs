@@ -59,12 +59,14 @@ namespace Phonebook
                 try
                 {
                     var emailAddress = new MailAddress(email);
+                    emailAddress.ToString();
+                    return ValidationResult.Success();
                 }
                 catch
                 {
                     return ValidationResult.Error("Incorrect format for email, try again.");
                 }
-                return ValidationResult.Success();
+                
             });
             contact.Email = AnsiConsole.Prompt<string> (emailText);
 
@@ -145,13 +147,15 @@ namespace Phonebook
                     {
                         try
                         {
-                            var emailAddress = new MailAddress(emailText.ToString());
+                            var emailAddress = new MailAddress(email);
+                            emailAddress.ToString();
+                            return ValidationResult.Success();
                         }
                         catch
                         {
                             return ValidationResult.Error("Incorrect format for email, try again.");
                         }                  
-                        return ValidationResult.Success();
+                        
                         
                     });
                     contact.Email = AnsiConsole.Prompt<string>(emailText);
