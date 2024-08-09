@@ -15,12 +15,6 @@ public class SmsHandler
     _accountSid = Environment.GetEnvironmentVariable("TWILIO_SID") ?? string.Empty;
     _authToken = Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN") ?? string.Empty;
     _twilioNumber = Environment.GetEnvironmentVariable("TWILIO_NUMBER") ?? string.Empty;
-
-    if (string.IsNullOrEmpty(_accountSid) || string.IsNullOrEmpty(_authToken) || string.IsNullOrEmpty(_twilioNumber))
-    {
-      throw new InvalidOperationException("Twilio environment variables are not set. Please ensure TWILIO_SID, TWILIO_AUTH_TOKEN, and TWILIO_NUMBER are configured.");
-    }
-    TwilioClient.Init(_accountSid, _authToken);
   }
 
   public async Task<string> SendSms(Contact contact)

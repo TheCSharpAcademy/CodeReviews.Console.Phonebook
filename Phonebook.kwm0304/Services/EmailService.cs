@@ -55,7 +55,7 @@ public class EmailService
     catch (Exception e)
     {
       AnsiConsole.WriteException(e);
-      Thread.Sleep(4000);
+      Thread.Sleep(1000);
     }
   }
   

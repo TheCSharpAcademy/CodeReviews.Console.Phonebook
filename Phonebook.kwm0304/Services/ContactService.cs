@@ -88,7 +88,7 @@ public class ContactService(IContactRepository repository, GroupService service,
       case ContactOption.TextContact:
         string sid = await _smsHandler.SendSms(contact);
         AnsiConsole.WriteLine(sid);
-        Thread.Sleep(4000);
+        Thread.Sleep(1000);
         break;
       case ContactOption.EditContact:
         await UpdateContact(contact);
