@@ -12,21 +12,29 @@ public class SmsHandler
   private readonly string _twilioNumber;
   public SmsHandler()
   {
-    _accountSid = Environment.GetEnvironmentVariable("TWILIO_SID")
-        ?? throw new InvalidOperationException("TWILIO_SID environment variable is not set.");
-    _authToken = Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN")
-        ?? throw new InvalidOperationException("TWILIO_AUTH_TOKEN environment variable is not set.");
-    _twilioNumber = Environment.GetEnvironmentVariable("TWILIO_NUMBER")
-        ?? throw new InvalidOperationException("TWILIO_NUMBER environment variable is not set.");
+    _accountSid = Environment.GetEnvironmentVariable("TWILIO_SID") ?? string.Empty;
+    _authToken = Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN") ?? string.Empty;
+    _twilioNumber = Environment.GetEnvironmentVariable("TWILIO_NUMBER") ?? string.Empty;
 
+    if (string.IsNullOrEmpty(_accountSid) || string.IsNullOrEmpty(_authToken) || string.IsNullOrEmpty(_twilioNumber))
+    {
+      throw new InvalidOperationException("Twilio environment variables are not set. Please ensure TWILIO_SID, TWILIO_AUTH_TOKEN, and TWILIO_NUMBER are configured.");
+    }
     TwilioClient.Init(_accountSid, _authToken);
   }
 
   public async Task<string> SendSms(Contact contact)
   {
+    if (string.IsNullOrEmpty(_accountSid) || string.IsNullOrEmpty(_authToken) || string.IsNullOrEmpty(_twilioNumber))
+    {
+      AnsiConsole.WriteLine("Cannot send SMS: Twilio credentials are missing.");
+      return string.Empty;
+    }
+    try 
+    {
     string numString = contact.ContactPhoneInt.ToString();
     AnsiConsole.WriteLine("TO:   " + numString);
-    AnsiConsole.WriteLine("TOKEN: " +_authToken + "*************");
+    AnsiConsole.WriteLine("TOKEN: " + _authToken + "*************");
     string messageBody = AnsiConsole.Ask<string>($"Enter your message to {contact.ContactName}:\n");
     var message = await MessageResource.CreateAsync(
       body: messageBody,
@@ -34,5 +42,11 @@ public class SmsHandler
       to: new Twilio.Types.PhoneNumber("+1" + numString)
     );
     return message.Sid;
+    }
+    catch (Exception e)
+    {
+      AnsiConsole.WriteLine($"Error: {e.Message}");
+      return string.Empty;
+    }
   }
 }
