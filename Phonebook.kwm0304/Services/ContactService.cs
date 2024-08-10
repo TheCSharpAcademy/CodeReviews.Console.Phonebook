@@ -153,7 +153,7 @@ public class ContactService(IContactRepository repository, GroupService service,
       case ContactOption.TextContact:
         try
         {
-          string sid = await _smsHandler.SendSms(contact);
+          await _smsHandler.SendSms(contact);
         }
         catch (Exception e)
         {
