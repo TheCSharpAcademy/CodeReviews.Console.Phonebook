@@ -122,7 +122,11 @@ public class ContactService(IContactRepository repository, GroupService service,
 
   public async Task HandleViewContacts()
   {
-    Contact contact = await ChooseContact();
+    Contact? contact = await ChooseContact();
+    if (contact == null)
+    {
+      return;
+    }
     if (contact.ContactName == "Back")
     {
       return;
@@ -142,7 +146,6 @@ public class ContactService(IContactRepository repository, GroupService service,
             AnsiConsole.WriteLine(e.Message);
             return;
           }
-
         }
         else
         {
@@ -185,11 +188,16 @@ public class ContactService(IContactRepository repository, GroupService service,
     }
   }
 
-  public async Task<Contact> ChooseContact()
+  public async Task<Contact?> ChooseContact()
   {
     try
     {
       List<Contact> contacts = await _repository.GetAllContactsAsync();
+      if (contacts == null || contacts.Count == 0)
+      {
+        AnsiConsole.WriteLine("No contacts available to display.");
+        return null;
+      }
       return SelectionMenu.SelectContact(contacts);
     }
     catch (Exception e)
