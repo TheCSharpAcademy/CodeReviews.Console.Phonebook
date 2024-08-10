@@ -36,7 +36,7 @@ public class SelectionMenu
   
   public static string EditContactOptions()
   {
-    var menuOptions = new List<string> { "Name", "Number", "Group", "Back" };
+    var menuOptions = new List<string> { "Name", "Number", "Group", "Email", "Back" };
     var menu = new Container<string>("What would you like to change?", menuOptions, "Cancel");
     return menu.Show()!;
   }

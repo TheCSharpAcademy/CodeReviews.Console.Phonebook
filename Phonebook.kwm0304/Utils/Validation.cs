@@ -12,6 +12,7 @@ public class Validation
   }
   public static bool IsValidNumber(long phoneNumber)
   {
+    
     string numStr = phoneNumber.ToString();
     if (numStr.Length == 11)
     {
@@ -27,6 +28,7 @@ public class Validation
     {
       return true;
     }
+    
     return false;
   }
 
@@ -76,10 +78,23 @@ public class Validation
   public static bool IsValidPhoneNumber(string number)
   {
     bool initialCheck = PreliminaryValidation(number);
-    if (initialCheck)
+    if (initialCheck && !number.StartsWith("0"))
     {
       long initialNumber = NormalizePhoneNumberInt(number);
       return IsValidNumber(initialNumber);
+    }
+    else if (initialCheck && number.StartsWith("0") && (number.Length == 10 || number.Length == 11))
+    {
+      return true;
+    }
+    return false;
+  }
+  public static bool IsValidEmailAddress(string email)
+  {
+    bool initialCheck = !string.IsNullOrEmpty(email) && !string.IsNullOrWhiteSpace(email);
+    if (initialCheck && IsValidEmail(email))
+    {
+      return true;
     }
     return false;
   }

@@ -21,16 +21,31 @@ public class ContactService(IContactRepository repository, GroupService service,
     string email = Helper.GetInput("email", Validation.IsValidEmail);
     string numberStr = Validation.FormatContactNumberStr(number);
     long numberInt = Validation.NormalizePhoneNumberInt(number);
-    ContactGroup? group = await _groupService.GetGroup();
-    var contact = new Contact
+    try
     {
-      ContactName = name,
-      ContactEmail = email,
-      ContactPhoneStr = numberStr,
-      ContactPhoneInt = numberInt,
-      Group = group
-    };
-    await _repository.AddContact(contact);
+      ContactGroup? group = await _groupService.GetGroup();
+      var contact = new Contact
+      {
+        ContactName = name,
+        ContactEmail = email,
+        ContactPhoneStr = numberStr,
+        ContactPhoneInt = numberInt,
+        Group = group
+      };
+      try
+      {
+        await _repository.AddContact(contact);
+      }
+      catch (Exception e)
+      {
+        AnsiConsole.WriteLine($"Error adding contact: {e.Message}");
+      }
+    }
+    catch (Exception e)
+    {
+      AnsiConsole.WriteLine($"Error getting contact groups. {e.Message}");
+      return;
+    }
   }
 
   public async Task UpdateContact(Contact contact)
@@ -46,7 +61,15 @@ public class ContactService(IContactRepository repository, GroupService service,
       case "Name":
         string name = UserPrompts.StringPrompt("name");
         contact.ContactName = name;
-        await _repository.UpdateContact(contact);
+        try
+        {
+          await _repository.UpdateContact(contact);
+        }
+        catch (Exception e)
+        {
+          AnsiConsole.WriteLine(e.Message);
+          return;
+        }
         break;
       case "Number":
         string number = Helper.GetInput("number", Validation.IsValidPhoneNumber);
@@ -54,12 +77,41 @@ public class ContactService(IContactRepository repository, GroupService service,
         long newNumber = Validation.NormalizePhoneNumberInt(number);
         contact.ContactPhoneInt = newNumber;
         contact.ContactPhoneStr = newNumberString;
-        await _repository.UpdateContact(contact);
+        try
+        {
+          await _repository.UpdateContact(contact);
+        }
+        catch (Exception e)
+        {
+          AnsiConsole.WriteLine(e.Message);
+          return;
+        }
         break;
       case "Group":
         ContactGroup? group = await _groupService.GetGroup();
         contact.Group = group;
-        await _repository.UpdateContact(contact);
+        try
+        {
+          await _repository.UpdateContact(contact);
+        }
+        catch (Exception e)
+        {
+          AnsiConsole.WriteLine(e.Message);
+          return;
+        }
+        break;
+      case "Email":
+        string newEmail = Helper.GetInput("email", Validation.IsValidEmailAddress);
+        contact.ContactEmail = newEmail;
+        try
+        {
+          await _repository.UpdateContact(contact);
+        }
+        catch (Exception e)
+        {
+          AnsiConsole.WriteLine(e.Message);
+          return;
+        }
         break;
       case "Back":
         return;
@@ -81,14 +133,33 @@ public class ContactService(IContactRepository repository, GroupService service,
       case ContactOption.EmailContact:
         if (contact.ContactEmail != null)
         {
-          await _emailService.CreateMessage(contact)!;
+          try
+          {
+            await _emailService.CreateMessage(contact)!;
+          }
+          catch (Exception e)
+          {
+            AnsiConsole.WriteLine(e.Message);
+            return;
+          }
+
         }
-        else return;
+        else
+        {
+          AnsiConsole.WriteLine("No email saved for this contact");
+          return;
+        }
         break;
       case ContactOption.TextContact:
-        string sid = await _smsHandler.SendSms(contact);
-        AnsiConsole.WriteLine(sid);
-        Thread.Sleep(1000);
+        try
+        {
+          string sid = await _smsHandler.SendSms(contact);
+        }
+        catch (Exception e)
+        {
+          AnsiConsole.WriteLine(e.Message);
+          return;
+        }
         break;
       case ContactOption.EditContact:
         await UpdateContact(contact);
@@ -98,7 +169,15 @@ public class ContactService(IContactRepository repository, GroupService service,
           $"Are you sure you want to delete\n{contact.ContactName}\n{contact.ContactPhoneStr}");
         if (confirmDelete)
         {
-          await _repository.DeleteContact(contact);
+          try
+          {
+            await _repository.DeleteContact(contact);
+          }
+          catch (Exception e)
+          {
+            AnsiConsole.WriteLine(e.Message);
+            return;
+          }
         }
         break;
       case ContactOption.Back:
@@ -108,7 +187,15 @@ public class ContactService(IContactRepository repository, GroupService service,
 
   public async Task<Contact> ChooseContact()
   {
-    List<Contact> contacts = await _repository.GetAllContactsAsync();
-    return SelectionMenu.SelectContact(contacts);
+    try
+    {
+      List<Contact> contacts = await _repository.GetAllContactsAsync();
+      return SelectionMenu.SelectContact(contacts);
+    }
+    catch (Exception e)
+    {
+      AnsiConsole.WriteLine(e.Message);
+      return default!;
+    }
   }
 }
