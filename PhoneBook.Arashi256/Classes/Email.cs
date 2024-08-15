@@ -21,11 +21,11 @@ namespace PhoneBook.Arashi256.Classes
         public Email() 
         {
             _emailConnection = new EmailConnection();
-            _smtpServer = _emailConnection.SMTPServer;
-            _smtpUsername = _emailConnection.SMTPUser;
-            _smtpPassword = _emailConnection.SMTPPassword;
-            _smtpPort = _emailConnection.SMTPPort;
-            _smtpSSLEnabled = _emailConnection.SMTPSSL;
+            _smtpServer = _emailConnection.SmtpServer;
+            _smtpUsername = _emailConnection.SmtpUser;
+            _smtpPassword = _emailConnection.SmtpPassword;
+            _smtpPort = _emailConnection.SmtpPort;
+            _smtpSSLEnabled = _emailConnection.SmtpSSL;
         }
 
         public bool CheckValidSettings()
