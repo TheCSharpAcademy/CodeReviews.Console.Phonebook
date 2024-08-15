@@ -14,7 +14,6 @@ using (var scope = host.Services.CreateScope())
 
     try
     {
-        var context = services.GetRequiredService<PhonebookContext>();
         var phonebookService = services.GetRequiredService<PhonebookService>();
         phonebookService.Run();
     }
