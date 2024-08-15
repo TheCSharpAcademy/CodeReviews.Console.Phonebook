@@ -25,7 +25,7 @@ namespace PhoneBook.Arashi256.Classes
             _smtpUsername = _emailConnection.SmtpUser;
             _smtpPassword = _emailConnection.SmtpPassword;
             _smtpPort = _emailConnection.SmtpPort;
-            _smtpSSLEnabled = _emailConnection.SmtpSSL;
+            _smtpSSLEnabled = _emailConnection.SmtpSsl;
         }
 
         public bool CheckValidSettings()

@@ -14,13 +14,13 @@
             _smtpUser = appManager.SmtpUser;
             _smtpPassword = appManager.SmtpPassword;
             _smtpPort = appManager.SmtpPort;
-            _smtpSSLEnabled = appManager.SmtpSSL;
+            _smtpSSLEnabled = appManager.SmtpSsl;
         }
 
         public string? SmtpServer { get { return _smtpServer; } }
         public string? SmtpUser { get { return _smtpUser; } }
         public string? SmtpPassword { get { return _smtpPassword; } }
         public int SmtpPort { get { return _smtpPort; } }
-        public bool SmtpSSL { get { return _smtpSSLEnabled; } }
+        public bool SmtpSsl { get { return _smtpSSLEnabled; } }
     }
 }

@@ -9,7 +9,7 @@ namespace PhoneBook.Arashi256.Config
         public string? SmtpUser { get; private set; }
         public string? SmtpPassword { get; private set; }
         public int SmtpPort { get; private set; }
-        public bool SmtpSSL { get; private set; }
+        public bool SmtpSsl { get; private set; }
 
         private NameValueCollection? _appConfig;
 
@@ -37,11 +37,11 @@ namespace PhoneBook.Arashi256.Config
                     }
                     try
                     {
-                        SmtpSSL = Convert.ToBoolean(_appConfig.Get("SmtpSSL"));
+                        SmtpSsl = Convert.ToBoolean(_appConfig.Get("SmtpSSL"));
                     }
                     catch (FormatException e)
                     {
-                        SmtpSSL = false;
+                        SmtpSsl = false;
                     }
                 }
             }

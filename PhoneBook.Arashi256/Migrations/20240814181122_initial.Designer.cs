@@ -13,7 +13,7 @@ namespace PhoneBook.Arashi256.Migrations
 {
     [DbContext(typeof(DataContext))]
     [Migration("20240814181122_initial")]
-    partial class initial
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
