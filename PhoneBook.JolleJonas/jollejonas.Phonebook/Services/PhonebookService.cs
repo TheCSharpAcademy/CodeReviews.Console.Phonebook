@@ -1,7 +1,6 @@
 ﻿using jollejonas.Phonebook.Models;
 using jollejonas.Phonebook.Data;
 using jollejonas.Phonebook.UserInput;
-using jollejonas.Phonebook.Services;
 using Spectre.Console;
 
 namespace jollejonas.Phonebook.Services;
@@ -110,7 +109,6 @@ public class PhonebookService
     public void DisplayContacts()
     {
        var contacts = GetContacts();
-       var categories = GetCategories();
 
         if (contacts == null) return;
         foreach (var contact in contacts)

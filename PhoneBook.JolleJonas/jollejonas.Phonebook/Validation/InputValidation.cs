@@ -24,11 +24,12 @@ public class InputValidation
         
         string emailRegex = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
 
-        if(Regex.IsMatch(email, emailRegex));
+        if(Regex.IsMatch(email, emailRegex))
         {
             Console.WriteLine("The phone number format is invalid. Please enter a valid number.");
             return false;
         }
+        return true;
     }
 
     public static bool IsValidNote(string note)
