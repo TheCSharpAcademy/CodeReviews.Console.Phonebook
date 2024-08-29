@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using jollejonas.Phonebook.Models;
-using Microsoft.Extensions.Logging;
-
 
 namespace jollejonas.Phonebook.Data;
 
