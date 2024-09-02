@@ -1,5 +1,3 @@
-using System.Net;
-using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 using Spectre.Console;
 
@@ -10,11 +8,10 @@ namespace PhoneBook.Email;
 /// </summary>
 internal class EmailManager : IEmailManager
 {
-    private const string CredentialsSection = "EmailCredentials";
-    private const string ServerSection = "Server";
-    private const string PortSection = "Port";
-    private const string LoginSection = "Login";
-    private const string PasswordSection = "Password";
+    private const string ServerSection = "EmailCredentials:Server";
+    private const string PortSection = "EmailCredentials:Port";
+    private const string LoginSection = "EmailCredentials:Login";
+    private const string PasswordSection = "EmailCredentials:Password";
     private const int DefaultPort = 587;
     
     private readonly IConfiguration _connectionConfiguration;
@@ -52,7 +49,7 @@ internal class EmailManager : IEmailManager
         };
 
     private string ConfigureServerAddress() => 
-        _connectionConfiguration.GetSection(CredentialsSection)[ServerSection];
+        _connectionConfiguration[ServerSection];
 
     private int ConfigurePort()
     {
@@ -60,7 +57,7 @@ internal class EmailManager : IEmailManager
         
         try
         {
-            string? port = _connectionConfiguration.GetSection(CredentialsSection)[PortSection];
+            string? port = _connectionConfiguration[PortSection];
             configuredPort = Convert.ToInt32(port);
         }
         catch (Exception)
@@ -73,10 +70,10 @@ internal class EmailManager : IEmailManager
     }
 
     private string ConfigureLogin() =>
-        _connectionConfiguration.GetSection(CredentialsSection)[LoginSection];
+        _connectionConfiguration[LoginSection];
     
     private string ConfigurePassword() =>
-        _connectionConfiguration.GetSection(CredentialsSection)[PasswordSection];
+        _connectionConfiguration[PasswordSection];
 }
 
 internal interface IEmailManager

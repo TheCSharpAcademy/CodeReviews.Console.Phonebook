@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace PhoneBook.Enums;
+﻿namespace PhoneBook.Enums;
 
 /// <summary>
 /// Defines the options for managing contacts within the phone book.
