@@ -11,10 +11,10 @@ namespace PhoneBook.Email;
 internal class EmailManager : IEmailManager
 {
     private const string CredentialsSection = "EmailCredentials";
-    private const string Server = "Server";
-    private const string Port = "Port";
-    private const string Login = "Login";
-    private const string Password = "Password";
+    private const string ServerSection = "Server";
+    private const string PortSection = "Port";
+    private const string LoginSection = "Login";
+    private const string PasswordSection = "Password";
     private const int DefaultPort = 587;
     
     private readonly IConfiguration _connectionConfiguration;
@@ -52,7 +52,7 @@ internal class EmailManager : IEmailManager
         };
 
     private string ConfigureServerAddress() => 
-        _connectionConfiguration.GetSection(CredentialsSection)[Server];
+        _connectionConfiguration.GetSection(CredentialsSection)[ServerSection];
 
     private int ConfigurePort()
     {
@@ -60,7 +60,7 @@ internal class EmailManager : IEmailManager
         
         try
         {
-            string? port = _connectionConfiguration.GetSection(CredentialsSection)[Port];
+            string? port = _connectionConfiguration.GetSection(CredentialsSection)[PortSection];
             configuredPort = Convert.ToInt32(port);
         }
         catch (Exception)
@@ -73,10 +73,10 @@ internal class EmailManager : IEmailManager
     }
 
     private string ConfigureLogin() =>
-        _connectionConfiguration.GetSection(CredentialsSection)[Login];
+        _connectionConfiguration.GetSection(CredentialsSection)[LoginSection];
     
     private string ConfigurePassword() =>
-        _connectionConfiguration.GetSection(CredentialsSection)[Password];
+        _connectionConfiguration.GetSection(CredentialsSection)[PasswordSection];
 }
 
 internal interface IEmailManager
