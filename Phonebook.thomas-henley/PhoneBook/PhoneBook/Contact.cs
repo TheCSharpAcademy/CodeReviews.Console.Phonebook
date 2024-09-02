@@ -1,23 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-
-namespace PhoneBook;
-
-public class PhonebookDbContext : DbContext
-{
-    private readonly string _cs;
-    public DbSet<Contact> Contacts { get; set; }
-
-    public PhonebookDbContext(string cs)
-    {
-        _cs = cs;
-    }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer(_cs);
-    }
-}
+﻿namespace PhoneBook;
 
 public class Contact
 {

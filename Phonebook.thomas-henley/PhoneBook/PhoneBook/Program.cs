@@ -1,20 +1,26 @@
-﻿using PhoneBook;
+﻿using Microsoft.Extensions.Configuration;
+using PhoneBook;
 
-var cxString = "Server=(localdb)\\MSSQLLocalDB;Database=HenleyPhonebookDB;Integrated Security=true";
+var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .Build();
 
-var db = new PhonebookDbContext(cxString);
+var db = new PhonebookDbContext(config.GetConnectionString("LocalDb")!);
 
+var validation = new ContactValidator();
+
+var ui = new SpectreConsole(validation);
+
+db.Database.EnsureDeleted();
 db.Database.EnsureCreated();
 
-db.Contacts.Add(
-    new Contact()
-    {
-        Name = "Thomas Henley",
-        Email = "thomas.e.henley@gmail.com",
-        Phone = "0123456789",
-    });
+if (config["UseExampleData"] is "True")
+{
+    db.PopulateExampleData();
+}
 
-db.SaveChanges();
+PhonebookController controller = new(config, db, ui, validation);
+controller.Run();
 
 db.Database.EnsureDeleted();
 
