@@ -1,6 +1,4 @@
-﻿
-
-namespace PhoneBook.Enums;
+﻿namespace PhoneBook.Enums;
 
 /// <summary>
 /// Enum representing the main menu options in the PhoneBook application.

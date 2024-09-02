@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace PhoneBook.Extensions;
+﻿namespace PhoneBook.Extensions;
 
 /// <summary>
 /// The EnumExtensions class provides extension methods for working with enums.
