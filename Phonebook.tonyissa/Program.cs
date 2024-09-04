@@ -1,4 +1,5 @@
 ﻿global using Microsoft.EntityFrameworkCore;
+using Phonebook.tonyissa.Models;
 
 void StartProgram()
 {
