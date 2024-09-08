@@ -17,9 +17,14 @@ public static class PhonebookRepository
         await context.SaveChangesAsync();
     }
 
-    public static async Task<Contact?> GetEntryAsync(PhonebookContext context, int id)
+    public static async Task<Contact> GetEntryAsync(PhonebookContext context, int id)
     {
         return await context.Contacts.FindAsync(id);
+    }
+
+    public static async Task<List<Contact>> GetEntryFromName(PhonebookContext context, string name)
+    {
+        return await context.Contacts.Where(c => c.Name.Contains(name)).ToListAsync();
     }
 
     public static async Task<List<Contact>> GetAllEntriesAsync(PhonebookContext context)

@@ -14,27 +14,22 @@ public static class MenuController
                 new SelectionPrompt<string>()
                 .Title("Please select an option")
                 .AddChoices([
-                    "View all entries",
-                    "Find an entry",
-                    "Create an entry",
-                    "Remove an entry",
-                    "Update an entry",
+                    "View all contacts",
+                    "Find/update/delete a contact",
+                    "Create a new contact",
                     "Quit"
                 ])
             );
 
             switch (prompt)
             {
-                case "View all entries":
+                case "View all contacts":
                     await PhonebookService.GetAllContactsAsync();
                     break;
-                case "Find an entry":
+                case "Find/update/delete a contact":
+                    await PhonebookService.GetSingularContact();
                     break;
-                case "Create an entry":
-                    break;
-                case "Remove an entry":
-                    break;
-                case "Update an entry":
+                case "Create a new contact":
                     break;
                 default:
                     return;
@@ -42,18 +37,24 @@ public static class MenuController
         }
     }
 
-    public static void PrintContactList(List<Contact> contacts)
+    public static void PrintContacts(List<Contact> contacts)
     {
+        Console.Clear();
+        if (contacts.Count < 1)
+        {
+            Console.WriteLine("No contacts found");
+            return;
+        }
+
         var table = new Table { Title = new TableTitle("Contacts") };
         table.AddColumns(["ID", "Name", "Email", "Phone Number"]);
 
         foreach (var contact in contacts)
         {
-            table.AddRow([$"{contact.ID}", contact.Name, contact.Email, contact.PhoneNumber]);
+            var contactID = contacts.IndexOf(contact) + 1;
+            table.AddRow([contactID.ToString(), contact.Name, contact.Email, contact.PhoneNumber]);
         }
 
         AnsiConsole.Write(table);
-        AnsiConsole.Write("\nPress any key to continue...");
-        Console.ReadKey();
     }
 }
