@@ -1,19 +1,18 @@
-﻿global using Microsoft.EntityFrameworkCore;
-using Phonebook.tonyissa.Models;
+﻿global using Phonebook.tonyissa.Models;
+using Phonebook.tonyissa.UI;
 
-void StartProgram()
+while (true)
 {
     try
     {
-
+        await MenuController.InitMenu();
+        break;
     }
-    catch(Exception ex)
+    catch (Exception ex)
     {
         Console.Write(ex.ToString());
-        Console.WriteLine();
+        Console.WriteLine("\nUnhandled exception. Press any key to restart the program.");
         Console.ReadKey();
-        StartProgram();
+        continue;
     }
 }
-
-StartProgram();

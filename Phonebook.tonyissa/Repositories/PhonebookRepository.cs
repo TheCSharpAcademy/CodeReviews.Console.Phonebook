@@ -8,43 +8,37 @@ using System.Threading.Tasks;
 
 namespace Phonebook.tonyissa.Repositories;
 
-public class PhonebookRepository
+public static class PhonebookRepository
 {
-    private readonly PhonebookContext _context;
 
-    public PhonebookRepository(PhonebookContext context)
+    public static async Task AddEntryAsync(PhonebookContext context, Contact contact)
     {
-        _context = context;
+        await context.Contacts.AddAsync(contact);
+        await context.SaveChangesAsync();
     }
 
-    public async Task AddEntryAsync(Contact contact)
+    public static async Task<Contact?> GetEntryAsync(PhonebookContext context, int id)
     {
-        await _context.Contacts.AddAsync(contact);
-        await _context.SaveChangesAsync();
+        return await context.Contacts.FindAsync(id);
     }
 
-    public async Task<Contact> GetEntryAsync(int id)
+    public static async Task<List<Contact>> GetAllEntriesAsync(PhonebookContext context)
     {
-        return await _context.Contacts.FindAsync(id);
+        return await context.Contacts.ToListAsync<Contact>();
     }
 
-    public async Task<List<Contact>> GetAllEntriesAsync()
+    public static async Task UpdateEntryAsync(PhonebookContext context, Contact entry)
     {
-        return await _context.Contacts.ToListAsync<Contact>();
+        context.Contacts.Update(entry);
+        await context.SaveChangesAsync();
     }
 
-    public async Task UpdateEntryAsync(Contact entry)
+    public static async Task DeleteEntryAsync(PhonebookContext context, int id)
     {
-        _context.Contacts.Update(entry);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task DeleteEntryAsync(int id)
-    {
-        var entry = await _context.Contacts.FindAsync(id);
+        var entry = await context.Contacts.FindAsync(id);
 
         if (entry == null) return;
 
-        _context.Contacts.Remove(entry);
+        context.Contacts.Remove(entry);
     }
 }
