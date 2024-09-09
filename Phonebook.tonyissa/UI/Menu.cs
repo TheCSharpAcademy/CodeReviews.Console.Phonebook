@@ -30,6 +30,7 @@ public static class MenuController
                     await PhonebookService.GetSingularContact();
                     break;
                 case "Create a new contact":
+                    await PhonebookService.CreateContact();
                     break;
                 default:
                     return;
