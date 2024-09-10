@@ -9,6 +9,7 @@ public static class MenuController
     {
         while (true)
         {
+
             Console.Clear();
             var prompt = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
@@ -38,9 +39,35 @@ public static class MenuController
         }
     }
 
+    public static async Task InitContactMenu(Contact contact)
+    {
+        var prompt = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+            .Title("What do you want to do?")
+            .AddChoices([
+                "Update contact",
+                "Delete contact",
+                "Quit"
+            ])
+        );
+
+        switch (prompt)
+        {
+            case "Update contact":
+                await PhonebookService.UpdateContact(contact);
+                break;
+            case "Delete contact":
+                await PhonebookService.DeleteContact(contact);
+                break;
+            default:
+                return;
+        }
+    }
+
     public static void PrintContacts(List<Contact> contacts)
     {
         Console.Clear();
+
         if (contacts.Count < 1)
         {
             Console.WriteLine("No contacts found");

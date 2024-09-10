@@ -29,16 +29,22 @@ public static class PhonebookService
         var contacts = await PhonebookRepository.GetEntryFromName(context, name);
         MenuController.PrintContacts(contacts);
 
+        if (contacts.Count < 1)
+        {
+            AnsiConsole.Write("\nPress any key to continue...");
+            Console.ReadKey();
+            return;
+        }
+
         var selectedIndex = UserInputHandler.GetContactPosFromList(contacts);
         MenuController.PrintContacts([contacts[selectedIndex]]);
 
-        AnsiConsole.Write("\nPress any key to continue...");
-        Console.ReadKey();
+        await MenuController.InitContactMenu(contacts[selectedIndex]);
     }
 
     public static async Task CreateContact()
     {
-        var name = UserInputHandler.GetName("Enter a name for your new contact, or type quit to exit:");
+        var name = UserInputHandler.GetName("Enter a name for your new contact, or type quit to exit");
         if (name.ToLower() == "quit") return;
 
         var email = UserInputHandler.GetEmail();
@@ -54,6 +60,28 @@ public static class PhonebookService
         MenuController.PrintContacts([newContact]);
 
         AnsiConsole.Write("\nRecord created successfully. Press any key to continue...");
+        Console.ReadKey();
+    }
+
+    public static async Task UpdateContact(Contact contact)
+    {
+        var name = UserInputHandler.GetName("Enter a new name for your contact, or type quit to exit");
+        if (name.ToLower() == "quit") return;
+
+        var email = UserInputHandler.GetEmail();
+        if (email.ToLower() == "quit") return;
+
+        var phoneNumber = UserInputHandler.GetNumber();
+        if (phoneNumber.ToLower() == "quit") return;
+
+        contact.Name = name;
+        contact.Email = email;
+        contact.PhoneNumber = phoneNumber;
+
+        using var context = new PhonebookContext();
+        await PhonebookRepository.UpdateEntryAsync(context, contact);
+
+        AnsiConsole.Write("Record updated successfully. Press any key to continue...");
         Console.ReadKey();
     }
 }

@@ -40,10 +40,6 @@ public static class PhonebookRepository
 
     public static async Task DeleteEntryAsync(PhonebookContext context, int id)
     {
-        var entry = await context.Contacts.FindAsync(id);
 
-        if (entry == null) return;
-
-        context.Contacts.Remove(entry);
     }
 }
