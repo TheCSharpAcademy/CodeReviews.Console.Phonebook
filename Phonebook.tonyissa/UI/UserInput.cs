@@ -14,7 +14,7 @@ public static class UserInputHandler
     {
         try
         {
-            var email = AnsiConsole.Ask<string>("Please enter an email for this contact");
+            var email = AnsiConsole.Ask<string>("Please enter an email for this contact:");
             if (email.ToLower() == "quit") return email;
 
             var splitString = email.Split('@');
@@ -41,7 +41,7 @@ public static class UserInputHandler
     {
         try
         {
-            var phoneNumber = AnsiConsole.Ask<string>("Please enter a valid phone number in the (X-)XXX-XXX-XXXX format");
+            var phoneNumber = AnsiConsole.Ask<string>("Please enter a valid phone number in the (X-)XXX-XXX-XXXX format:");
             var regex = "^\\d?-?\\d{3}-\\d{3}-\\d{4}$";
             
             if (!Regex.IsMatch(phoneNumber, regex) && phoneNumber.ToLower() != "quit")
@@ -62,7 +62,7 @@ public static class UserInputHandler
     {
         try
         {
-            var input = AnsiConsole.Ask<int>("Enter the ID for the contact you want to select");
+            var input = AnsiConsole.Ask<int>("Enter the ID for the contact you want to select:");
 
             if (input < 1 || input > contacts.Count)
             {

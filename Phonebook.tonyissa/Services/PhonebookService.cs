@@ -44,7 +44,7 @@ public static class PhonebookService
 
     public static async Task CreateContact()
     {
-        var name = UserInputHandler.GetName("Enter a name for your new contact, or type quit to exit");
+        var name = UserInputHandler.GetName("Enter a name for your new contact, or type quit to exit:");
         if (name.ToLower() == "quit") return;
 
         var email = UserInputHandler.GetEmail();
@@ -65,7 +65,7 @@ public static class PhonebookService
 
     public static async Task UpdateContact(Contact contact)
     {
-        var name = UserInputHandler.GetName("Enter a new name for your contact, or type quit to exit");
+        var name = UserInputHandler.GetName("Enter a new name for your contact, or type quit to exit:");
         if (name.ToLower() == "quit") return;
 
         var email = UserInputHandler.GetEmail();
@@ -82,6 +82,19 @@ public static class PhonebookService
         await PhonebookRepository.UpdateEntryAsync(context, contact);
 
         AnsiConsole.Write("Record updated successfully. Press any key to continue...");
+        Console.ReadKey();
+    }
+
+    public static async Task DeleteContact(Contact contact)
+    {
+        var confirmation = AnsiConsole.Confirm("Are you sure you want to delete this record?");
+
+        if (!confirmation) return;
+
+        using var context = new PhonebookContext();
+        await PhonebookRepository.DeleteEntryAsync(context, contact);
+
+        AnsiConsole.Write("Record deleted successfully. Press any key to continue...");
         Console.ReadKey();
     }
 }

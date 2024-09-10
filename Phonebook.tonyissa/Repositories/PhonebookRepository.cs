@@ -11,9 +11,9 @@ namespace Phonebook.tonyissa.Repositories;
 public static class PhonebookRepository
 {
 
-    public static async Task AddEntryAsync(PhonebookContext context, Contact contact)
+    public static async Task AddEntryAsync(PhonebookContext context, Contact entry)
     {
-        await context.Contacts.AddAsync(contact);
+        await context.Contacts.AddAsync(entry);
         await context.SaveChangesAsync();
     }
 
@@ -38,8 +38,9 @@ public static class PhonebookRepository
         await context.SaveChangesAsync();
     }
 
-    public static async Task DeleteEntryAsync(PhonebookContext context, int id)
+    public static async Task DeleteEntryAsync(PhonebookContext context, Contact entry)
     {
-
+        context.Contacts.Remove(entry);
+        await context.SaveChangesAsync();
     }
 }
