@@ -48,7 +48,7 @@ public class ContactCategoryService
     {
         MenuPresentation.PresentMenu("[red]Deleting[/]");
         bool isCancelled;
-        string categoryName, contactName;
+        string contactName;
         Category categorySelected;
         Contact contactSelected;
 

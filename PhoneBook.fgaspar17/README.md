@@ -7,14 +7,14 @@ and SQL Server Express LocalDB.
 ## Given Requirements
 
 - [x] This is an application where you should record contacts with their phone numbers.
-- [x] Users should be able to Add, Delete, Update and Read 
+- [x] Users should be able to Add, Delete, Update and Read
 from a database, using the console.
 - [x] You need to use Entity Framework, raw SQL isn't allowed.
-- [x] Your code should contain a base Contact class with AT LEAST 
+- [x] Your code should contain a base Contact class with AT LEAST
 {Id INT, Name STRING, Email STRING and Phone Number(STRING)}
-- [x] You should validate e-mails and phone numbers and 
+- [x] You should validate e-mails and phone numbers and
 let the user know what formats are expected
-- [x] You should use Code-First Approach, 
+- [x] You should use Code-First Approach,
 which means EF will create the database schema for you.
 - [x] You should use SQL Server, not SQLite
 
@@ -23,7 +23,7 @@ which means EF will create the database schema for you.
 - SQL Server database connection
 
   - The data is stored in a SQL Server database. I connect to it for the CRUD.
-  - The database is managed by Entity Framework. 
+  - The database is managed by Entity Framework.
   You should add an initial migration and update the database first.
 
 - Console-based UI to navigate the menus
@@ -52,7 +52,8 @@ which means EF will create the database schema for you.
 - Send SMS
 
   - I'm using the Twilio API, so you need a Twilio account first.
-  - In the user secrets or configuration file you enter the Twilio SID, auth token, and number.
+  - In the user secrets or configuration file you enter the Twilio SID,
+auth token, and number.
   - Then you can pick the Send SMS option, and you write the message.
   - ![image](https://github.com/user-attachments/assets/1fa066a3-f06a-4c05-948b-7154c182056a)
 
