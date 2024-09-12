@@ -1,7 +1,7 @@
 # PhoneBook
 
 A console-based application to help you manage your contacts.
-Developed using C#, Entity Framework, Twilio, Gmail, Spectre.Console, 
+Developed using C#, Entity Framework, Twilio, Gmail, Spectre.Console,
 and SQL Server Express LocalDB.
 
 ## Given Requirements
