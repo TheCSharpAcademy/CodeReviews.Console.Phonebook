@@ -19,7 +19,7 @@ public static class SenderFactory
                 (bool isCancelled, string subject) = AskForSubject();
                 if (isCancelled) return null;
 
-                sender = new GmailSender(name, subject, ContactController.GetContactByName(name).Email);
+                sender = new GmailSender(name, subject, mail);
                 break;
             case SenderType.Sms:
                 (isValid, string phone) = HasValidPhone(name);

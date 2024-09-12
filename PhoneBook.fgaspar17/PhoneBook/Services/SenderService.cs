@@ -10,7 +10,7 @@ public static class SenderService
         MenuPresentation.PresentMenu("[yellow]Sending Message[/]");
 
         bool isCancelled;
-        string name, mail, subject, body, message;
+        string name, message;
 
         ContactService.ShowContactTable();
 

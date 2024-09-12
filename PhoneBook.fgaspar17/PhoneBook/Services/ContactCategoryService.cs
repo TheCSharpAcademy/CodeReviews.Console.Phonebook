@@ -8,7 +8,7 @@ public class ContactCategoryService
     {
         MenuPresentation.PresentMenu("[blue]Assigning[/]");
         bool isCancelled;
-        string categoryName, contactName;
+        string contactName;
         Category categorySelected;
         Contact contactSelected;
 

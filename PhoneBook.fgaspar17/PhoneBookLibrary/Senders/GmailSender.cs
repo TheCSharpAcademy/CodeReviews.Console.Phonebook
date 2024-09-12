@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Net.Mail;
+﻿using System.Net.Mail;
 
 namespace PhoneBookLibrary;
 
@@ -30,7 +29,7 @@ public class GmailSender : ISender
             EnableSsl = true,
             DeliveryMethod = SmtpDeliveryMethod.Network,
             UseDefaultCredentials = false,
-            Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+            Credentials = new System.Net.NetworkCredential(fromAddress.Address, fromPassword)
         };
         using var message = new MailMessage(fromAddress, toAddress)
         {
