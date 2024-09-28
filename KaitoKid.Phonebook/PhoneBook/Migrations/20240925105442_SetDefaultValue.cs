@@ -10,13 +10,13 @@ namespace PhoneBook.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
+            throw null;
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
+            throw null;
         }
     }
 }
