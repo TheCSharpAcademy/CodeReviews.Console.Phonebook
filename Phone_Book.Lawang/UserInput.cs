@@ -101,7 +101,7 @@ public class UserInput
             AnsiConsole.Markup("[red bold]Invalid Input, Try Again (eg:- abc@gmail.com): [/]");
             email = Console.ReadLine()?.Trim();
         }
-        var countryCode = AnsiConsole.Ask<string>("[green]Enter Country Code with '+' at the begining: [bold]");
+        var countryCode = AnsiConsole.Ask<string>("[green bold]Enter Country Code with '+' at the begining: [/]");
         while (!Validation.IsCountryCodeValid(countryCode ?? ""))
         {
             if (countryCode == "0") return null;
