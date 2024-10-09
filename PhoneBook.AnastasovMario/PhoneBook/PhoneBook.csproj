@@ -10,8 +10,7 @@
   <ItemGroup>
     <Folder Include="Handlers\Errors\" />
     <Folder Include="Handlers\Email\" />
-    <Folder Include="Models\" />
-    <Folder Include="Services\" />
+    <Folder Include="Handlers\Validators\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +20,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Spectre.Console" Version="0.49.1" />
   </ItemGroup>
 
 </Project>
