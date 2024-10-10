@@ -1,18 +1,19 @@
 ﻿using PhoneBook.Data.Models;
-using PhoneBook.Dtos;
 
 namespace PhoneBook.Contracts
 {
   public interface IContactService
 	{
-		void AddContact(ContactDto contact);
+		void AddContact(Contact contact);
 
-		void DeleteContact(int id);
+		void DeleteContact(string email);
 
 		List<Contact> GetAllContacts();
 
-		void UpdateContact(int id, ContactDto updatedContact);
+		void UpdateContact(string email, Contact updatedContact);
 
-		Contact GetContact(int id);
+    Contact GetContact(string email);
+
+		Contact GetValidatedContact();
 	}
 }

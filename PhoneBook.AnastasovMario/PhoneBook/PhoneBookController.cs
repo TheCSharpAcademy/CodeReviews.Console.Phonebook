@@ -1,5 +1,4 @@
 ﻿using PhoneBook.Data.Models;
-using PhoneBook.Dtos;
 using PhoneBook.Helpers;
 using PhoneBook.Services;
 using Spectre.Console;
@@ -13,44 +12,39 @@ namespace PhoneBook
 
     public static void AddContact()
     {
-      // Asking for contact details using Spectre.Console
-      var name = AnsiConsole.Ask<string>("Enter the contact's name: ");
-      var email = AnsiConsole.Ask<string>("Enter the contact's email: ");
-      var phoneNumber = AnsiConsole.Ask<string>("Phone number (format: xxx-xxx-xxxx): ");
+      try
+      {
+        var contact = _contactService.GetValidatedContact();
+        if (contact == null) return; // Exit if user chose not to continue
 
-      var contact = new ContactDto { Name = name, Email = email, PhoneNumber = phoneNumber };
-
-      _contactService.AddContact(contact);
-
-      Console.WriteLine("\nNew Contact has been added\n");
-
-      Helper.ContinueMessage();
+        _contactService.AddContact(contact);
+        AnsiConsole.MarkupLine("[green]\nNew Contact has been added successfully![/]");
+        Helper.ContinueMessage();
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine(ex.Message);
+      }
     }
 
     public static void UpdateContact()
     {
-      // Ask for id 
-      var contactId = AnsiConsole.Ask<int>("Enter the contact's Id you want to update (PRESS 0 to return to MENU): ");
-
-      while (contactId != 0)
+      try
       {
-        var contact = _contactService.GetContact(contactId);
+        var contactEmail = AnsiConsole.Ask<string>("Enter the contact's email you want to update: ");
 
-        if (contact != null)
-        {
-          UserInterface.ShowContact(contact);
+        var contact = _contactService.GetContact(contactEmail);
 
-          var name = AnsiConsole.Ask<string>("Update contact's name: ");
-          var email = AnsiConsole.Ask<string>("Update contact's email: ");
-          var phoneNumber = AnsiConsole.Ask<string>("Phone number (format: xxx-xxx-xxxx): ");
+        UserInterface.ShowContact(contact);
+        var updatedContact = _contactService.GetValidatedContact();
+        if (updatedContact == null) return; // Exit if user chose not to continue
 
-          var contactDto = new ContactDto { Name = name, PhoneNumber = phoneNumber, Email = email };
-
-          _contactService.UpdateContact(contactId, contactDto);
-          break;
-        }
-
-        contactId = AnsiConsole.Ask<int>("Enter the contact's Id you want to update (PRESS 0 to return to MENU): ");
+        _contactService.UpdateContact(contactEmail, updatedContact);
+        AnsiConsole.MarkupLine("[green]Contact updated successfully![/]");
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine(ex.Message);
       }
     }
 
@@ -60,31 +54,34 @@ namespace PhoneBook
 
       UserInterface.ShowContacts(result);
 
-      var contactId = AnsiConsole.Ask<int>("Enter the contact's id you want to delete (PRESS 0 to return to MENU): ");
+      var contactId = AnsiConsole.Ask<string>("Enter the contact's email you want to delete: ");
 
-      while (contactId != 0)
+      try
       {
         _contactService.DeleteContact(contactId);
-
-        contactId = AnsiConsole.Ask<int>("Enter the contact's id you want to delete (PRESS 0 to return to MENU): ");
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine(ex.Message);
       }
     }
     public static void ViewContact()
     {
-      var contactId = AnsiConsole.Ask<int>("Enter the contact's Id you want to get (PRESS 0 to return to MENU): ");
+      var contactEmail = AnsiConsole.Ask<string>("Enter the contact's email you want to get: ");
 
-      while (contactId != 0)
+      try
       {
-        var contact = _contactService.GetContact(contactId);
+        var contact = _contactService.GetContact(contactEmail);
 
         if (contact != null)
         {
           UserInterface.ShowContact(contact);
           Helper.ContinueMessage();
-          break;
         }
-
-        contactId = AnsiConsole.Ask<int>("Enter the contact's Id you want to get (PRESS 0 to return to MENU): ");
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine(ex.Message);
       }
     }
     public static void ViewAllContacts()

@@ -10,7 +10,6 @@
   <ItemGroup>
     <Folder Include="Handlers\Errors\" />
     <Folder Include="Handlers\Email\" />
-    <Folder Include="Handlers\Validators\" />
   </ItemGroup>
 
   <ItemGroup>
