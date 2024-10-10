@@ -6,85 +6,79 @@ using PhoneBook.Dtos;
 namespace PhoneBook.Services
 {
   public class ContactService(PhonebookDbContext context) : IContactService
-	{
-		private PhonebookDbContext _context = context;
+  {
+    private PhonebookDbContext _context = context;
 
-		public async Task AddContact(ContactDto contact)
-		{
-			bool emailExists = await _context.Contacts.FirstOrDefaultAsync(c => c.Email == contact.Email) != null;
-
-			if (emailExists)
-			{
-				Console.WriteLine("The email is already in use");
-			}
-
-			bool phoneExists = await _context.Contacts.FirstOrDefaultAsync(c => c.PhoneNumber == contact.PhoneNumber) != null;
-
-			if (phoneExists)
-			{
-				Console.WriteLine("The number is already in use");
-			}
-
-			_context.Contacts.Add(new Contact
-			{
-				Name = contact.Name,
-				PhoneNumber = contact.PhoneNumber,
-				Email = contact.Email,
-			});
-
-			await _context.SaveChangesAsync();
-
-			Console.WriteLine("New Contact has been added");
-		}
-
-		public async Task DeleteContact(int id)
-		{
-			var contact = await _context.Contacts.FirstOrDefaultAsync(c => c.Id == id);
-
-			if (contact != null)
-			{
-				_context.Contacts.Remove(contact);
-				await _context.SaveChangesAsync();
-			}
-			else
-			{
-				Console.WriteLine("Contact with this Id doesn't exist");
-			}
-		}
-
-		public async Task<List<ContactDto>> GetAllContacts()
-		{
-			return await _context.Contacts
-				.Select(c => new ContactDto
-				{
-					Name = c.Name,
-					PhoneNumber = c.PhoneNumber,
-					Email = c.Email,
-				})
-				.ToListAsync();
-		}
-
-    public Task<Contact> GetProduct(int id)
+    public void AddContact(ContactDto contact)
     {
-      throw new NotImplementedException();
+      bool emailExists = _context.Contacts.FirstOrDefault(c => c.Email == contact.Email) != null;
+
+      if (emailExists)
+      {
+        Console.WriteLine("The email is already in use");
+      }
+
+      bool phoneExists = _context.Contacts.FirstOrDefault(c => c.PhoneNumber == contact.PhoneNumber) != null;
+
+      if (phoneExists)
+      {
+        Console.WriteLine("The number is already in use");
+      }
+
+      _context.Contacts.Add(new Contact
+      {
+        Name = contact.Name,
+        PhoneNumber = contact.PhoneNumber,
+        Email = contact.Email,
+      });
+
+      _context.SaveChanges();
+
     }
 
-    public async Task UpdateContact(int id, ContactDto updatedContact)
-		{
-			var contact = await _context.Contacts.FirstOrDefaultAsync(c => c.Id == id);
+    public void DeleteContact(int id)
+    {
+      var contact = _context.Contacts.FirstOrDefault(c => c.Id == id);
 
-			if (contact != null)
-			{
-				 contact.Name = updatedContact.Name;
-				 contact.PhoneNumber = updatedContact.PhoneNumber;
-				 contact.Email = updatedContact.Email;
+      if (contact != null)
+      {
+        _context.Contacts.Remove(contact);
+        _context.SaveChanges();
 
-				 await _context.SaveChangesAsync();
-			}
-			else
-			{
-				Console.WriteLine("Contact with this Id doesn't exist");
-			}
-		}
-	}
+        Console.WriteLine("\nContact has been deleted successfully");
+      }
+      else
+      {
+        Console.WriteLine("\nContact with this Id doesn't exist");
+      }
+    }
+
+    public List<Contact> GetAllContacts()
+    {
+      return [.. _context.Contacts];
+    }
+
+    public Contact GetContact(int id)
+    {
+      var contact = _context.Contacts.FirstOrDefault(c => c.Id == id);
+
+      if (contact == null)
+      {
+        Console.WriteLine("Contact with this Id doesn't exist.\n");
+      }
+
+      return contact;
+    }
+
+    public void UpdateContact(int id, ContactDto updatedContact)
+    {
+      var contact = _context.Contacts.First(c => c.Id == id);
+      contact.Name = updatedContact.Name;
+      contact.PhoneNumber = updatedContact.PhoneNumber;
+      contact.Email = updatedContact.Email;
+
+      _context.SaveChangesAsync();
+
+    }
+  }
 }

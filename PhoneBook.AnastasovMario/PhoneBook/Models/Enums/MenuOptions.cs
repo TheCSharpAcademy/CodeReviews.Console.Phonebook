@@ -2,11 +2,11 @@
 {
 	enum MenuOptions
 	{
-	  AddProduct,
-		DeleteProduct,
-		UpdateProduct,
-		ViewProduct,
-		ViewAllProducts,
+	  AddContact = 1,
+		DeleteContact,
+		UpdateContact,
+		ViewContact,
+		ViewAllContacts,
 		Quit
 	}
 }

@@ -5,14 +5,14 @@ namespace PhoneBook.Contracts
 {
   public interface IContactService
 	{
-		Task AddContact(ContactDto contact);
+		void AddContact(ContactDto contact);
 
-		Task DeleteContact(int id);
+		void DeleteContact(int id);
 
-		Task<List<ContactDto>> GetAllContacts();
+		List<Contact> GetAllContacts();
 
-		Task UpdateContact(int id, ContactDto updatedContact);
+		void UpdateContact(int id, ContactDto updatedContact);
 
-		Task<Contact> GetProduct(int id)
+		Contact GetContact(int id);
 	}
 }
