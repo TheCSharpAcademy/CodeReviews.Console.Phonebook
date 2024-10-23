@@ -47,10 +47,10 @@ internal static class Utility
     private static string GetPhoneNumber()
     {
         string? res;
-        System.Console.Write("Please Enter your Phone number\n> ");
+        System.Console.Write("Please Enter your Phone number without any spaces or -'s\n(ex. 6258889595)\n> ");
         
         while((bool)(res = System.Console.ReadLine())?.Any(ch => Char.IsLetter(ch)) 
-            || res.Length < 10)
+            || res.Length != 10)
             System.Console.Write("Please enter a valid Phone Number\n> ");
         
         return res ?? "N/A";
