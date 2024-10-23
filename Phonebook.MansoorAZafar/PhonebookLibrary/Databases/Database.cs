@@ -1,5 +1,6 @@
 ﻿using PhonebookLibrary.Controllers;
-namespace PhonebookLibrary.Models;
+using PhonebookLibrary.Models;
+namespace PhonebookLibrary.Databases;
 
 internal static class Database
 {
@@ -8,9 +9,9 @@ internal static class Database
         Contact person = Utility.CreateContact();
         using var db = new PhonebookContext();
         db.Add(person);
-        
+
         db.SaveChanges();
-        System.Console.WriteLine("Successfully Added...");
+        Console.WriteLine("Successfully Added...");
     }
 
     internal static List<Contact> GetContact()
@@ -24,9 +25,9 @@ internal static class Database
     {
         using var db = new PhonebookContext();
         db.Remove(new Contact { Id = id });
-        
+
         db.SaveChanges();
-        System.Console.WriteLine("Successfully Deleted...");
+        Console.WriteLine("Successfully Deleted...");
     }
 
     internal static void UpdateContact(Contact updatedContact)
@@ -35,7 +36,7 @@ internal static class Database
         db.Update(updatedContact);
 
         db.SaveChanges();
-        System.Console.WriteLine("Successfully Updated...");
+        Console.WriteLine("Successfully Updated...");
     }
 
     internal static bool IDExists(int id)

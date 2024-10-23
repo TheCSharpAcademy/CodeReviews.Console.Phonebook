@@ -1,5 +1,4 @@
 ﻿using Spectre.Console;
-using System.Runtime.InteropServices.JavaScript;
 namespace PhonebookLibrary.Views;
 
 internal static class DataViewer

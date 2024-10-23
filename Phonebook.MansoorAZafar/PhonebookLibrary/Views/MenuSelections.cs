@@ -1,4 +1,4 @@
-﻿namespace PhonebookLibrary.Models;
+﻿namespace PhonebookLibrary.Views;
 
 internal enum HomeMenuSelections
 {
