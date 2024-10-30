@@ -6,11 +6,6 @@ public class DataServices
 {
     public ApplicationDbContext appDbContext = new();
 
-    public static void CreateDatabaseIfNotExists()
-    {
-
-    }
-
     public void PostContact(Contact contact)
     {
         appDbContext.Contacts.Add(contact);
