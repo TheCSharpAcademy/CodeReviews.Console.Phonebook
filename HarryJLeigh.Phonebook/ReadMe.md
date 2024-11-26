@@ -3,7 +3,8 @@
 ## Overview
 
 The Phonebook application is a simple C# project designed to manage contact information.
-It allows users to perform CRUD (Create, Read, Update, Delete) operations on a list of contacts,
+It allows users to perform CRUD (Create, Read, Update, Delete) operations
+on a list of contacts,
 making it easy to store and retrieve important details.
 The application leverages Entity Framework Core, an Object-Relational Mapper (ORM),
 which simplifies database interactions.
@@ -13,8 +14,11 @@ which simplifies database interactions.
 - **Database Connection**: You must configure the connection string
 in `App.Config` to point to your local SQL Server database (LocalDB).
 - **Mail Server Configuration**: 
+
 You need to set up a mail 
+
 server (hMailServer is recommended, as it is free and open source). 
+
 - Update the following in the `EmailService` class:
   - **Line 16**: `new SmtpClient` - Add the SMTP host.
   - **Line 19**: `new NetworkCredential` - Add your username and password as strings.
@@ -42,7 +46,7 @@ apply migrations and set up the local database schema:
    ```sh
    dotnet ef database update
    ```
-
+   
 ### Steps to Run the Application Locally
 
 1. **Clone the Repository**:
@@ -87,6 +91,7 @@ the console or a graphical user interface, depending on the implementation.
 - **Update Contact**: Update an existing contact.
 - **Delete Contact**: Remove a contact from the phonebook.
 - **Send Email**: Send emails directly from the application.
+
 - **Filter Contacts**: Filter contacts				
         based on category (e.g., Friends, Family, Work).
 
@@ -103,7 +108,8 @@ Proper database structuring is crucial for scalability and maintainability.
 Entity Framework Core simplifies interactions, but understanding SQL is also essential.
 - **Modular Code Structure**:
 Organizing code into services, models,
-and views results in a clean, readable codebase. It also makes testing and extending components easier.
+and views results in a clean, readable codebase.
+It also makes testing and extending components easier.
 - **Working with ORMs**:
 Entity Framework Core simplifies database management
 but introduces challenges like managing migrations effectively.
@@ -111,6 +117,7 @@ but introduces challenges like managing migrations effectively.
 ## Challenges Faced
 
 - **Entity Framework Setup**:
+
 Setting up models correctly was challenging initially, 
 especially understanding the importance of correctly annotating primary keys.
 - **Email Functionality**:
