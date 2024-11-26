@@ -2,13 +2,18 @@
 
 ## Overview
 
-The Phonebook application is a simple C# project designed to manage contact information. It allows users to perform CRUD (Create, Read, Update, Delete) operations on a list of contacts, making it easy to store and retrieve important details. The application leverages Entity Framework Core, an Object-Relational Mapper (ORM), which simplifies database interactions.
+The Phonebook application is a simple C# project designed to manage contact information.
+It allows users to perform CRUD (Create, Read, Update, Delete) operations on a list of contacts,
+making it easy to store and retrieve important details.
+The application leverages Entity Framework Core, an Object-Relational Mapper (ORM),
+which simplifies database interactions.
 
 ### Important Setup Notes
 
 - **Database Connection**: You must configure the connection string
 in `App.Config` to point to your local SQL Server database (LocalDB).
-- **Mail Server Configuration**: You need to set up a mail 
+- **Mail Server Configuration**: 
+You need to set up a mail 
 server (hMailServer is recommended, as it is free and open source). 
 - Update the following in the `EmailService` class:
   - **Line 16**: `new SmtpClient` - Add the SMTP host.
@@ -24,7 +29,8 @@ server (hMailServer is recommended, as it is free and open source).
 
 To run the application locally, follow these steps:
 
-1. **Set Up the Connection String**: Update the connection string in `App.Config` to point to your
+1. **Set Up the Connection String**: Update the connection string in `App.Config`
+to point to your
 LocalDB instance.Ensure that it matches your local database configuration.
 
 2. **Install Dependencies**: Ensure that the necessary dependencies are installed,
@@ -92,18 +98,25 @@ the console or a graphical user interface, depending on the implementation.
 
 ## Lessons Learned
 
-- **Database Design**: Proper database structuring is crucial for scalability and maintainability. Entity Framework Core simplifies interactions, but understanding SQL is also essential.
-- **Modular Code Structure**: Organizing code into services, models,
+- **Database Design**:
+Proper database structuring is crucial for scalability and maintainability.
+Entity Framework Core simplifies interactions, but understanding SQL is also essential.
+- **Modular Code Structure**:
+Organizing code into services, models,
 and views results in a clean, readable codebase. It also makes testing and extending components easier.
-- **Working with ORMs**: Entity Framework Core simplifies database management
+- **Working with ORMs**:
+Entity Framework Core simplifies database management
 but introduces challenges like managing migrations effectively.
 
 ## Challenges Faced
 
-- **Entity Framework Setup**: Setting up models correctly was challenging initially, 
+- **Entity Framework Setup**:
+Setting up models correctly was challenging initially, 
 especially understanding the importance of correctly annotating primary keys.
-- **Email Functionality**: Integrating email features with `System.Net.Mail`
-involved handlingSMTP server configuration challenges.
-- **Error Handling**: Implementing robust error handling,
+- **Email Functionality**:
+Integrating email features with `System.Net.Mail`
+involved handling SMTP server configuration challenges.
+- **Error Handling**:
+Implementing robust error handling,
 especially for database operations, was more complex than expected.
 
