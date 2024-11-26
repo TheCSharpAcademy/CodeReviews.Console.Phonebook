@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PhoneBook": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\Admins\\source\\repos\\PhoneBook\\PhoneBook"
+    }
+  }
+}
