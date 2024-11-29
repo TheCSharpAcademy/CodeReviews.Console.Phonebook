@@ -1,4 +1,4 @@
-﻿﻿# ConsoleDrinks
+# ConsoleDrinks
 
 ## Given Requirements:
 - [x] This is an application where you can record contacts with their phone numbers.
