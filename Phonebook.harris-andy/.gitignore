@@ -1,0 +1,5 @@
+.vscode/
+appsettings.json
+contacts.db
+Migrations_OLD/
+Migrations/
