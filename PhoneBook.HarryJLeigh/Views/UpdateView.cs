@@ -1,12 +1,12 @@
+using Phonebook.Controllers;
 using Phonebook.Enums;
-using Phonebook.Services;
 using Spectre.Console;
 
 namespace Phonebook.Views;
 
-public static class UpdateView
+public  class UpdateView
 {
-    internal static void Run()
+    internal void Run(PhonebookController _phonebookController)
     {
         bool endUpdateView = false;
         while (!endUpdateView)
@@ -20,19 +20,23 @@ public static class UpdateView
             switch (updateChoice)
             {
                 case UpdateOptions.Name:
-                    PhonebookService.UpdateContact(updateName: true);
+                    _phonebookController.UpdateContact(updateName: true);
                     break;
                 case UpdateOptions.Email:
-                    PhonebookService.UpdateContact(updateEmail: true);
+                    _phonebookController.UpdateContact(updateEmail: true);
                     break;
                 case UpdateOptions.Number:
-                    PhonebookService.UpdateContact(updateNumber: true);
+                    _phonebookController.UpdateContact(updateNumber: true);
                     break;
                 case UpdateOptions.Category:
-                    PhonebookService.UpdateContact(updateCategory: true);
+                    _phonebookController.UpdateContact(updateCategory: true);
                     break;
                 case UpdateOptions.All:
-                    PhonebookService.UpdateContact(updateName: true, updateEmail: true, updateNumber: true);
+                    _phonebookController.UpdateContact(
+                        updateName: true, 
+                        updateEmail: true, 
+                        updateNumber: true,
+                        updateCategory: true);
                     break;
                 case UpdateOptions.Exit:
                     endUpdateView = true;

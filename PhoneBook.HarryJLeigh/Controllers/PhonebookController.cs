@@ -1,4 +1,3 @@
-using Phonebook.Data;
 using Phonebook.Models;
 using Phonebook.Services;
 using Phonebook.Utilities;
@@ -7,13 +6,13 @@ using Spectre.Console;
 
 namespace Phonebook.Controllers;
 
-public class PhoneController
+public class PhonebookController
 {
     private readonly PhonebookService _phonebookService = new PhonebookService();
 
     internal void ViewContacts()
     {
-        var contacts = _phonebookService.GetAllContacts();
+        var contacts = GetAllContacts();
         Console.Clear();
         if (contacts.Count == 0)
             AnsiConsole.MarkupLine("[yellow]No contacts found![/]");
@@ -23,7 +22,7 @@ public class PhoneController
 
     internal void ViewContactsByFilter(string filter)
     {
-        var filteredContacts = _phonebookService.GetContactsByCategory(filter);
+        var filteredContacts = GetContactsByCategory(filter);
         TableVisualisation.ShowTable(filteredContacts);
         Util.AskUserToContinue();
     }
@@ -43,7 +42,7 @@ public class PhoneController
         bool updateCategory = false)
     {
         ViewContacts();
-        var contactIds = _phonebookService.GetContactsId();
+        var contactIds = GetContactsId();
         
         if (contactIds.Count == 0)
         {
@@ -52,17 +51,47 @@ public class PhoneController
         }
 
         int contactId = UserInputHelper.GetId(contactIds, "update");
-        var contact = _phonebookService.GetContactById(contactId);
+        var contact = GetContactById(contactId);
 
-        if (updateName == true) contact[0].Name = UserInputHelper.GetName("update");
-        if (updateEmail == true) contact[0].Email = UserInputHelper.GetEmail("update");
-        if (updateNumber == true) contact[0].PhoneNumber = UserInputHelper.GetPhoneNumber("update");
-        if (updateCategory == true) contact[0].Category = UserInputHelper.GetCategory("update");
+        if (updateName == true) contact.Name = UserInputHelper.GetName("update");
+        if (updateEmail == true) contact.Email = UserInputHelper.GetEmail("update");
+        if (updateNumber == true) contact.PhoneNumber = UserInputHelper.GetPhoneNumber("update");
+        if (updateCategory == true) contact.Category = UserInputHelper.GetCategory("update");
         if (Util.ReturnToMenu()) return;
         
-        _phonebookService.UpdateContact(contact[0]);
+        _phonebookService.UpdateContact(contact);
         
         AnsiConsole.MarkupLine("[yellow]Success! Updated contact.[/]");
         Util.AskUserToContinue();
     }
+
+    internal void DeleteContact()
+    {
+        ViewContacts();
+        var contacts = GetAllContacts();
+        
+        if (contacts.Count == 0)
+        {
+            Util.AskUserToContinue();
+            return;
+        }
+
+        List<int> contactIds = GetContactsId();
+        int contactId = UserInputHelper.GetId(contactIds, "delete");
+        if (Util.ReturnToMenu()) return;
+        
+        _phonebookService.DeleteContact(contactId);
+        
+        AnsiConsole.MarkupLine("[yellow]Success! Contact deleted.[/]");
+        Util.AskUserToContinue();
+    }
+    
+    internal List<int> GetContactsId() => _phonebookService.GetContactsId();
+    
+    internal List<Contact> GetAllContacts() => _phonebookService.GetAllContacts();
+    
+    internal Contact GetContactById(int id) => _phonebookService.GetContactById(id);
+
+    internal List<Contact> GetContactsByCategory(string category) => 
+        _phonebookService.GetContactsByCategory(category);
 }

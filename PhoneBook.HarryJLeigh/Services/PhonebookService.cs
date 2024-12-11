@@ -6,99 +6,34 @@ using Spectre.Console;
 
 namespace Phonebook.Services;
 
-public static class PhonebookService
+public class PhonebookService
 {
-    internal static void ViewContacts()
+    private readonly AppDbContext _context  = new AppDbContext();
+    
+    internal void CreateContact(Contact contact)
     {
-        Console.Clear();
-        var contacts = GetAllContacts();
-        if (contacts.Count == 0)
-            AnsiConsole.MarkupLine("[yellow]No contacts found![/]");
-        else
-            TableVisualisation.ShowTable(contacts);
+        _context.Contacts.Add(contact);
+        _context.SaveChanges();
     }
 
-    internal static void ViewContactsByFilter(string filter)
+    internal void UpdateContact(Contact contact)
     {
-        using var context = new AppDbContext();
-        List<Contact> filteredContacts = context.Contacts.Where(c => c.Category == filter).ToList();
-        TableVisualisation.ShowTable(filteredContacts);
-        Util.AskUserToContinue();
+        _context.SaveChanges();
     }
 
-    internal static void CreateContact(Contact contact)
+    internal void DeleteContact(int id)
     {
-        if (Util.ReturnToMenu()) return;
-        using var context = new AppDbContext();
-        context.Contacts.Add(contact);
-        context.SaveChanges();
-        AnsiConsole.MarkupLine("[yellow]Success! Created new contact.[/]");
-        Util.AskUserToContinue();
+        var contact = _context.Contacts.Find(id);
+        _context.Contacts.Remove(contact);
+        _context.SaveChanges();
     }
+    
+    internal List<int> GetContactsId() => _context.Contacts.Select(c => c.Id).ToList();
+    
+    internal List<Contact> GetAllContacts() => _context.Contacts.ToList();
 
-    internal static void UpdateContact(bool updateName = false, bool updateEmail = false, bool updateNumber = false, bool updateCategory = false)
-    {
-        ViewContacts();
+    internal Contact GetContactById(int id) => _context.Contacts.FirstOrDefault(c => c.Id == id);
 
-        List<int> contactIds = GetContactsId();
-        if (contactIds.Count == 0)
-        {
-            Util.AskUserToContinue();
-            return;
-        }
-
-        int contactId = UserInputHelper.GetId(contactIds, "update");
-
-        using var context = new AppDbContext();
-        var contact = context.Contacts.Find(contactId);
-
-        if (updateName == true) contact.Name = UserInputHelper.GetName("update");
-        if (updateEmail == true) contact.Email = UserInputHelper.GetEmail("update");
-        if (updateNumber == true) contact.PhoneNumber = UserInputHelper.GetPhoneNumber("update");
-        if (updateCategory == true) contact.Category = UserInputHelper.GetCategory("update");
-        if (Util.ReturnToMenu()) return;
-
-        context.SaveChanges();
-        AnsiConsole.MarkupLine("[yellow]Success! Updated contact.[/]");
-        Util.AskUserToContinue();
-    }
-
-    internal static void DeleteContact()
-    {
-        ViewContacts();
-
-        List<Contact> contacts = GetAllContacts();
-        if (contacts.Count == 0)
-        {
-            Util.AskUserToContinue();
-            return;
-        }
-
-        using var context = new AppDbContext();
-        List<int> contactIds = GetContactsId();
-        int contactId = UserInputHelper.GetId(contactIds, "delete");
-
-        if (Util.ReturnToMenu()) return;
-        var contact = context.Contacts.Find(contactId);
-        context.Contacts.Remove(contact);
-        context.SaveChanges();
-    }
-
-    internal static List<int> GetContactsId()
-    {
-        using var context = new AppDbContext();
-        return context.Contacts.Select(c => c.Id).ToList();
-    }
-
-    private static List<Contact> GetAllContacts()
-    {
-        using var context = new AppDbContext();
-        return context.Contacts.ToList();
-    }
-
-    internal static List<Contact> GetContactById(int id)
-    {
-        using var context = new AppDbContext();
-        return context.Contacts.Where(c => c.Id == id).ToList();
-    }
+    internal List<Contact> GetContactsByCategory(string category) => 
+        _context.Contacts.Where(c => c.Category == category).ToList();
 }

@@ -1,13 +1,13 @@
+using Phonebook.Controllers;
 using Phonebook.Enums;
-using Phonebook.Services;
 using Phonebook.Utilities;
 using Spectre.Console;
 
 namespace Phonebook.Views;
 
-public static class FilterView
+public class FilterView
 {
-    internal static void Run()
+    internal void Run(PhonebookController _phonebookController)
     {
         bool endFilterView = false;
         while (!endFilterView)
@@ -21,17 +21,17 @@ public static class FilterView
             switch (filterChoice)
             {
                 case FilterOptions.All:
-                    PhonebookService.ViewContacts();
+                    _phonebookController.ViewContacts();
                     Util.AskUserToContinue();
                     break;
                 case FilterOptions.Friends:
-                    PhonebookService.ViewContactsByFilter("Friends");
+                    _phonebookController.ViewContactsByFilter("Friends");
                     break;
                 case FilterOptions.Family:
-                    PhonebookService.ViewContactsByFilter("Family");
+                    _phonebookController.ViewContactsByFilter("Family");
                     break;
                 case FilterOptions.Work:
-                    PhonebookService.ViewContactsByFilter("Work");
+                    _phonebookController.ViewContactsByFilter("Work");
                     break;
                 case FilterOptions.Exit:
                     endFilterView = true;

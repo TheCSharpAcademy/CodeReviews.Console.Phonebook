@@ -1,16 +1,20 @@
 using System.Net;
 using System.Net.Mail;
+using Microsoft.Extensions.Configuration;
+using Phonebook.Controllers;
 using Phonebook.Models;
 using Phonebook.Utilities;
 using Spectre.Console;
 
 namespace Phonebook.Services;
 
-public static class EmailService
+public class EmailService
 {
-    internal static void SendEmail()
+    private readonly PhonebookController _phonebookController = new PhonebookController();
+    
+    internal void SendEmail()
     {
-        Email email = EmailExtensions.CreateEmail();
+        Email email = EmailExtensions.CreateEmail(_phonebookController);
         try
         {
             SmtpClient smtpClient = new SmtpClient("your-host")

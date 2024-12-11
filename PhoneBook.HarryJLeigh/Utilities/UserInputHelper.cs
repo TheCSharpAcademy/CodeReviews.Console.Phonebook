@@ -41,7 +41,7 @@ public static class UserInputHelper
     internal static string GetCategory(string text)
     {
         var contactCategory = AnsiConsole.Prompt(
-                new TextPrompt<string>("Enter [green]category[/] of contact to {text}: (Friends/Family/Work)")
+                new TextPrompt<string>($"Enter [green]category[/] of contact to {text}: (Friends/Family/Work)")
                     .Validate(input =>
                         Validator.IsCategoryValid(input)
                         ? ValidationResult.Success()

@@ -13,8 +13,10 @@ public static class Util
     internal static bool ReturnToMenu()
     {
         var input = AnsiConsole.Prompt(
-            new TextPrompt<string>("Type [green]0[/] to return to the menu or press any other key to continue:")
-                .PromptStyle("yellow"));
+            new TextPrompt<string>("Type [green]0[/] to return to the menu or press enter to continue:")
+                .PromptStyle("yellow")
+                .AllowEmpty());
+            ;
 
         if (input == "0")
         {
