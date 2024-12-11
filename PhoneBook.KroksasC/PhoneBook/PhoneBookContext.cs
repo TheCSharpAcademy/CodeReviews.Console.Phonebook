@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PhoneBook.Helpers;
 using PhoneBook.Models;
+
 
 namespace PhoneBook
 {
@@ -8,7 +10,7 @@ namespace PhoneBook
         public DbSet<Contact> Contacts {  get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
-            => optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=PhoneBookDB;Integrated Security=True;TrustServerCertificate=True;");
+            => optionsBuilder.UseSqlServer(DataAccesHelper.CnnVal("Phonebook"));
 
         public static void InitializeDatabase()
         {

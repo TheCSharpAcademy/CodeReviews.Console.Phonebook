@@ -1,44 +1,39 @@
-﻿using MailKit.Net.Smtp;
-using MimeKit;
+﻿using System.Configuration;
+using System.Net;
+using System.Net.Mail;
 
 namespace PhoneBook.Services
 {
     internal class EmailService
     {
-        public static void SendEmail(string To, string message, string name, string Subject)
+        public static void SendEmail(MailMessage email)
         {
+            var fromEmail = ConfigurationManager.AppSettings.Get("email");
+            var fromEmailPassword = ConfigurationManager.AppSettings.Get("emailPassword");
+
+            // sets up the Smtp Client
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+            // tells Smtp Client that specific credentials will be used
+            smtp.UseDefaultCredentials = false;
+
+            // required, email needs to be secure/encrypted
+            smtp.EnableSsl = true;
+            // fromEmail credentials set
+            smtp.Credentials = new NetworkCredential(fromEmail, fromEmailPassword);
+
             try
             {
-                using var email = new MimeMessage();
-                email.From.Add(new MailboxAddress("Gustas", "gustas@gmail.com"));
-                email.To.Add(new MailboxAddress($"{name}", $"{To}"));
-
-                email.Subject = $"{Subject}";
-
-                var builder = new BodyBuilder()
-                {
-                    TextBody = message
-                };
-
-                email.Body = builder.ToMessageBody();
-
-                using var smtp = new SmtpClient();
-
-                smtp.Connect("sandbox.smtp.mailtrap.io", 587, false);
-
-                smtp.Authenticate("your_username", "your_password");//You need to create mailtrap account and enter username and password that
-                                                                    //are given in account to authenticate
-
                 smtp.Send(email);
-                smtp.Disconnect(true);
-
+                Console.WriteLine("Email sent successfully!");
+                Console.ReadLine();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ". Press any key to continue");
+                Console.WriteLine($"Error: {ex}");
                 Console.ReadLine();
             }
-
         }
     }
 }

@@ -9,7 +9,8 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/Phonebook.Forser/bin/Debug/net7.0/Phonebook.Forser.dll",
+      "program": "${workspaceFolder}/Phonebook.Forser/bin/Debug/net7.0/Phonebook.Forser.dll
+        ",
       "args": [],
       "cwd": "${workspaceFolder}/Phonebook.Forser",
       "console": "integratedTerminal",

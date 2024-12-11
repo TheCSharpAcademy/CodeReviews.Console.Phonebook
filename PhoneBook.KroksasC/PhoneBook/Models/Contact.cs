@@ -9,14 +9,5 @@
 
         // Parameterless constructor for EF Core
         public Contact() { }
-
-        // Custom constructor
-        public Contact(int id, string? name, string? email, string? phoneNumber)
-        {
-            Id = id;
-            Name = name;
-            Email = email;
-            PhoneNumber = phoneNumber;
-        }
     }
 }

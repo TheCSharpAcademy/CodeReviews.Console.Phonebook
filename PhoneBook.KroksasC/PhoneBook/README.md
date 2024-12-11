@@ -13,7 +13,12 @@
 
 ## Features
 + You can manage your contacts and do CRUD commands
-+ You can send emails from the app(you need to create mailtrap account and write in code given password and username)
++ You can send emails from the app, if you want to do this: 
+
+	Additionally go to the Google Account > Security page and look at the Signing in to Google > 2-Step Verification setting.
+	
+	If it is enabled, then you have to generate a password allowing .NET to bypass the 2-Step Verification. To do this, click on Signing in to Google > App passwords, select app = Mail, and device = Windows Computer, and finally generate the password. Use the generated password in the fromPassword constant instead of your standard Gmail password.
+    If it is disabled, then you have to turn on Less secure app access, which is not recommended! So better enable the 2-Step verification.
 
 ## Challenges
 + Needed some time to understand how to work with EF

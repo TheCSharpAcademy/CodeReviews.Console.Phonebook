@@ -7,20 +7,18 @@ namespace PhoneBook
     {
         public static void InsertContact()
         {
-            string? name = "";
-            string? email = "";
-            string? num = "";
-            PhoneBookService.GetUserInput(ref name, ref email, ref num);
-
+            string? name = UI.GetContactName();
+            string? email = UI.GetContactEmail();
+            string? phone = UI.GetContactPhone();
             using var db = new PhoneBookContext();
-            db.Add(new Contact{ Name = name, Email = email, PhoneNumber = num });
+            db.Add(new Contact{ Name = name, Email = email, PhoneNumber = phone });
             db.SaveChanges();
 
         }
         public static void RemoveContact() 
         {
             using var db = new PhoneBookContext();
-            var option = PhoneBookService.GetContactOptionInput();
+            var option = UI.GetContactOptionInput();
             db.Remove(option);
             db.SaveChanges();
         }
@@ -33,7 +31,7 @@ namespace PhoneBook
         }
         public static void ViewContacts()
         {
-            PhoneBookService.ShowContactTable(GetContactsList());
+            UI.ShowContactTable(GetContactsList());
         }
         internal static Contact GetContactById(int id)
         {
@@ -46,10 +44,6 @@ namespace PhoneBook
             using var db = new PhoneBookContext();
             var contacts = db.Contacts.ToList();
             return contacts;
-        }
-        public static void SendEmail()
-        {
-            PhoneBookService.GetEmailInput();
         }
     }
 }

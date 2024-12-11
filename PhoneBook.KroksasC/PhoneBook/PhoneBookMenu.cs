@@ -1,4 +1,6 @@
-﻿namespace PhoneBook
+﻿using PhoneBook.Services;
+
+namespace PhoneBook
 {
     internal static class PhoneBookMenu
     {
@@ -31,13 +33,13 @@
                         PhoneBookController.ViewContacts();
                         break;
                     case "e":
-                        PhoneBookController.SendEmail();
+                        PhoneBookService.SendEmail();
                         break;
                     case "f":
                         Environment.Exit(0);
                         break;
                     default:
-                        Console.WriteLine("Wrong option. Try again");
+                        Console.WriteLine("Invalid option. Try again");
                         Console.ReadLine();
                         break;
                 }
