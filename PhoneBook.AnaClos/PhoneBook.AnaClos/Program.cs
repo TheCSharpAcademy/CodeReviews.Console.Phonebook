@@ -19,8 +19,9 @@ var connectionString = configuration.GetConnectionString("PhoneBookDatabase");
 
 var consoleController = new ConsoleController();
 var databaseController = new DataBaseController(connectionString);
-var contactsController = new ContactsController();
+
 var categoriesController = new CategoriesController(consoleController, databaseController);
+var contactsController = new ContactsController(consoleController, databaseController,categoriesController);
 
 //var databaseController = new DataBaseController();
 

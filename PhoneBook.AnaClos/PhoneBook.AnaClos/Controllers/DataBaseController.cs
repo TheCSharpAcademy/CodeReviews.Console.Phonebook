@@ -19,7 +19,7 @@ public class DataBaseController : DbContext
 
     public DataBaseController()
     {
-        _connectionString = "Server=localhost;Database=PhoneBook;Trusted_Connection=True;TrustServerCertificate=True;";
+        _connectionString = "Server=DESKTOP-H645C4H\\SQLEXPRESS;Database=PhoneBook;Trusted_Connection=True;TrustServerCertificate=True;";
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -29,20 +29,30 @@ public class DataBaseController : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Category>().ToTable("Category");
+        modelBuilder.Entity<Contact>().ToTable("Contact");
         modelBuilder.Entity<Contact>()
-        .HasOne(c => c.Category)
-        .WithMany(c => c.Contacts)
-        .HasForeignKey(c => c.IdCategory)
-        .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Contact>()
-        .HasIndex(c => c.Name)
-        .IsUnique();
+            .HasOne(c => c.Category)
+            .WithMany(c => c.Contacts)
+            .HasForeignKey(c => c.IdCategory)
+            .OnDelete(DeleteBehavior.Restrict); // Configuración de la restricción
 
         modelBuilder.Entity<Category>()
         .HasIndex(c => c.Name)
-        .IsUnique();
+        .IsUnique(); // Configuración del índice único
 
-        base.OnModelCreating(modelBuilder);
+        //modelBuilder.Entity<Contact>()
+        //.HasOne(c => c.Category)
+        //.WithMany(c => c.Contacts)
+        //.HasForeignKey(c => c.IdCategory)
+        //.OnDelete(DeleteBehavior.Cascade);
+
+        //modelBuilder.Entity<Contact>()
+        //.HasIndex(c => c.Name)
+        //.IsUnique();
+
+
+
+        //base.OnModelCreating(modelBuilder);
     }
 }

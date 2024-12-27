@@ -11,8 +11,8 @@ using PhoneBook.AnaClos.Controllers;
 namespace PhoneBook.AnaClos.Migrations
 {
     [DbContext(typeof(DataBaseController))]
-    [Migration("20241207132455_initial-migration")]
-    partial class initialmigration
+    [Migration("20241225233801_InitDB")]
+    partial class InitDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,19 +26,22 @@ namespace PhoneBook.AnaClos.Migrations
 
             modelBuilder.Entity("PhoneBook.AnaClos.Models.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("IdCategory")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCategory"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdCategory");
 
-                    b.ToTable("Categories");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("PhoneBook.AnaClos.Models.Contact", b =>
@@ -48,9 +51,6 @@ namespace PhoneBook.AnaClos.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -61,7 +61,7 @@ namespace PhoneBook.AnaClos.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -69,16 +69,23 @@ namespace PhoneBook.AnaClos.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("IdCategory");
 
-                    b.ToTable("Contacts");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Contact", (string)null);
                 });
 
             modelBuilder.Entity("PhoneBook.AnaClos.Models.Contact", b =>
                 {
-                    b.HasOne("PhoneBook.AnaClos.Models.Category", null)
+                    b.HasOne("PhoneBook.AnaClos.Models.Category", "Category")
                         .WithMany("Contacts")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("IdCategory")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("PhoneBook.AnaClos.Models.Category", b =>

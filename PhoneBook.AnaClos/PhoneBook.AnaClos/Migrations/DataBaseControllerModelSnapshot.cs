@@ -23,22 +23,22 @@ namespace PhoneBook.AnaClos.Migrations
 
             modelBuilder.Entity("PhoneBook.AnaClos.Models.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("IdCategory")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCategory"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdCategory");
 
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("PhoneBook.AnaClos.Models.Contact", b =>
@@ -71,7 +71,7 @@ namespace PhoneBook.AnaClos.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Contacts");
+                    b.ToTable("Contact", (string)null);
                 });
 
             modelBuilder.Entity("PhoneBook.AnaClos.Models.Contact", b =>
@@ -79,7 +79,7 @@ namespace PhoneBook.AnaClos.Migrations
                     b.HasOne("PhoneBook.AnaClos.Models.Category", "Category")
                         .WithMany("Contacts")
                         .HasForeignKey("IdCategory")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Category");
