@@ -18,6 +18,7 @@ public class CategoriesController : IController
     {
         string name = _consoleController.GetString("Category's name");
         Category category = new Category { Name = name };
+
         try
         {
             _dataBaseController.Add(category);
@@ -40,9 +41,9 @@ public class CategoriesController : IController
         Category category = GetCategoryFromMenu("Select a category to delete");
         if (category == null)
         {
-            //_consoleController.MessageAndPressKey("There is no Category to delete.", "Red");
             return;
         }
+
         try
         {
             _dataBaseController.Remove(category);
@@ -64,7 +65,6 @@ public class CategoriesController : IController
         Category category = GetCategoryFromMenu("Select a category to update");
         if (category == null)
         {
-            //_consoleController.MessageAndPressKey("There is no Category to update.", "Red");
             return;
         }
         string newName = _consoleController.GetString("New category's name");
@@ -91,7 +91,6 @@ public class CategoriesController : IController
         Category category = GetCategoryFromMenu("Select a category to view details");
         if (category == null)
         {
-            //_consoleController.MessageAndPressKey("There is no Category to view details.", "Red");
             return;
         }
 
@@ -100,7 +99,6 @@ public class CategoriesController : IController
         var recordCategories = CategoryToProperties(category);
         _consoleController.ShowTable("Category", columns, recordCategories);
         _consoleController.PressKey("Press a key to continue.");
-
     }
 
     public void ViewAll()
@@ -154,7 +152,6 @@ public class CategoriesController : IController
         return tableRecord;
     }
 
-
     public string GetNameFromMenu(string title)
     {
         var categories = _dataBaseController.Categories.ToList<Category>();
@@ -171,6 +168,7 @@ public class CategoriesController : IController
             _consoleController.MessageAndPressKey("There is no Category to select.", "Red");
             return null;
         }  
+
         List<string> stringCategories = CategoryToString(categories);
         stringCategories.Add("Exit Menu");
 
@@ -179,6 +177,7 @@ public class CategoriesController : IController
         {
             return null;
         }
+
         var category = _dataBaseController.Categories.SingleOrDefault(x => x.Name == name);
         return category;
     }

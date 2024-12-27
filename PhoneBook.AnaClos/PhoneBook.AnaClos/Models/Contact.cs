@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-
 namespace PhoneBook.AnaClos.Models;
+
 [Index(nameof(Name), IsUnique = true)]
 public class Contact
 {

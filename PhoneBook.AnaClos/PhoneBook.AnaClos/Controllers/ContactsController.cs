@@ -11,6 +11,7 @@ public class ContactsController: IController
     DataBaseController _dataBaseController;
     CategoriesController _categoriesController;
     ContactValidator _validator = new();
+
     public ContactsController(ConsoleController consoleController, DataBaseController dataBaseController, CategoriesController categoriesController)
     {
         _consoleController = consoleController;
@@ -26,7 +27,6 @@ public class ContactsController: IController
         Category category = _categoriesController.GetCategoryFromMenu("Contact Category");
         if (category == null)
         {
-            //_consoleController.MessageAndPressKey("There is no Category to select.", "Red");
             return;
         }
 
@@ -89,7 +89,6 @@ public class ContactsController: IController
         Contact contact = GetContactFromMenu("Select a contact to update");
         if (contact == null)
         {
-            //_consoleController.MessageAndPressKey("There is no Contact to update.", "Red");
             return;
         }
         List<string> updateOptions = new List<string> { "Update Name", "Update Category", "Update Email", "Update Phone", "Exit Update"};
@@ -102,24 +101,19 @@ public class ContactsController: IController
                     UpdateName(contact);
                     break;
                 case "Update Category":
-                    UpdateCategory(contact);
-                    
+                    UpdateCategory(contact);                    
                     break;
                 case "Update Email":
                     UpdateEmail(contact);                    
                     break;
                 case "Update Phone":
-                    UpdatePhone(contact);
-                    
+                    UpdatePhone(contact);                    
                     break;
                 case "Exit Update":
-
                     break;
             }
 
-        } while (option != "Exit Update");   
-        
-        
+        } while (option != "Exit Update");            
     }
 
     public void View()
@@ -127,7 +121,6 @@ public class ContactsController: IController
         Contact contact = GetContactFromMenu("Select a contact to view details");
         if (contact == null)
         {
-            //_consoleController.MessageAndPressKey("There is no Contact to view details.", "Red");
             return;
         }
 
@@ -136,7 +129,6 @@ public class ContactsController: IController
         var recordContacts = ContactToProperties(contact);
         _consoleController.ShowTable("Contact", columns, recordContacts);
         _consoleController.PressKey("Press a key to continue.");
-
     }
 
     public void ViewAll()
@@ -152,6 +144,7 @@ public class ContactsController: IController
         _consoleController.ShowTable("Contacts", columns, recordContacts);
         _consoleController.PressKey("Press a key to continue.");
     }
+
     public Contact GetContactsFromMenu(string title)
     {
         var contacts = _dataBaseController.Contacts.Include(n => n.Category).ToList<Contact>();
@@ -217,6 +210,7 @@ public class ContactsController: IController
         }
         return tableRecord;
     }
+
     public Contact GetContactFromMenu(string title)
     {
         var contacts = _dataBaseController.Contacts.Include(n => n.Category).ToList<Contact>();
@@ -263,6 +257,7 @@ public class ContactsController: IController
             _dataBaseController.ChangeTracker.Clear();
         }
     }
+
     private void UpdateCategory(Contact contact)
     {
         Category newCategory = _categoriesController.GetCategoryFromMenu("Contact Category");
@@ -282,6 +277,7 @@ public class ContactsController: IController
             _consoleController.MessageAndPressKey(ex.Message.ToString(), "red");
         }        
     }
+
     private void UpdateEmail(Contact contact)
     {
         string newEmail;
@@ -294,6 +290,7 @@ public class ContactsController: IController
             contact.Email = newEmail;
         }
     }
+
     private void UpdatePhone(Contact contact)
     {
         string newPhoneNumber;
@@ -301,6 +298,7 @@ public class ContactsController: IController
         {
             newPhoneNumber = _consoleController.GetString($"Contact Phone Number - Only numbers, 10-15 characters (0 to keep the value {contact.PhoneNumber})");
         } while (newPhoneNumber != "0" && !_validator.PhoneValidator(newPhoneNumber));
+
         if (newPhoneNumber != "0")
         {
             contact.PhoneNumber = newPhoneNumber;

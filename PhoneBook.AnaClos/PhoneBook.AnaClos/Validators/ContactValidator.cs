@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace PhoneBook.AnaClos.Validators
 {
@@ -14,9 +9,10 @@ namespace PhoneBook.AnaClos.Validators
             string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             return Regex.IsMatch(email, pattern);
         }
+
         public bool PhoneValidator(string phoneNumber)
         {
-            string pattern = @"^\d{10}$";
+            string pattern = @"^\d{10,15}$";
             return Regex.IsMatch(phoneNumber, pattern);
         }
     }

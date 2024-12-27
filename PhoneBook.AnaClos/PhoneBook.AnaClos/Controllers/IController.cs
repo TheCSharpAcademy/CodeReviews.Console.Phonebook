@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PhoneBook.AnaClos.Controllers;
+﻿namespace PhoneBook.AnaClos.Controllers;
 
 public interface IController
 {
