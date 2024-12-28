@@ -1,11 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PhoneBook.AnaClos.Controllers;
-using System.Net;
 
 List<string> mainOptions = new List<string> { "Manage Categories", "Manage Contacts", "Exit Program" };
 List<string> menuOptions = new List<string> { "Add", "Delete", "Update", "View", "View All", "Exit Menu" };
 
-ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 
 var builder = new ConfigurationBuilder()
 .SetBasePath(Directory.GetCurrentDirectory())

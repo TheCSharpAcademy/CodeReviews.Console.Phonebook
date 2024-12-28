@@ -83,8 +83,6 @@ public class ContactsController: IController
 
     public void Update()
     {
-        string newEmail;
-        string newPhoneNumber;
         string option;
         Contact contact = GetContactFromMenu("Select a contact to update");
         if (contact == null)
@@ -164,10 +162,9 @@ public class ContactsController: IController
     public List<string> ContactToString(List<Contact> contacts)
     {
         var tableRecord = new List<string>();
-        var records = contacts.Select(c => c.Name).ToList();
+
         foreach (var contact in contacts)
         {
-            var record = contact.Name;
             tableRecord.Add(contact.Name);
         }
         return tableRecord;
