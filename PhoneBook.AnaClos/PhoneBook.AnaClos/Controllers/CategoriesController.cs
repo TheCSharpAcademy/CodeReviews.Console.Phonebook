@@ -143,10 +143,9 @@ public class CategoriesController : IController
     public List<string> CategoryToString(List<Category> categories)
     {
         var tableRecord = new List<string>();
-        var records = categories.Select(c => c.Name).ToList();
+
         foreach (var category in categories)
         {
-            var record = category.Name;
             tableRecord.Add(category.Name);
         }
         return tableRecord;
