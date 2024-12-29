@@ -1,3 +1,0 @@
-﻿using PhoneBookCarDioLogics;
-
-UserInterface.MainMenu();
