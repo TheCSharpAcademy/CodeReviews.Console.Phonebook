@@ -12,7 +12,7 @@ namespace PhoneBook.Bina28.Migrations
 {
     [DbContext(typeof(PhoneBookContext))]
     [Migration("20241218185050_initial-migration")]
-    partial class initialmigration
+    partial class Initialmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
