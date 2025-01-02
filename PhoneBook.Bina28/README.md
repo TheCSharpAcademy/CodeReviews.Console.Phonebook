@@ -1,11 +1,9 @@
-﻿
-<?xml version="1.0" encoding="utf-8" ?> 
+﻿# PhoneBook Application
 
-# PhoneBook Application
-
-This is a console-based PhoneBook application built using C# and Entity Framework Core (EF Core). 
-The app allows users to perform CRUD (Create, Read, Update, Delete) operations on contacts, including their name, 
-phone number, and email.
+This is a console-based PhoneBook application built using C# 
+and Entity Framework Core (EF Core). 
+The app allows users to perform CRUD (Create, Read, Update, Delete) 
+operations on contacts, including their name, phone number, and email.
 
 ## Features
 
@@ -33,28 +31,41 @@ Before running the application, ensure the following:
 ## Installation
 
 1. Clone the repository:
+
     ```bash
+
     git clone https://github.com/Bina28/CodeReviews.Console.Phonebook.git
     cd PhoneBook
+
     ```
 
 2. Restore dependencies:
+
     ```bash
+
     dotnet restore
+
     ```
 
 3. Update the connection string:
     - Open the `PhoneBookContext` class and modify the connection string inside the `OnConfiguring` method:
     
     ```csharp
+
     optionsBuilder.UseSqlServer("Server=your_server_name;Database=your_database_name;Trusted_Connection=True;");
+
     ```
 
-    Replace `your_server_name` with the appropriate server address and `your_database_name` with the database you want to use. Make the same in the appsettings.json.
+    Replace `your_server_name` with the appropriate server address and
+    `your_database_name` with the database you want to use.
+    Make the same in the appsettings.json.
 
 4. Run migrations to create the database and schema:
+
     ```bash
+
     dotnet ef database update
+
     ```
 
 ## Running the Application
@@ -63,10 +74,14 @@ To run the application:
 
 1. Open a terminal in the project folder.
 2. Run the application:
+
     ```bash
+
     dotnet run
+
     ```
-3. Follow the on-screen prompts to interact with the application (add, remove, update, view contacts).
+3. Follow the on-screen prompts to interact with the application 
+(add, remove, update, view contacts).
 
 ## Commands
 
