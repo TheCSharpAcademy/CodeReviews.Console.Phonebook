@@ -4,9 +4,9 @@
 
 namespace PhoneBook.Bina28.Migrations
 {
-    /// <inheritdoc />
-    public partial class initialmigration : Migration
-    {
+	/// <inheritdoc />
+	public partial class Initialmigration : Migration
+	{
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
