@@ -1,7 +1,8 @@
-﻿# PhoneBook Application
+﻿
+# PhoneBook Application
 
 This is a console-based PhoneBook application built using C# 
-and Entity Framework Core (EF Core). 
+and Entity Framework Core (EF Core).
 The app allows users to perform CRUD (Create, Read, Update, Delete) 
 operations on contacts, including their name, phone number, and email.
 
@@ -18,7 +19,6 @@ operations on contacts, including their name, phone number, and email.
 - C#
 - .NET 6 or later
 - Entity Framework Core
-- SQL Server 
 - AnsiConsole (for command-line interface)
 
 ## Requirements
@@ -48,7 +48,8 @@ Before running the application, ensure the following:
     ```
 
 3. Update the connection string:
-    - Open the `PhoneBookContext` class and modify the connection string inside the `OnConfiguring` method:
+    - Open the `PhoneBookContext` class and modify the connection 
+    string inside the `OnConfiguring` method:
     
     ```csharp
 
@@ -80,6 +81,7 @@ To run the application:
     dotnet run
 
     ```
+
 3. Follow the on-screen prompts to interact with the application 
 (add, remove, update, view contacts).
 
