@@ -2,41 +2,35 @@
 
 internal class PhoneBookController
 {
-	internal static void AddData(PhoneBook phoneBook)
+	internal static void Add(PhoneBook phoneBook)
 	{
-
 		using var db = new PhoneBookContext();
 		db.Add(phoneBook);
 		db.SaveChanges();
 	}
 
-	internal static void RemoveData(PhoneBook phoneBook)
-	{
+	internal static void Remove(PhoneBook phoneBook)
+	{		
 		using var db = new PhoneBookContext();
 		db.Remove(phoneBook);
-		db.SaveChanges();
+		db.SaveChanges();			
 	}
 
-	internal static List<PhoneBook> ShowAllData()
+	internal static List<PhoneBook> Get()
 	{
 		using var db = new PhoneBookContext();
 		var phonesData = db.PhoneBooks.ToList<PhoneBook>();
 		return phonesData;
 	}
 
-	internal static void ShowData()
-	{
-		throw new NotImplementedException();
-	}
-
-	internal static void UpdateData(PhoneBook phoneBook)
+	internal static void Update(PhoneBook phoneBook)
 	{
 		using var db = new PhoneBookContext();
 		db.Update(phoneBook);
 		db.SaveChanges();
 	}
 
-	internal static PhoneBook GetPhoneDataById(int id)
+	internal static PhoneBook? GetById(int id)
 	{
 		using var db = new PhoneBookContext();
 		var phoneData = db.PhoneBooks.SingleOrDefault(x => x.Id == id);

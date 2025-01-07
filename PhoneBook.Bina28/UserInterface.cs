@@ -40,4 +40,20 @@ Email: {phoneBook.Email}");
 		Console.ReadLine();
 		Console.Clear();
 	}
+
+	static internal void UpdateInput(PhoneBook contact)
+	{
+		contact.Name = AnsiConsole.Confirm("Update name?")
+		? AnsiConsole.Ask<string>("Enter Name: ")
+		: contact.Name;
+		contact.PhoneNumber = AnsiConsole.Confirm("Update phone number?")
+		? Validation.GetValidPhoneNumber()
+		: contact.PhoneNumber;
+		contact.Email = AnsiConsole.Confirm("Update Email?")
+		? Validation.GetValidEmail()
+		: contact.Email;
+		PhoneBookController.Update(contact);
+		AnsiConsole.MarkupLine("[green]Contact updated successfully![/]");
+		
+	}
 }

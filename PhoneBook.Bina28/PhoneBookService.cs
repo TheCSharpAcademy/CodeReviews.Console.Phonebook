@@ -3,64 +3,78 @@
 namespace PhoneBook.Bina28;
 internal class PhoneBookService
 {
-	internal static async void AddData()
-	{   var phoneBook = new PhoneBook();
-	phoneBook.Name = AnsiConsole.Ask<string>("Enter Name: ");
+	internal static void AddInput()
+	{
+		var phoneBook = new PhoneBook();
+		phoneBook.Name = AnsiConsole.Ask<string>("Enter Name: ");
 		phoneBook.PhoneNumber = Validation.GetValidPhoneNumber();
 		phoneBook.Email = Validation.GetValidEmail();
-		PhoneBookController.AddData(phoneBook);
+		PhoneBookController.Add(phoneBook);
 		AnsiConsole.MarkupLine("[green]Contact added successfully![/]");
 		AwaitKeyPress();
 	}
 
-	internal static void DeleteContact()
+	internal static void DeleteInput()
 	{
 		var contact = GetPhoneBookOptionInput();
-		PhoneBookController.RemoveData(contact);
+		if (contact == null)
+		{
+			Console.WriteLine( "The contact to be removed does not exist.");
+			AwaitKeyPress();
+			return;
+		}
+		PhoneBookController.Remove(contact);
 		AnsiConsole.MarkupLine("[green]Contact removed successfully![/]");
 		AwaitKeyPress();
 	}
-	static private PhoneBook GetPhoneBookOptionInput()
+	static private PhoneBook? GetPhoneBookOptionInput()
 	{
-		var phoneBookData = PhoneBookController.ShowAllData();
+		var phoneBookData = PhoneBookController.Get();
+		if (!phoneBookData.Any())
+		{
+			
+			return null;
+		}
 		var phoneBookArray= phoneBookData.Select(x => x.Name).ToArray();
 		var phoneBookOption = AnsiConsole.Prompt(
 			new SelectionPrompt<string>()
 				.Title("Select a contact: ")				
 				.AddChoices(phoneBookArray)
 		);
-		var id=phoneBookData.Single(x => x.Name == phoneBookOption).Id;
-		var phoneBook = PhoneBookController.GetPhoneDataById(id);
+		var id=phoneBookData.First(x => x.Name == phoneBookOption).Id;
+		var phoneBook = PhoneBookController.GetById(id);
 		return phoneBook;
 	}
 
 	internal static void GetContacts()
 	{
 		Console.Clear();
-		var phoneBookData = PhoneBookController.ShowAllData();
+		var phoneBookData = PhoneBookController.Get();
 		UserInterface.ShowPhonebookTable(phoneBookData);
 	}
 
-	internal static void GetContact()
+	internal static void GetContactInput()
 	{
 		var phoneBookSingleData = GetPhoneBookOptionInput();
+		if (phoneBookSingleData==null)
+		{
+			Console.WriteLine("The contact does not exist.");
+			AwaitKeyPress();
+			return;
+		}
 		UserInterface.ShowContact(phoneBookSingleData);
 	}
 
-	internal static void UpdateContact()
+	internal static void UpdateInput()
 	{
 		var contact = GetPhoneBookOptionInput();
-	    contact.Name = AnsiConsole.Confirm("Update name?")
-		? AnsiConsole.Ask<string>("Enter Name: ")
-		: contact.Name;
-		contact.PhoneNumber = AnsiConsole.Confirm("Update phone number?")
-		? Validation.GetValidPhoneNumber()
-		:contact.PhoneNumber;
-		contact.Email = AnsiConsole.Confirm("Update Email?")
-		? Validation.GetValidEmail()
-		:contact.Email;
-		PhoneBookController.UpdateData(contact);
-		AnsiConsole.MarkupLine("[green]Contact updated successfully![/]");
+		if (contact == null)
+		{
+			Console.WriteLine("The contact to be update does not exist.");
+			AwaitKeyPress();
+			return;
+		}
+		UserInterface.UpdateInput(contact);
 		AwaitKeyPress();
 	}
 
