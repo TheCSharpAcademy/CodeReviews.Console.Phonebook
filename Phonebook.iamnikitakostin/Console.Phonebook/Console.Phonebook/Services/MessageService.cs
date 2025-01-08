@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Net.Mail;
+﻿using System.Net.Mail;
 using Console.Phonebook.Controllers;
 using Console.Phonebook.Validations;
 using Microsoft.Extensions.Configuration;
@@ -72,7 +71,7 @@ internal class MessageService : ConsoleController
             smtpClient.Host = "google.com";
             smtpClient.Port = 587;
             smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential("email", "password");
+            smtpClient.Credentials = new System.Net.NetworkCredential("email", "password");
             smtpClient.EnableSsl = true;
 
             smtpClient.Send(mailMessage);
@@ -86,7 +85,7 @@ internal class MessageService : ConsoleController
         }
     }
 
-    public bool SendSMS(string receiver, string text)
+    public bool SendSms(string receiver, string text)
     {
         string accountId = config["Accounts:Phone:TwilioAccountSid"];
         string token = config["Accounts:Phone:TwilioAuthToken"];
@@ -96,7 +95,7 @@ internal class MessageService : ConsoleController
         {
             TwilioClient.Init(accountId, token);
 
-            var message = MessageResource.Create(
+            MessageResource.Create(
                 to: new PhoneNumber(receiver),
                 from: new PhoneNumber(sender),
                 body: text

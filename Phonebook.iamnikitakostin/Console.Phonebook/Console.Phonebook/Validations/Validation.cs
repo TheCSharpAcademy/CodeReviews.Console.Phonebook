@@ -5,46 +5,46 @@ namespace Console.Phonebook.Validations;
 
 internal class Validation: ConsoleController
 {
-    internal static bool Email(string email)
+    internal static bool Email(string emailAddress)
     {
-        if (email == null)
+        if (emailAddress == null)
         {
             ErrorMessage("Email cannot be empty");
             return false;
         }
-        else if (email.Length < 4)
+        else if (emailAddress.Length < 4)
         {
             ErrorMessage("Email cannot have less than 5 characters");
             return false;
         }
-        else if (!email.Contains('@'))
+        else if (!emailAddress.Contains('@'))
         {
             ErrorMessage("You must have a @ in the email");
             return false;
         }
-        else if (!Regex.IsMatch(email, "^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$")) { 
+        else if (!Regex.IsMatch(emailAddress, "^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$")) { 
             ErrorMessage("Your domain is incorrect. It should have the following format '@abc.com'");
             return false;
         }
         return true;
     }
-    internal static bool PhoneNumber(string phoneNumber)
+    internal static bool PhoneNumber(string phone)
     {
-        if (phoneNumber == null)
+        if (phone == null)
         {
             ErrorMessage("Phone Number cannot be empty");
             return false;
         }
-        else if (phoneNumber.Length < 6)
+        else if (phone.Length < 6)
         {
             ErrorMessage("Phone Number cannot have less than 7 characters");
             return false;
         }
-        else if (!phoneNumber.StartsWith('+'))
+        else if (!phone.StartsWith('+'))
         {
             ErrorMessage("You must start a Phone Number with a +");
             return false;
-        } else if (!Regex.IsMatch(phoneNumber, "^\\+[0-9]+$"))
+        } else if (!Regex.IsMatch(phone, "^\\+[0-9]+$"))
         {
             ErrorMessage("The format of the phone number is incorrect.");
             return false;

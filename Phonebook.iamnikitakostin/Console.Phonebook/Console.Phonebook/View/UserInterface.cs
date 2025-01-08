@@ -260,7 +260,7 @@ internal class UserInterface : ConsoleController
                     SendEmail();
                     break;
                 case SendMessageOptions.SMS:
-                    SendSMS();
+                    SendSms();
                     break;
                 default:
                     return;
@@ -268,7 +268,7 @@ internal class UserInterface : ConsoleController
         }
     }
 
-    internal void SendSMS()
+    internal void SendSms()
     {
         bool isPhoneConfigured = _messageService.CheckIfPhoneConfigured();
 
@@ -285,7 +285,7 @@ internal class UserInterface : ConsoleController
 
         string text = AnsiConsole.Prompt(new TextPrompt<string>("Enter text of the SMS:").Validate(e => e.Length > 1));
 
-        bool isSuccess = _messageService.SendSMS(contact.Email, text);
+        bool isSuccess = _messageService.SendSms(contact.Email, text);
 
         if (isSuccess)
             SuccessMessage("Message has been sent. Press any button to continue...");
