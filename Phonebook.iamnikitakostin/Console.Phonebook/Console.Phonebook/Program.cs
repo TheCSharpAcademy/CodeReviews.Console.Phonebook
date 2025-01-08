@@ -4,7 +4,6 @@ using Console.Phonebook.Services;
 using Console.Phonebook.View;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Console.Phonebook;
 
@@ -31,8 +30,10 @@ internal class Program : ConsoleController
         context.Database.Migrate();
 
         var contactService = new ContactService(context);
+        var categoryService = new CategoryService(context);
+        var messageService = new MessageService();
 
-        UserInterface userInterface = new UserInterface(contactService);
+        UserInterface userInterface = new UserInterface(contactService, categoryService, messageService);
 
         userInterface.MainMenu();
     }

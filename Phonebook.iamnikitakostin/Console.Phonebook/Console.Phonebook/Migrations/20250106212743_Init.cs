@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Console.Phonebook.Migrations
 {
     /// <inheritdoc />
-    public partial class Init1 : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -46,6 +46,11 @@ namespace Console.Phonebook.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 1, "General" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contacts_CategoryId",

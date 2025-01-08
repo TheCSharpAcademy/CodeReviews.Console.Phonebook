@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Console.Phonebook;
+﻿namespace Console.Phonebook;
 
 internal enum MainMenuOptions
 {
     CurrentContacts,
     AddContact,
-    About,
+    ManageCategories,
+    SendMessage,
     Quit
 }
 
@@ -26,11 +21,21 @@ internal enum EditMenuOptions
 {
     Name,
     Email,
-    PhoneNumber
+    PhoneNumber,
+    Category,
+    Back
 }
 
 internal enum SendMessageOptions
 {
     Email,
-    SMS
+    SMS,
+    Back
+}
+
+internal enum ManageCategoriesOptions
+{
+    Add,
+    Delete,
+    Back
 }

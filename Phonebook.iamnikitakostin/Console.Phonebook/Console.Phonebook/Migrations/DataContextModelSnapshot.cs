@@ -37,6 +37,13 @@ namespace Console.Phonebook.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "General"
+                        });
                 });
 
             modelBuilder.Entity("Console.Phonebook.Models.Contact", b =>

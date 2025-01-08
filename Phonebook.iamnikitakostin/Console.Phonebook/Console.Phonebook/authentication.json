@@ -1,11 +1,4 @@
 {
-    "AppSettings": {
-        "AppName": "Phonebook",
-        "Version": "1.0.0"
-    },
-    "ConnectionStrings": {
-        "DefaultConnection": "Server=.;Database=Phonebook;Trusted_Connection=True;Encrypt=false;"
-    },
     "Accounts": {
         "Email": {
             //Switch IsActive to 1 if you would like to use sending messages by email
@@ -20,7 +13,8 @@
             //Switch IsActive to 1 if you would like to use sending messages by phone
             "IsActive": "0",
             "TwilioAccountSid": "1234",
-            "TwilioAuthToken": "XxXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+            "TwilioAuthToken": "XxXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+            "TwilioPhoneNumber":  "+19999999999"
         }
     }
 }

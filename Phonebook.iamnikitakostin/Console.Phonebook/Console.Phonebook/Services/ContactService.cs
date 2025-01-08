@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Console.Phonebook.Controllers;
 using Console.Phonebook.Data;
 using Console.Phonebook.Models;
-using Spectre.Console;
 
 namespace Console.Phonebook.Services;
-internal class ContactService
+internal class ContactService : ConsoleController
 {
     private readonly DataContext _context;
 
@@ -40,7 +35,7 @@ internal class ContactService
         }
         catch (Exception ex)
         {
-            AnsiConsole.WriteLine($"An error occurred: {ex.Message}");
+            ErrorMessage($"An error occurred: {ex.Message}");
             return false;
         }
     }
@@ -51,11 +46,12 @@ internal class ContactService
         {
             var contact = GetById(id);
             _context.Contacts.Remove(contact);
+            _context.SaveChanges();
             return true;
         }
         catch (Exception ex)
         {
-            AnsiConsole.WriteLine($"An error occurred: {ex.Message}");
+            ErrorMessage($"An error occurred: {ex.Message}");
             return false;
         }
     }
@@ -68,12 +64,13 @@ internal class ContactService
             savedContact.Email = contact.Email;
             savedContact.PhoneNumber = contact.PhoneNumber;
             savedContact.Name = contact.Name;
+            savedContact.Category = contact.Category;
             _context.SaveChanges();
             return true;
         }
         catch (Exception ex)
         {
-            AnsiConsole.WriteLine($"An error occurred: {ex.Message}");
+            ErrorMessage($"An error occurred: {ex.Message}");
             return false;
         }
     }

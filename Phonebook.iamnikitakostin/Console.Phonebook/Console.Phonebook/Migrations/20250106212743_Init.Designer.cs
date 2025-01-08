@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Console.Phonebook.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250103234842_Init1")]
-    partial class Init1
+    [Migration("20250106212743_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,13 @@ namespace Console.Phonebook.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "General"
+                        });
                 });
 
             modelBuilder.Entity("Console.Phonebook.Models.Contact", b =>
