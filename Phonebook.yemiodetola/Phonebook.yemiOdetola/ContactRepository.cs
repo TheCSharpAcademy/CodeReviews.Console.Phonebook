@@ -49,17 +49,10 @@ public class ContactsRepository
     }
   }
 
-  public async Task UpdateContact(string name)
+  public async Task UpdateContact(Contact contact)
   {
     using (var db = new PhonebookContext())
     {
-      var contact = await GetContactByName(name);
-      var newName = AnsiConsole.Ask<string>("Enter new name: "); ;
-      var newEmail = AnsiConsole.Ask<string>("Enter new email: ");
-      var newPhoneNumber = AnsiConsole.Ask<string>("Enter new phone number: ");
-      if (!string.IsNullOrEmpty(newName)) contact.Name = newName;
-      if (!string.IsNullOrEmpty(newEmail)) contact.Email = newEmail;
-      if (!string.IsNullOrEmpty(newPhoneNumber)) contact.PhoneNumber = newPhoneNumber;
       db.Update(contact);
       await db.SaveChangesAsync();
     }

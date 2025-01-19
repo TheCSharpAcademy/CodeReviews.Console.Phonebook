@@ -73,9 +73,43 @@ public class ContactController
   public async Task UpdateContact()
   {
     string name = AnsiConsole.Ask<string>("Enter name of contact to update: ");
+    Contact? contact = null;
+
     try
     {
-      await _contactsRepository.UpdateContact(name);
+      contact = await _contactsRepository.GetContactByName(name);
+    }
+    catch (Exception ex)
+    {
+      AnsiConsole.MarkupLine($"[red]Error getting contact: {ex.Message}[/]");
+      return;
+    }
+
+    if (contact == null)
+    {
+      AnsiConsole.MarkupLine("[bold red]Contact not found![/]");
+      return;
+    }
+
+    var newName = AnsiConsole.Prompt(
+            new TextPrompt<string>($"Enter new name (current: [bold]{contact.Name}[/]):")
+                .AllowEmpty()
+        );
+    var newEmail = AnsiConsole.Prompt(
+        new TextPrompt<string>($"Enter new email (current: [bold]{contact.Email}[/]):")
+            .AllowEmpty()
+    );
+    var newPhoneNumber = AnsiConsole.Prompt(
+        new TextPrompt<string>($"Enter new phone number (current: [bold]{contact.PhoneNumber}[/]):")
+            .AllowEmpty()
+    );
+    contact.Name = string.IsNullOrEmpty(newName) ? contact.Name : newName;
+    contact.Email = string.IsNullOrEmpty(newEmail) ? contact.Email : newEmail;
+    contact.PhoneNumber = string.IsNullOrEmpty(newPhoneNumber) ? contact.PhoneNumber : newPhoneNumber;
+
+    try
+    {
+      await _contactsRepository.UpdateContact(contact);
       AnsiConsole.MarkupLine("[bold green]Contact updated successfully![/]");
     }
     catch (Exception ex)
@@ -83,6 +117,7 @@ public class ContactController
       AnsiConsole.MarkupLine($"[red]Error updating contact: {ex.Message}[/]");
     }
   }
+
   public async Task GetAllContacts()
   {
     try
