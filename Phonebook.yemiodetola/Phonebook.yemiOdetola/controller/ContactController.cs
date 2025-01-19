@@ -15,36 +15,17 @@ public class ContactController
   {
     Contact contact = new Contact();
     contact.Name = AnsiConsole.Ask<string>("FullName");
-    bool isValidEmail = false;
-    bool isValidPhoneNumber = false;
-
-    while (!isValidEmail)
+    contact.Email = Validation.GetAndValidateEmail();
+    contact.PhoneNumber = Validation.GetAndValidatePhone();
+    int? categoryId = await SelectContactCategory();
+    Console.WriteLine($"CategoryID {categoryId.Value}");
+    if (categoryId == null)
     {
-      string email = AnsiConsole.Ask<string>("Enter email address: ");
-      isValidEmail = contact.validateEmailAddress(email);
-      if (!isValidEmail)
-      {
-        AnsiConsole.MarkupLine("[red]Invalid email address. Please try again.[/]");
-      }
-      else
-      {
-        contact.Email = email;
-      }
+      AnsiConsole.MarkupLine("[red]Operation canceled: No valid category selected.[/]");
+      return;
     }
 
-    while (!isValidPhoneNumber)
-    {
-      string phoneNumber = AnsiConsole.Ask<string>("Enter phone number (ex: 09137121527): ");
-      isValidPhoneNumber = contact.validatePhoneNumber(phoneNumber);
-      if (!isValidPhoneNumber)
-      {
-        AnsiConsole.MarkupLine("[red]Incorrect phone number. Please try again.[/]");
-      }
-      else
-      {
-        contact.PhoneNumber = phoneNumber;
-      }
-    }
+    contact.CategoryId = categoryId.Value;
 
     try
     {
@@ -56,6 +37,24 @@ public class ContactController
       AnsiConsole.MarkupLine($"[red]Error adding contact: {e.Message}[/]");
     }
 
+  }
+
+  public async Task<int?> SelectContactCategory()
+  {
+    var categories = await _contactsRepository.GetCategories();
+    if (!categories.Any())
+    {
+      AnsiConsole.MarkupLine("[bold red]No categories was found![/]");
+      return null;
+    }
+
+    var categoryNames = categories.Select(x => x.Name).ToArray();
+    var categoryOption = AnsiConsole.Prompt<string>(new SelectionPrompt<string>()
+        .Title("Select category")
+        .AddChoices(categoryNames));
+    var category = categories.SingleOrDefault(x => x.Name == categoryOption);
+
+    return category.Id;
   }
   public async Task DeleteContact()
   {
@@ -99,14 +98,16 @@ public class ContactController
         .AddColumn("[bold yellow]Id[/]")
         .AddColumn("[bold darkorange]Name[/]")
         .AddColumn("[bold darkorange]Email[/]")
-        .AddColumn("[bold darkorange]Phone number[/]");
+        .AddColumn("[bold darkorange]Phone number[/]")
+        .AddColumn("[bold darkorange]Group[/]");
       foreach (Contact contact in contacts)
       {
         table.AddRow(
           $"[bold yellow]{contacts.IndexOf(contact) + 1}[/]",
           $"[bold darkorange]{contact.Name}[/]",
           $"[bold darkorange]{contact.Email}[/]",
-          $"[bold darkorange]{contact.PhoneNumber}[/]"
+          $"[bold darkorange]{contact.PhoneNumber}[/]",
+          $"[bold darkorange]{contact.Category.Name}[/]"
         );
       }
       AnsiConsole.Write(table);

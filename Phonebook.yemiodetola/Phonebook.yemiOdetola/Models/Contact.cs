@@ -7,6 +7,10 @@ public class Contact
   public string Email { get; set; }
   public string PhoneNumber { get; set; }
 
+  public int CategoryId { get; set; }
+
+    public Category Category { get; set; }
+
   public bool validatePhoneNumber(string phoneNumber)
   {
     return !string.IsNullOrEmpty(phoneNumber)

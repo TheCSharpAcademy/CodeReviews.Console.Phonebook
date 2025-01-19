@@ -10,11 +10,11 @@ public class ContactsRepository
 
   public async Task AddContact(Contact contact)
   {
-    using (var db = new ContactsContext())
+    using (var db = new PhonebookContext())
     {
       try
       {
-        db.Contacts.Add(new Contact { Name = contact.Name, PhoneNumber = contact.PhoneNumber, Email = contact.Email });
+        db.Contacts.Add(contact);
         await db.SaveChangesAsync();
         AnsiConsole.WriteLine("Contact added successfully.");
       }
@@ -28,15 +28,17 @@ public class ContactsRepository
 
   public async Task<List<Contact>> GetContacts()
   {
-    using (var db = new ContactsContext())
+    using (var db = new PhonebookContext())
     {
-      return await db.Contacts.ToListAsync();
+      return await db.Contacts
+      .Include(c => c.Category)
+      .ToListAsync();
     }
   }
 
   public async Task<Contact> GetContactByName(string name)
   {
-    using (var db = new ContactsContext())
+    using (var db = new PhonebookContext())
     {
       var contact = await db.Contacts.FirstOrDefaultAsync(c => c.Name == name);
       if (contact == null)
@@ -49,7 +51,7 @@ public class ContactsRepository
 
   public async Task UpdateContact(string name)
   {
-    using (var db = new ContactsContext())
+    using (var db = new PhonebookContext())
     {
       var contact = await GetContactByName(name);
       var newName = AnsiConsole.Ask<string>("Enter new name: "); ;
@@ -65,7 +67,7 @@ public class ContactsRepository
 
   public async Task DeleteContact(string name)
   {
-    using (var db = new ContactsContext())
+    using (var db = new PhonebookContext())
     {
       var contact = await GetContactByName(name);
       if (contact == null)
@@ -80,7 +82,7 @@ public class ContactsRepository
   {
     try
     {
-      using (var db = new ContactsContext())
+      using (var db = new PhonebookContext())
       {
         bool canConnect = await db.Database.CanConnectAsync();
 
@@ -100,5 +102,28 @@ public class ContactsRepository
     }
   }
 
+  public async Task CreateCategory(Category category)
+  {
+    using (var db = new PhonebookContext())
+    {
+      try
+      {
+        db.Categories.Add(category);
+        await db.SaveChangesAsync();
+        AnsiConsole.WriteLine("Category added successfully.");
+      }
+      catch (Exception ex)
+      {
+        AnsiConsole.WriteLine($"Error: {ex.Message}");
+      }
+    }
+  }
 
+  public async Task<List<Category>> GetCategories()
+  {
+    using (var db = new PhonebookContext())
+    {
+      return await db.Categories.ToListAsync();
+    }
+  }
 }

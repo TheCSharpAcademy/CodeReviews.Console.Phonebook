@@ -6,11 +6,13 @@ public class Menu
 
   private readonly ContactsRepository contactsRepository;
   private readonly ContactController contactController;
+  private readonly CategoryController categoryController;
 
   public Menu()
   {
     contactsRepository = new ContactsRepository();
     contactController = new ContactController(contactsRepository);
+    categoryController = new CategoryController(contactsRepository);
   }
   public async Task Show()
   {
@@ -25,8 +27,8 @@ public class Menu
         MenuOptions.DeleteContact,
         MenuOptions.UpdateContact,
         MenuOptions.ViewAllContacts,
-        // MenuOptions.CreateCategory,
-        // MenuOptions.GetAllCategories,
+        MenuOptions.CreateCategory,
+        MenuOptions.GetAllCategories,
         MenuOptions.Exit
         )
       );
@@ -45,12 +47,12 @@ public class Menu
         case MenuOptions.ViewAllContacts:
           await contactController.GetAllContacts();
           break;
-        // case MenuOptions.CreateCategory:
-        //   await categoryController.CreateCategory();
-        //   break;
-        // case MenuOptions.GetAllCategories:
-        //   await categoryController.GetAllCategories();
-        //   break;
+        case MenuOptions.CreateCategory:
+          await categoryController.CreateCategory();
+          break;
+        case MenuOptions.GetAllCategories:
+          await categoryController.GetAllCategories();
+          break;
         case MenuOptions.Exit:
           isAppRunning = false;
           break;
